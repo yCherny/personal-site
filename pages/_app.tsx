@@ -1,0 +1,15 @@
+import NavigationBar from '@/components/navigation/navigation';
+import '@/styles/globals.css';
+import type { AppProps } from 'next/app';
+import { ThemeProvider } from 'next-themes';
+
+export default function App({ Component, pageProps }: AppProps) {
+	return (
+		<ThemeProvider attribute='class'>
+			<div className='p-7 md:p-10'>
+				<Component {...pageProps} />
+			</div>
+			<NavigationBar />
+		</ThemeProvider>
+	);
+}
