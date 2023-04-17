@@ -102,6 +102,12 @@ export default function Home() {
 								</span>{' '}
 								- Song by Coma-Media
 							</a>
+							<a href='https://www.pexels.com/photo/photo-of-graffiti-wall-3053859/'>
+								<span className='font-bold underline'>
+									Wall Art Over the Bed
+								</span>
+								- Photo by Nextvoyage
+							</a>
 						</ul>
 						<button
 							className='rounded-full bg-black px-3 py-2 text-white font-bold'

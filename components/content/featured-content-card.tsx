@@ -12,7 +12,7 @@ type Props = {
 function FeaturedContentCard({ path, data }: Props) {
 	return (
 		<Link href={`/${path}/${data.slug}`} className='drop-shadow-2xl'>
-			<div className='max-w-full rounded-xl overflow-hidden transition duration-500 hover:scale-105 bg-white dark:bg-black relative h-96 grid grid-cols-5 md:grid-cols-3'>
+			<div className='max-w-full rounded-xl overflow-hidden transition duration-500 hover:scale-105 bg-white dark:bg-black relative h-96 grid grid-cols-5 sm:grid-cols-4'>
 				<Image
 					src={data.coverImage.url}
 					alt={'Blog post image'}
@@ -21,8 +21,8 @@ function FeaturedContentCard({ path, data }: Props) {
 					className='absolute h-full w-full object-cover'
 				/>
 
-				<div className='md:col-span-2'></div>
-				<div className='z-50 p-5 col-span-4 md:col-span-1'>
+				<div className='sm:col-span-2'></div>
+				<div className='z-50 p-5 col-span-4 sm:col-span-2'>
 					<div className='flex flex-col h-full items-start justify-end drop-shadow-2xl bg-white rounded-xl p-5 gap-4'>
 						<div className='flex flex-col gap-2'>
 							<div className='flex flex-row gap-2'>
@@ -36,12 +36,14 @@ function FeaturedContentCard({ path, data }: Props) {
 							</div>
 
 							<h2 className='text-sm font-bold text-gray-500 dark:text-gray-500'>
-								<DateFormatter dateString={data.startDate} />
+								<DateFormatter dateString={data.createdDate} />
 							</h2>
 							<h1 className='font-bold text-black z-50 text-xl md:text-4xl'>
 								{data.title}
 							</h1>
-							<p className='text-gray-800 text-sm'>{data.excerpt}</p>
+							<p className='text-gray-800 text-sm'>
+								{data.excerpt}
+							</p>
 						</div>
 						<div
 							className='flex flex-row gap-1 rounded-full p-1'
@@ -58,7 +60,7 @@ function FeaturedContentCard({ path, data }: Props) {
 											alt={'Author Profile Image'}
 											width={30}
 											height={30}
-											className='rounded-full bg-black bg-cover overflow-hidden object-contain'
+											className='rounded-full bg-black aspect-square overflow-hidden '
 										/>
 									</a>
 								</div>

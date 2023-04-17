@@ -46,8 +46,8 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 export function getStaticProps() {
 	const allPosts = getAllPosts([
 		'slug',
-		'startDate',
-		'endDate',
+		'createdDate',
+		'editedDate',
 		'title',
 		'excerpt',
 		'tags',

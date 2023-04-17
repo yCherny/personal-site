@@ -3,10 +3,10 @@ import type Tag from './tag';
 
 type Content = {
 	slug: string;
-	startDate: string;
+	createdDate: string;
 
 	// Optional For Projects
-	endDate?: string;
+	editedDate?: string;
 
 	title: string;
 	excerpt: string;

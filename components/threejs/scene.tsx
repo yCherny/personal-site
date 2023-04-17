@@ -29,7 +29,14 @@ TrueISOCam Properties Taken from Reiner Prokein's Work:
 http://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Add_Mesh/Create_IsoCam
 */
 
-function Scene() {
+type Props = {
+	meshWasClicked: any;
+};
+
+function Scene({ meshWasClicked }: Props) {
+	// Camera Ref
+	const myCamera = React.useRef();
+
 	// Scene Variables Control
 	const [bad, set] = useState(false);
 	// const options = useControls('Performance', {
@@ -39,6 +46,10 @@ function Scene() {
 	// 	focus: { value: 0.5, min: 0, max: 2, step: 0.1 },
 	// 	samples: { value: 16, min: 1, max: 40, step: 1 },
 	// });
+
+	function meshClicked(bool: boolean) {
+		meshWasClicked(bool);
+	}
 
 	const { forward, backward, left, right, jump } = usePersonControls();
 
@@ -85,6 +96,7 @@ function Scene() {
 				near={1}
 				far={50000}
 				position={[30.60861, 30.60861, 30.60861]}
+				ref={myCamera}
 			/>
 
 			<OrbitControls
@@ -103,8 +115,8 @@ function Scene() {
 			{/* <Performance enabled={options.debug} /> */}
 			<SceneLighting enabled={true} />
 			{/* <Physics gravity={[gravity.x, gravity.y, gravity.z]}> */}
-			<Model />
-			<Player />
+			<Model meshClicked={meshClicked} />
+			{/* <Player /> */}
 			{/* </Physics> */}
 		</Canvas>
 	);

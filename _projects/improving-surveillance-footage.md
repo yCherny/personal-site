@@ -1,5 +1,5 @@
 ---
-startDate: '2023-04-04T05:54:00.322Z'
+createdDate: '2023-04-04T05:54:00.322Z'
 title: 'NYU Machine Learning Project'
 excerpt: 'Improving object detection in surveillance footage using ESRGAN Image Upscaling and Inception ResNet v2'
 tags: ['Machine Learning']
@@ -8,7 +8,7 @@ githubLink: 'https://github.com/yCherny/NYU-ML-Project-Fall-2021'
 coverImage: { url: '/assets/improving-surveillance-footage.png' }
 authors:
     [
-        { name: Yegor Chernyshev, picture: '/assets/cat.jpg', url: '' },
+        { name: Yegor Chernyshev, picture: '/assets/me.jpg', url: '' },
         {
             name: Yulian Kraynyak,
             picture: 'https://yulian.codes/static/media/avatar-hex.d1abb4fbe6d7e23733af.webp',

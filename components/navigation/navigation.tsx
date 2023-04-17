@@ -4,12 +4,11 @@ import NavigationGroup from './navigation-group';
 import Toggle from '../buttons/toggle-button';
 import {
 	HomeIcon,
-	CubeTransparentIcon,
+	IdentificationIcon,
+	CommandLineIcon,
 	NewspaperIcon,
 	MoonIcon,
 	SunIcon,
-	SpeakerWaveIcon,
-	SpeakerXMarkIcon,
 } from '@heroicons/react/24/outline';
 import Player from '../buttons/player';
 
@@ -24,11 +23,14 @@ function NavigationBar() {
 
 	function tabSelected(title: string) {
 		switch (title) {
-			case 'Portfolio':
+			case 'About':
 				setSelectedTab(1);
 				break;
-			case 'Blog':
+			case 'Portfolio':
 				setSelectedTab(2);
+				break;
+			case 'Blog':
+				setSelectedTab(3);
 				break;
 			default:
 				setSelectedTab(0);
@@ -51,18 +53,26 @@ function NavigationBar() {
 					selected={selectedTab === 0}
 				/>
 				<NavigationItem
-					path={'/portfolio'}
-					title={'Portfolio'}
-					icon={<CubeTransparentIcon />}
+					path={'/about'}
+					title={'About'}
+					icon={<IdentificationIcon />}
 					onPress={tabSelected}
 					selected={selectedTab === 1}
+				/>
+
+				<NavigationItem
+					path={'/portfolio'}
+					title={'Portfolio'}
+					icon={<CommandLineIcon />}
+					onPress={tabSelected}
+					selected={selectedTab === 2}
 				/>
 				<NavigationItem
 					path={'/blog'}
 					title={'Blog'}
 					icon={<NewspaperIcon />}
 					onPress={tabSelected}
-					selected={selectedTab === 2}
+					selected={selectedTab === 3}
 				/>
 			</NavigationGroup>
 			<NavigationGroup>

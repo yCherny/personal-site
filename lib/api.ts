@@ -58,8 +58,8 @@ export function getAllPosts(fields: string[] = []) {
 export function getFilteredPosts(tag: string) {
 	const allPosts = getAllPosts([
 		'slug',
-		'startDate',
-		'endDate',
+		'createdDate',
+		'editedDate',
 		'title',
 		'excerpt',
 		'tags',

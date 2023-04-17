@@ -48,8 +48,8 @@ export function getAllProjects(fields: string[] = []) {
 export function getFilteredProjects(tag: string) {
 	const allProjects = getAllProjects([
 		'slug',
-		'startDate',
-		'endDate',
+		'createdDate',
+		'editedDate',
 		'title',
 		'excerpt',
 		'tags',

@@ -27,8 +27,8 @@ type Params = {
 export async function getStaticProps({ params }: Params) {
 	const project = getProjectBySlug(params.projectId, [
 		'slug',
-		'startDate',
-		'endDate',
+		'createdDate',
+		'editedDate',
 		'title',
 		'excerpt',
 		'tags',

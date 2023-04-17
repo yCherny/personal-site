@@ -5,6 +5,7 @@ import Markdown from '@/components/sections/markdown';
 import Content from '@/interfaces/content';
 import DateFormatter from '../layout/date-formatter';
 import StickyNavBar from '../layout/sticky-nav-bar';
+import VotingButton from '@/components/buttons/voting-button';
 
 type Props = {
 	type: string;
@@ -19,18 +20,30 @@ export default function DetailContent({ type, data }: Props) {
 					<FeedbackPanel />
 				</Header>
 			</StickyNavBar>
-			<div className='grid grid-cols-1 mt-16 gap-10'>
-				<h2 className='text-lg font-bold text-gray-500 dark:text-gray-500'>
-					<DateFormatter dateString={data.startDate} />
-				</h2>
-				<div className='flex flex-col gap-5'>
-					<h1 className='font-bold dark:text-white text-4xl md:text-8xl'>
-						{data.title}
-					</h1>
-					<p className='dark:text-gray-500 text-xl'>{data.excerpt}</p>
+			<div className='grid grid-cols-1 mt-16 gap-5'>
+				<div className='flex flex-col'>
+					<h2 className='text-lg font-bold text-gray-400 dark:text-gray-500'>
+						<DateFormatter dateString={data.createdDate} />
+					</h2>
+
+					{data.editedDate && (
+						<h2 className='text-lg font-bold text-gray-500 dark:text-[#A59DB9]'>
+							Last Updated:{' '}
+							<DateFormatter dateString={data.editedDate} />
+						</h2>
+					)}
 				</div>
 
-				<div className='flex items-start justify-between flex-col md:flex-row'>
+				<div className='flex flex-col gap-5'>
+					<h1 className='font-bold dark:text-white text-5xl md:text-7xl'>
+						{data.title}
+					</h1>
+					<p className='dark:text-gray-500 text-xl md:text-2xl'>
+						{data.excerpt}
+					</p>
+				</div>
+
+				<div className='flex py-5 items-start justify-between flex-col md:flex-row'>
 					<div className='flex flex-col gap-2'>
 						{data.authors.length > 1 && (
 							<h4 className='dark:text-white text-lg font-bold ml-5'>
@@ -39,7 +52,7 @@ export default function DetailContent({ type, data }: Props) {
 						)}
 
 						<div
-							className={`flex flex-row w-full gap-2 rounded-full p-2`}
+							className={`flex flex-row w-full gap-2 rounded-full p-1`}
 							style={{ backgroundColor: data.color }}
 						>
 							{data.authors.map((author, index) => (
@@ -50,9 +63,9 @@ export default function DetailContent({ type, data }: Props) {
 											alt={'Author Profile Image'}
 											width={30}
 											height={30}
-											className='rounded-full'
+											className='rounded-full aspect-square'
 										/>
-										<h4 className='font-bold dark:text-white text-sm md:text-xl'>
+										<h4 className='font-bold dark:text-white text-sm md:text-md'>
 											{author.name}
 										</h4>
 									</div>
@@ -80,8 +93,14 @@ export default function DetailContent({ type, data }: Props) {
 					)}
 				</div>
 				<Markdown content={data.content} />
-				<div className='mb-28 flex flex-col items-center'>
-					<FeedbackPanel />
+				<div className='mt-14 mb-24 flex flex-col items-center mx-auto gap-3'>
+					<h2 className='text-lg font-bold text-gray-500 dark:text-[#A59DB9]'>
+						How was this article?
+					</h2>
+					<div className='flex flex-row gap-3'>
+						<VotingButton upvote />
+						<VotingButton />
+					</div>
 				</div>
 			</div>
 		</div>

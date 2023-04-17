@@ -48,8 +48,8 @@ function PortfolioPage({ allProjects, uniqueTags }: Props) {
 export function getStaticProps() {
 	const allProjects = getAllProjects([
 		'slug',
-		'startDate',
-		'endDate',
+		'createdDate',
+		'editedDate',
 		'title',
 		'excerpt',
 		'tags',

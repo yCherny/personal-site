@@ -60,7 +60,7 @@ function ContentCard({ path, data, expanded = false }: Props) {
 													alt={'Author Profile Image'}
 													width={30}
 													height={30}
-													className='rounded-full bg-black bg-cover overflow-hidden object-contain'
+													className='rounded-full aspect-square'
 												/>
 											</a>
 										</div>
