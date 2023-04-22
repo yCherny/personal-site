@@ -18,7 +18,7 @@ function ContentCard({ path, data, expanded = false }: Props) {
 				href={{
 					pathname: `/${path}`,
 					query: {
-						slug: data.slug,
+						slug: data.title.split(' ').join('-').toLowerCase(),
 						type: data.type,
 					},
 				}}

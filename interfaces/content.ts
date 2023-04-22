@@ -6,6 +6,7 @@ const uri = process.env.MONGO_INSTANCE as string;
 export interface IPost {
 	// Main Content
 	type: string;
+	slug: string;
 	title: string;
 	excerpt: string;
 	tags: string[];
@@ -27,6 +28,7 @@ export interface IPost {
 export const postSchema = new Schema<IPost>(
 	{
 		type: { type: String, required: true },
+		slug: { type: String, required: true },
 		title: { type: String, required: true },
 		excerpt: { type: String, required: true },
 		tags: { type: [String], required: true },
@@ -58,11 +60,11 @@ export const postSchema = new Schema<IPost>(
 export const Post = models.Post || model<IPost>('Post', postSchema);
 
 type Content = {
-	slug: string;
 	createdAt: Date;
 	updatedAt: Date;
 
 	type: string;
+	slug: string;
 	title: string;
 	excerpt: string;
 	tags: string[];

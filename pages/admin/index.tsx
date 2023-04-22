@@ -1,10 +1,48 @@
 import { getServerSession } from 'next-auth';
+import { useEffect, useState } from 'react';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { useSession, getSession } from 'next-auth/react';
 import { Card, Metric, Text, Flex, Grid, Title, BarList } from '@tremor/react';
 import Navbar from '@/components/navigation/nav-bar';
+import Content from '@/interfaces/content';
 
-export default function Dashboard() {
+type Props = {
+	allContent: Content[];
+};
+
+export default function Dashboard({ allContent }: Props) {
+	const [blogCount, setBlogCount] = useState<number>(0);
+	const [projectCount, setProjectCount] = useState<number>(0);
+	const [viewCount, setViewCount] = useState<number>(0);
+	const [upvoteCount, setUpvoteCount] = useState<number>(0);
+	const [downvoteCount, setDownvoteCount] = useState<number>(0);
+
+	useEffect(() => {
+		let blogCount = 0;
+		let projectCount = 0;
+		let upvoteCount = 0;
+		let downvoteCount = 0;
+		let viewCount = 0;
+
+		for (let post of allContent) {
+			if (post.type === 'blog') {
+				blogCount += 1;
+			} else {
+				projectCount += 1;
+			}
+
+			upvoteCount += post.upvotes ?? 0;
+			downvoteCount += post.downvotes ?? 0;
+			viewCount += post.views ?? 0;
+		}
+
+		setBlogCount(blogCount);
+		setProjectCount(projectCount);
+		setUpvoteCount(upvoteCount);
+		setDownvoteCount(downvoteCount);
+		setViewCount(viewCount);
+	}, []);
+
 	const { data: session, status } = useSession();
 	if (status === 'loading') {
 		return <h1>Loading...</h1>;
@@ -35,7 +73,7 @@ export default function Dashboard() {
 									justifyContent='start'
 									alignItems='baseline'
 								>
-									<Metric>2</Metric>
+									<Metric>{blogCount}</Metric>
 								</Flex>
 							</Card>
 							<Card>
@@ -47,7 +85,7 @@ export default function Dashboard() {
 									justifyContent='start'
 									alignItems='baseline'
 								>
-									<Metric>4</Metric>
+									<Metric>{projectCount}</Metric>
 								</Flex>
 							</Card>
 						</div>
@@ -65,7 +103,7 @@ export default function Dashboard() {
 									justifyContent='start'
 									alignItems='baseline'
 								>
-									<Metric>2</Metric>
+									<Metric>{viewCount}</Metric>
 								</Flex>
 							</Card>
 							<Card>
@@ -77,7 +115,7 @@ export default function Dashboard() {
 									justifyContent='start'
 									alignItems='baseline'
 								>
-									<Metric>4</Metric>
+									<Metric>{upvoteCount}</Metric>
 								</Flex>
 							</Card>
 							<Card>
@@ -89,7 +127,7 @@ export default function Dashboard() {
 									justifyContent='start'
 									alignItems='baseline'
 								>
-									<Metric>2</Metric>
+									<Metric>{downvoteCount}</Metric>
 								</Flex>
 							</Card>
 						</div>
@@ -101,13 +139,29 @@ export default function Dashboard() {
 }
 
 export async function getServerSideProps(context) {
-	return {
-		props: {
-			session: await getServerSession(
-				context.req,
-				context.res,
-				authOptions
-			),
-		},
-	};
+	try {
+		const res = await fetch('http://localhost:3000/api/blog');
+		const data = await res.json();
+		const posts = data.posts;
+		console.log(posts[0].createdAt);
+
+		if (!data) {
+			return {
+				notFound: true,
+			};
+		}
+
+		return {
+			props: {
+				allContent: posts,
+				session: await getServerSession(
+					context.req,
+					context.res,
+					authOptions
+				),
+			},
+		};
+	} catch (err) {
+		console.log(`Error: ${err}`);
+	}
 }
