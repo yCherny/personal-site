@@ -1,6 +1,7 @@
 ---
 createdDate: '2023-04-04T05:54:00.322Z'
 title: 'NYU Machine Learning Project'
+type: 'project'
 excerpt: 'Improving object detection in surveillance footage using ESRGAN Image Upscaling and Inception ResNet v2'
 tags: ['Machine Learning']
 color: '#A020F0'

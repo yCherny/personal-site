@@ -1,10 +1,11 @@
 ---
 createdDate: '2023-04-04T05:54:00.322Z'
 title: 'Rally'
+type: 'project'
 excerpt: 'An app to connect individuals over similar interests.'
 tags: ['iOS']
-color: '#00cc00'
-coverImage: { url: '/assets/app.png' }
+color: '#FF006F'
+coverImage: { url: '/assets/rally.png' }
 authors: [{ name: Yegor Chernyshev, picture: '/assets/me.jpg', url: '' }]
 ---
 

@@ -1,6 +1,7 @@
 ---
 createdDate: '2023-04-04T05:54:00.322Z'
 title: 'All Hail Website Mark. II'
+type: 'blog'
 excerpt: "Theseus' Website: if you refactor the entire website, is it still the same website?"
 tags: ['Development']
 color: '#A020F0'

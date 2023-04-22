@@ -2,6 +2,7 @@
 createdDate: '2023-04-04T05:54:00.322Z'
 editedDate: '2023-04-15T06:37:00.322Z'
 title: 'Breakroom'
+type: 'project'
 excerpt: 'A social-media, geolocation based, anonymous group chat app.'
 tags: ['Web', 'iOS']
 color: '#93ECDF'

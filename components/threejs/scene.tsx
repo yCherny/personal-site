@@ -23,6 +23,7 @@ import {
 	useCylinder,
 	useConvexPolyhedron,
 } from '@react-three/cannon';
+import { ContentType } from '../sections/three-js-viewport';
 
 /*
 TrueISOCam Properties Taken from Reiner Prokein's Work:
@@ -47,8 +48,8 @@ function Scene({ meshWasClicked }: Props) {
 	// 	samples: { value: 16, min: 1, max: 40, step: 1 },
 	// });
 
-	function meshClicked(bool: boolean) {
-		meshWasClicked(bool);
+	function meshClicked(content: ContentType) {
+		meshWasClicked(content);
 	}
 
 	const { forward, backward, left, right, jump } = usePersonControls();

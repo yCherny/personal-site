@@ -5,11 +5,7 @@ interface ButtonProps {
 	color?: string;
 }
 
-function CircularButton({
-	icon,
-	onClick,
-	selected = false,
-}: ButtonProps) {
+function CircularButton({ icon, onClick, selected = false }: ButtonProps) {
 	function buttonClicked() {
 		onClick();
 	}
@@ -25,9 +21,7 @@ function CircularButton({
 			hover:bg-black hover:text-white 
 			
 			dark:bg-black/10  dark:hover:bg-white dark:hover:text-black
-			` +
-				(selected &&
-					'bg-black text-white dark:bg-white dark:text-black')
+			` + (selected && 'bg-black/100 text-white dark:bg-white dark:text-black')
 			}
 			onClick={buttonClicked}
 		>

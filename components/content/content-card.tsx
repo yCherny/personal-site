@@ -13,7 +13,17 @@ type Props = {
 function ContentCard({ path, data, expanded = false }: Props) {
 	return (
 		<div className={expanded ? 'row-span-2' : 'row-span-1'}>
-			<Link href={`/${path}/${data.slug}`} className='drop-shadow-2xl'>
+			{/* /${data.slug} */}
+			<Link
+				href={{
+					pathname: `/${path}`,
+					query: {
+						slug: data.slug,
+						type: data.type,
+					},
+				}}
+				className='drop-shadow-2xl'
+			>
 				<div className='group h-auto max-w-full rounded-xl overflow-hidden transition duration-500 hover:scale-105 bg-white dark:bg-black relative drop-shadow-lg'>
 					<div
 						className={expanded ? 'h-96' : 'h-48 group-hover:h-96'}

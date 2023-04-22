@@ -1,8 +1,8 @@
 ---
 createdDate: '2023-04-04T05:54:00.322Z'
 editedDate: '2023-04-15T05:46:00.322Z'
-
 title: 'yegor.codes'
+type: 'project'
 excerpt: "There's a lot more to this site under the surface than meets the eye."
 tags: ['Web']
 color: '#A020F0'

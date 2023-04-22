@@ -1,6 +1,7 @@
 ---
 createdDate: '2023-04-10T05:24:48.322Z'
 title: 'Creator of Worlds'
+type: 'blog'
 excerpt: "Watch out Hollywood VFX, I'm coming for you...in 30 years."
 tags: ['Life']
 color: '#A020F0'

@@ -13,6 +13,7 @@ Command: npx gltfjsx@6.1.4 room.gltf
 */
 
 import React, { useState, useRef } from 'react';
+import { ContentType } from '../sections/three-js-viewport';
 import {
 	useGLTF,
 	useAnimations,
@@ -20,22 +21,14 @@ import {
 	RandomizedLight,
 } from '@react-three/drei';
 
-enum Content {
-	Projects = 'Projects',
-	Resume = 'Resume',
-}
-
 export function Model(props) {
 	const group = useRef();
 	const { nodes, materials, animations } = useGLTF('/assets/room.gltf');
 	const { actions } = useAnimations(animations, group);
 
 	// Functions
-	// const [showContent, setShowContent] = useState(false);
-	function meshClicked(forContent: Content) {
-		console.log(`Content Selected: ${forContent.toString()}`);
-		// setShowContent(true);
-		props.meshClicked(true);
+	function meshClicked(content: ContentType) {
+		props.meshClicked(content);
 	}
 
 	return (
@@ -2702,7 +2695,7 @@ export function Model(props) {
 						onPointerLeave={() => {
 							document.body.style.cursor = 'auto';
 						}}
-						onClick={() => meshClicked(Content.Projects)}
+						onClick={() => meshClicked(ContentType.Projects)}
 					/>
 					<mesh
 						castShadow
@@ -2809,7 +2802,7 @@ export function Model(props) {
 						onPointerLeave={() => {
 							document.body.style.cursor = 'auto';
 						}}
-						onClick={() => meshClicked(Content.Resume)}
+						onClick={() => meshClicked(ContentType.Resume)}
 					/>
 					<mesh
 						castShadow
@@ -2833,7 +2826,7 @@ export function Model(props) {
 						onPointerLeave={() => {
 							document.body.style.cursor = 'auto';
 						}}
-						onClick={() => meshClicked(Content.Resume)}
+						onClick={() => meshClicked(ContentType.Resume)}
 					/>
 					<mesh
 						castShadow

@@ -26,14 +26,13 @@ export default function MasonryGrid({ type, data }: Props) {
 							data={data[0]}
 						/>
 					</div>
-				) : (
-					<ContentCard
-						path={type === DataType.Post ? 'blog' : 'portfolio'}
-						data={d}
-						expanded={postIndex !== 0 && postIndex !== 2}
-						key={postIndex}
-					/>
-				)
+				) : // <ContentCard
+				// 	path={type === DataType.Post ? 'blog' : 'portfolio'}
+				// 	data={d}
+				// 	expanded={postIndex !== 0 && postIndex !== 2}
+				// 	key={postIndex}
+				// />
+				null
 			)}
 		</div>
 	);
