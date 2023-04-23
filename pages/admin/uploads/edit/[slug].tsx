@@ -1,6 +1,5 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { useSession, getSession } from 'next-auth/react';
 
 import { Text, Button } from '@tremor/react';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -14,21 +13,25 @@ import {
 import Markdown from '@/components/sections/markdown';
 import { useRouter } from 'next/router';
 
-import { getProjectBySlug } from '@/lib/projectApi';
-import { getPostBySlug } from '@/lib/api';
-
 // Forms
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
 import FormikRadioGroup from '@/components/content/formik-radio-group';
 
+import type { GetServerSidePropsContext } from 'next';
+import type { Session } from 'next-auth';
+
 type Props = {
 	content?: Content;
+	session: Session;
 };
 
-export default function EditPane({ content = undefined }: Props) {
-	const { data: session, status } = useSession();
+export default function EditPane({ content = undefined, session }: Props) {
 	const router = useRouter();
+
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+	const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
 	const [contentMarkdown, setContentMarkdown] = useState<string>(
 		content?.content ?? ''
 	);
@@ -46,16 +49,6 @@ export default function EditPane({ content = undefined }: Props) {
 	useEffect(() => {
 		console.log(`New Image: ${imageURL}`);
 	}, [imageURL, contentMarkdown]);
-
-	// if (status === 'loading') {
-	// 	return <h1>Loading...</h1>;
-	// }
-
-	// if (status === 'unauthenticated') {
-	// 	return <h1>Access Denied</h1>;
-	// }
-
-	// if (typeof window === 'undefined') return null;
 
 	const initialValues = {
 		type: content?.type ?? 'blog',
@@ -84,6 +77,7 @@ export default function EditPane({ content = undefined }: Props) {
 	};
 
 	const uploadData = async (jsonData: string) => {
+		setIsSubmitting(true);
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
@@ -96,9 +90,34 @@ export default function EditPane({ content = undefined }: Props) {
 				},
 			});
 			res = await res.json();
+			setIsSubmitting(false);
 			router.back();
 		} catch (err) {
 			console.log(`Error: ${err}`);
+			setIsSubmitting(false);
+		}
+	};
+
+	const deleteData = async (slug: string) => {
+		setIsDeleting(true);
+		console.log(`Delete: ${slug}`);
+		const slugJSON = JSON.stringify(slug);
+
+		try {
+			let res = await fetch(`http://localhost:3000/api/blog/${slug}`, {
+				method: 'DELETE',
+				body: slugJSON,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+			});
+			res = await res.json();
+			setIsDeleting(false);
+			router.back();
+		} catch (err) {
+			console.log(`Error: ${err}`);
+			setIsDeleting(false);
 		}
 	};
 
@@ -134,7 +153,7 @@ export default function EditPane({ content = undefined }: Props) {
 						externalLink: Yup.string(),
 						githubLink: Yup.string(),
 					})}
-					onSubmit={(values, { setSubmitting }) => {
+					onSubmit={(values) => {
 						values['slug'] = values.title
 							.split(' ')
 							.join('-')
@@ -450,10 +469,30 @@ export default function EditPane({ content = undefined }: Props) {
 								</div>
 
 								<div className='flex flex-ror gap-4'>
-									<Button type='submit'>Upload</Button>
-									<Button className='bg-red-500'>
-										Delete
+									<Button
+										type='submit'
+										className='border-none'
+										loading={isSubmitting}
+										disabled={isSubmitting || isDeleting}
+									>
+										Upload
 									</Button>
+
+									{content?.slug && (
+										<Button
+											type='button'
+											className='bg-red-500 border-none'
+											loading={isDeleting}
+											disabled={
+												isSubmitting || isDeleting
+											}
+											onClick={() =>
+												deleteData(content.slug)
+											}
+										>
+											Delete
+										</Button>
+									)}
 								</div>
 							</div>
 						</div>
@@ -473,34 +512,22 @@ export default function EditPane({ content = undefined }: Props) {
 	);
 }
 
-type Params = {
-	params: {
-		slug: string;
-	};
-};
-
-export async function getServerSideProps(context: Params) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
 	try {
 		const res = await fetch(
-			`http://localhost:3000/api/blog/${context.params.slug}`
+			`http://localhost:3000/api/blog/${context.query.slug}`
 		);
 		const data = await res.json();
 		const post = data.post;
 
-		if (!data) {
-			return {
-				props: {},
-			};
-		}
-
 		return {
 			props: {
 				content: post,
-				// session: await getServerSession(
-				// 	context.req,
-				// 	context.res,
-				// 	authOptions
-				// ),
+				session: await getServerSession(
+					context.req,
+					context.res,
+					authOptions
+				),
 			},
 		};
 	} catch (err) {

@@ -8,6 +8,15 @@ export const authOptions: NextAuthOptions = {
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
 		}),
 	],
+	callbacks: {
+		async jwt({ token }) {
+			token.userRole = 'admin';
+			return token;
+		},
+		// session({ session, token, user }) {
+		// 	return session;
+		// },
+	},
 	secret: process.env.NEXTAUTH_SECRET,
 };
 

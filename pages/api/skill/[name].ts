@@ -1,4 +1,4 @@
-import { Post } from '@/interfaces/content';
+import { Skill } from '@/interfaces/skill';
 import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
@@ -10,6 +10,7 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	const session = await getServerSession(req, res, authOptions);
+	const skillName = req.query.name as string;
 
 	let client;
 	try {
@@ -21,32 +22,31 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let posts;
-			const query = Post.where({ type: 'blog' });
+			let skill;
 			try {
-				posts = await query.find();
-				console.log(posts);
+				const query = Skill.where({ name: skillName });
+				skill = await query.findOne();
 			} catch (err) {
 				res.status(500).json({ error: err });
 				client.connection.close();
 				return;
 			}
 
-			res.status(200).json({ posts: posts });
+			res.status(200).json({ skill: skill });
 			break;
 		case 'POST':
 			if (session) {
-				let post = await Post.exists({ slug: req.body.slug });
-				if (post) {
-					// Post Already Exists -> Update it;
-					await Post.updateOne({ slug: req.body.slug }, req.body);
+				let skill = await Skill.exists({ name: req.body.name });
+				if (skill) {
+					// Skill Already Exists -> Update it;
+					await Skill.updateOne({ name: req.body.name }, req.body);
 				} else {
 					// New Post, Who Dis?
-					const newPost = new Post(req.body);
-					let postUpload;
+					const newSkill = new Skill(req.body);
+					let skillUpload;
 					try {
-						postUpload = await newPost.save({ timestamps: true });
-						console.log(`Response: ${postUpload}`);
+						skillUpload = await newSkill.save();
+						console.log(`Response: ${skillUpload}`);
 					} catch (err) {
 						res.status(500).json({ error: err });
 						client.connection.close();
@@ -61,8 +61,20 @@ export default async function handler(
 				});
 			}
 			break;
+		case 'DELETE':
+			if (session) {
+				await Skill.deleteOne({ name: skillName });
+				res.status(202).json({
+					deleted: `Skill ${skillName}`,
+				});
+			} else {
+				res.status(401).json({
+					error: `Unauthorized to access this api point`,
+				});
+			}
+			break;
 		default:
-			res.setHeader('Allow', ['GET', 'POST']);
+			res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
 			res.status(405).end(`Method ${req.method} Not Allowed`);
 			break;
 	}

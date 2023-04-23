@@ -1,4 +1,4 @@
-import { getFilteredProjects } from '@/lib/projectApi';
+import { getFilteredProjects } from '@/lib/portfolio-api';
 import { Fragment } from 'react';
 import Head from 'next/head';
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';

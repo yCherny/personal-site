@@ -6,28 +6,27 @@ import { Fragment, useState } from 'react';
 
 import Navbar from '@/components/navigation/nav-bar';
 import SideBar from '@/components/navigation/side-bar';
-import DataFlow from '@/components/layout/data-flow';
-import Content from '@/interfaces/content';
+import SkillContent from '@/interfaces/skill';
 
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 
 type Props = {
-	allContent: Content[];
-	allContentFilters: string[];
+	allSkills: SkillContent[];
+	allSkillFilters: string[];
 	session: Session;
 };
 
-function Uploads({ allContent, allContentFilters, session }: Props) {
+function Skills({ allSkills, allSkillFilters, session }: Props) {
 	const [filteredContent, setFilteredContent] =
-		useState<Content[]>(allContent);
+		useState<SkillContent[]>(allSkills);
 	const [filter, setFilter] = useState<string>('');
 
 	function filterContent(type: string) {
 		if (type === filter) {
 			setFilter('');
 		} else {
-			const filteredContent = allContent.filter(
+			const filteredContent = allSkills.filter(
 				(data) => data.type === type
 			);
 			setFilter(type);
@@ -38,26 +37,29 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
 	return (
 		<Fragment>
 			<Head>
-				<title>Yegor Chernyshev | Uploads</title>
-				<meta
-					name='description'
-					content='Uploads by Yegor Chernyshev'
-				/>
+				<title>Yegor Chernyshev | Skills</title>
+				<meta name='description' content='Skills by Yegor Chernyshev' />
 			</Head>
 			<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
-				<Navbar user={'Jimmy'} />
+				<Navbar user={'Yegor'} />
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>
 					<SideBar
 						onClick={filterContent}
-						filterOptions={allContentFilters}
-						newPath={'/admin/uploads/edit/new'}
+						filterOptions={allSkillFilters}
+						newPath={'/admin/skills/edit/new'}
 					/>
 					<div className='col-span-2'>
-						<DataFlow
-							content={
-								filter === '' ? allContent : filteredContent
-							}
-						/>
+						<div className='flex flex-col gap-5'>
+							{(filter === '' ? allSkills : filteredContent).map(
+								(skill: SkillContent) => (
+									<SkillCard
+										skill={skill}
+										path={'admin/skills/edit'}
+										key={skill.name}
+									/>
+								)
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -65,24 +67,16 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
 	);
 }
 
-import { loadBlog } from '@/lib/blog-api';
-import { loadPortfolio } from '@/lib/portfolio-api';
+import { loadSkillset } from '@/lib/skill-api';
+import SkillCard from '@/components/content/skill-card';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const { posts, uniqueTags: postTags } = await loadBlog();
-	const { projects, uniqueTags: projectTags } = await loadPortfolio();
-	const allContent = posts.concat(projects);
-
-	if (!posts && !projects) {
-		return {
-			notFound: true,
-		};
-	}
+	const { skills, skillFilters } = await loadSkillset();
 
 	return {
 		props: {
-			allContent: allContent,
-			allContentFilters: ['blog', 'portfolio'],
+			allSkills: skills,
+			allSkillFilters: skillFilters,
 			session: await getServerSession(
 				context.req,
 				context.res,
@@ -92,4 +86,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 	};
 }
 
-export default Uploads;
+export default Skills;

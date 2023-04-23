@@ -12,7 +12,9 @@ function classNames(...classes: string[]) {
 
 const navigation = [
 	{ name: 'Dashboard', href: '/admin' },
+	{ name: 'About', href: '/admin/about' },
 	{ name: 'Uploads', href: '/admin/uploads' },
+	{ name: 'Skills', href: '/admin/skills' },
 ];
 
 export default function Navbar({ user }: { user: any }) {
@@ -57,8 +59,7 @@ export default function Navbar({ user }: { user: any }) {
 											<Image
 												className='h-8 w-8 rounded-full'
 												src={
-													user?.image ||
-													'/assets/me.jpg'
+													'https://www.dropbox.com/s/h3q3r022pfu3qru/me.jpg?dl=1'
 												}
 												height={32}
 												width={32}
@@ -172,7 +173,9 @@ export default function Navbar({ user }: { user: any }) {
 										<div className='flex-shrink-0'>
 											<Image
 												className='h-8 w-8 rounded-full'
-												src={user.image}
+												src={
+													'https://www.dropbox.com/s/h3q3r022pfu3qru/me.jpg?dl=1'
+												}
 												height={32}
 												width={32}
 												alt={`${user.name} avatar`}

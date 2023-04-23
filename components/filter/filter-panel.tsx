@@ -3,11 +3,12 @@ import FilterOption from './filter-option';
 import { useRouter } from 'next/router';
 
 type Props = {
-	options: string[];
+	onClick: any;
+	filterOptions: string[];
 	path: string;
 };
 
-function FilterPanel({ options, path }: Props) {
+function FilterPanel({ onClick, filterOptions, path }: Props) {
 	const router = useRouter();
 	function findContentHandler(tag: string) {
 		const fullPath = `/${path}/${tag}`;
@@ -24,12 +25,12 @@ function FilterPanel({ options, path }: Props) {
 				<AdjustmentsHorizontalIcon />
 			</div>
 
-			{options.map((option, index) => {
+			{filterOptions.map((option, index) => {
 				return (
 					<FilterOption
 						text={option}
 						key={index}
-						onPress={findContentHandler}
+						onPress={() => onClick(option)}
 					/>
 				);
 			})}

@@ -1,17 +1,21 @@
 import { getServerSession } from 'next-auth';
-import { Fragment, useEffect, useState } from 'react';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { useSession, getSession } from 'next-auth/react';
+
+import { Fragment, useEffect, useState } from 'react';
 import { Card, Metric, Text, Flex, Grid, Title, BarList } from '@tremor/react';
 import Head from 'next/head';
 import Navbar from '@/components/navigation/nav-bar';
 import Content from '@/interfaces/content';
 
+import type { GetServerSidePropsContext } from 'next';
+import type { Session } from 'next-auth';
+
 type Props = {
 	allContent: Content[];
+	session: Session;
 };
 
-export default function Dashboard({ allContent }: Props) {
+export default function Dashboard({ allContent, session }: Props) {
 	const [blogCount, setBlogCount] = useState<number>(0);
 	const [projectCount, setProjectCount] = useState<number>(0);
 	const [viewCount, setViewCount] = useState<number>(0);
@@ -44,17 +48,6 @@ export default function Dashboard({ allContent }: Props) {
 		setViewCount(viewCount);
 	}, []);
 
-	const { data: session, status } = useSession();
-	if (status === 'loading') {
-		return <h1>Loading...</h1>;
-	}
-
-	if (status === 'unauthenticated') {
-		return <h1>Access Denied</h1>;
-	}
-
-	if (typeof window === 'undefined') return null;
-
 	return (
 		<Fragment>
 			<Head>
@@ -62,7 +55,7 @@ export default function Dashboard({ allContent }: Props) {
 				<meta name='description' content='Admin dashboard' />
 			</Head>
 			<main className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
-				<Navbar user={'Jimmy'} />
+				<Navbar user={'Yegor'} />
 				<div className='flex flex-col gap-5 mt-5'>
 					<Title className='font-black text-4xl'>Dashboard</Title>
 					<div className='flex flex-col gap-5'>
@@ -99,7 +92,7 @@ export default function Dashboard({ allContent }: Props) {
 						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
 							<Title className='font-black'>Metrics</Title>
 							<div className='flex flex-row gap-5'>
-								<Card>
+								<Card decoration='top' decorationColor='gray'>
 									<Flex alignItems='start'>
 										<Text>Views</Text>
 									</Flex>
@@ -111,7 +104,7 @@ export default function Dashboard({ allContent }: Props) {
 										<Metric>{viewCount}</Metric>
 									</Flex>
 								</Card>
-								<Card>
+								<Card decoration='top' decorationColor='green'>
 									<Flex alignItems='start'>
 										<Text>Upvotes</Text>
 									</Flex>
@@ -123,7 +116,7 @@ export default function Dashboard({ allContent }: Props) {
 										<Metric>{upvoteCount}</Metric>
 									</Flex>
 								</Card>
-								<Card>
+								<Card decoration='top' decorationColor='red'>
 									<Flex alignItems='start'>
 										<Text>Downvotes</Text>
 									</Flex>
@@ -144,20 +137,15 @@ export default function Dashboard({ allContent }: Props) {
 	);
 }
 
-export async function getServerSideProps(context) {
-	// Get Blogs
-	const res = await fetch('http://localhost:3000/api/blog');
-	const data = await res.json();
-	const blogs: Content[] = data.posts;
+import { loadBlog } from '@/lib/blog-api';
+import { loadPortfolio } from '@/lib/portfolio-api';
 
-	// Get Projects
-	const resProject = await fetch('http://localhost:3000/api/portfolio');
-	const projectData = await resProject.json();
-	const projects: Content[] = projectData.projects;
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	const { posts, uniqueTags: postTags } = await loadBlog();
+	const { projects, uniqueTags: projectTags } = await loadPortfolio();
+	const allContent = posts.concat(projects);
 
-	const allContent = blogs.concat(projects);
-
-	if (!blogs && !projects) {
+	if (!posts && !projects) {
 		return {
 			notFound: true,
 		};

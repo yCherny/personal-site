@@ -13,6 +13,21 @@ type Props = {
 };
 
 function BlogPage({ allPosts, uniqueTags }: Props) {
+	const [filteredContent, setFilteredContent] = useState<Content[]>(allPosts);
+	const [filter, setFilter] = useState<string>('');
+
+	function filterContent(type: string) {
+		if (type === filter) {
+			setFilter('');
+		} else {
+			const filteredContent = allPosts.filter((data) =>
+				data.tags.includes(type)
+			);
+			setFilter(type);
+			setFilteredContent(filteredContent);
+		}
+	}
+
 	return (
 		<Fragment>
 			<Head>
@@ -35,23 +50,25 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 					subtitle={'the ramblings of a madman'}
 				/>
 				<StickyNavBar>
-					<FilterPanel options={uniqueTags} path={'blog'} />
+					<FilterPanel
+						onClick={filterContent}
+						filterOptions={uniqueTags}
+						path={'blog'}
+					/>
 				</StickyNavBar>
-				<MasonryGrid type={DataType.Post} data={allPosts} />
+				<MasonryGrid
+					type={DataType.Post}
+					data={filter === '' ? allPosts : filteredContent}
+				/>
 			</div>
 		</Fragment>
 	);
 }
 
-export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
-	context
-) => {
-	const res = await fetch('http://localhost:3000/api/blog');
-	const data = await res.json();
-	const posts: Content[] = data.posts;
+import { loadBlog } from '@/lib/blog-api';
 
-	const tags = posts.map((post) => post.tags).flat();
-	const uniqueTags = Array.from(new Set(tags));
+export async function getStaticProps() {
+	const { posts, uniqueTags } = await loadBlog();
 
 	if (!posts) {
 		return {
@@ -65,6 +82,6 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 			uniqueTags: uniqueTags,
 		},
 	};
-};
+}
 
 export default BlogPage;

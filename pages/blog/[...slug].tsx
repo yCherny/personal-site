@@ -1,4 +1,4 @@
-import { getFilteredPosts } from '@/lib/api';
+import { getFilteredPosts } from '@/lib/blog-api';
 import { Fragment } from 'react';
 import Head from 'next/head';
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';

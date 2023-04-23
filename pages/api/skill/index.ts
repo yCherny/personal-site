@@ -1,4 +1,4 @@
-import { Post } from '@/interfaces/content';
+import { Skill } from '@/interfaces/skill';
 import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
@@ -21,32 +21,31 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let posts;
-			const query = Post.where({ type: 'blog' });
+			let skills;
 			try {
-				posts = await query.find();
-				console.log(posts);
+				skills = await Skill.find();
+				console.log(skills);
 			} catch (err) {
 				res.status(500).json({ error: err });
 				client.connection.close();
 				return;
 			}
 
-			res.status(200).json({ posts: posts });
+			res.status(200).json({ skills: skills });
 			break;
 		case 'POST':
 			if (session) {
-				let post = await Post.exists({ slug: req.body.slug });
-				if (post) {
-					// Post Already Exists -> Update it;
-					await Post.updateOne({ slug: req.body.slug }, req.body);
+				let skill = await Skill.exists({ name: req.body.name });
+				if (skill) {
+					// Skill Already Exists -> Update it;
+					await Skill.updateOne({ name: req.body.name }, req.body);
 				} else {
 					// New Post, Who Dis?
-					const newPost = new Post(req.body);
-					let postUpload;
+					const newSkill = new Skill(req.body);
+					let skillUpload;
 					try {
-						postUpload = await newPost.save({ timestamps: true });
-						console.log(`Response: ${postUpload}`);
+						skillUpload = await newSkill.save();
+						console.log(`Response: ${skillUpload}`);
 					} catch (err) {
 						res.status(500).json({ error: err });
 						client.connection.close();

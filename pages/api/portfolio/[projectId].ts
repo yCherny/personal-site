@@ -1,10 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { Post } from '@/interfaces/content';
 import mongoose from 'mongoose';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
-const uri = process.env.MONGO_INSTANCE as string;
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
@@ -16,7 +16,7 @@ export default async function handler(
 
 	let client;
 	try {
-		client = await mongoose.connect(uri);
+		client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
 	} catch (err) {
 		res.status(500).json({ error: 'Connecting to the database failed.' });
 		return;

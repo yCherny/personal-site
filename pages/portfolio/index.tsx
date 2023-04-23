@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import Head from 'next/head';
 import Header from '../../components/header/header';
 import Content from '@/interfaces/content';
+import SkillContent from '@/interfaces/skill';
 import FilterPanel from '@/components/filter/filter-panel';
 
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
@@ -20,6 +21,7 @@ import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
 
 type Props = {
 	allProjects: Content[];
+	allSkills: SkillContent[];
 	uniqueTags: string[];
 	journey: [key: string];
 	principles: [key: string];
@@ -27,10 +29,27 @@ type Props = {
 
 function PortfolioPage({
 	allProjects,
+	allSkills,
 	uniqueTags,
 	journey,
 	principles,
 }: Props) {
+	const [filteredContent, setFilteredContent] =
+		useState<Content[]>(allProjects);
+	const [filter, setFilter] = useState<string>('');
+
+	function filterContent(type: string) {
+		if (type === filter) {
+			setFilter('');
+		} else {
+			const filteredContent = allProjects.filter((data) =>
+				data.tags.includes(type)
+			);
+			setFilter(type);
+			setFilteredContent(filteredContent);
+		}
+	}
+
 	return (
 		<Fragment>
 			<Head>
@@ -38,6 +57,10 @@ function PortfolioPage({
 				<meta
 					name='description'
 					content='Various projects made by Yegor Chernyshev'
+				/>
+				<link
+					rel='stylesheet'
+					href='https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css'
 				/>
 			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen'>
@@ -53,18 +76,22 @@ function PortfolioPage({
 					subtitle={'precious trinkets I made'}
 				/>
 				<StickyNavBar>
-					<FilterPanel options={uniqueTags} path={'portfolio'} />
+					<FilterPanel
+						onClick={filterContent}
+						filterOptions={uniqueTags}
+						path={'portfolio'}
+					/>
 				</StickyNavBar>
 
 				<div className='grid grid-cols-1 lg:grid-cols-3 mb-24 lg:gap-5'>
 					<div className='flex flex-col col-span-1 lg:col-span-2'>
 						<MasonryGrid
 							type={DataType.Project}
-							data={allProjects}
+							data={filter === '' ? allProjects : filteredContent}
 						/>
 					</div>
 					<div className='flex flex-col col-span-1 order-first lg:order-last py-5 gap-5'>
-						<SkillsetDashboard />
+						<SkillsetDashboard skills={allSkills} />
 						<AccordionList className='w-full'>
 							<Accordion className='dark:bg-[#534670] border-none'>
 								<AccordionHeader className='dark:text-white text-lg md:text-xl font-bold'>
@@ -90,19 +117,14 @@ function PortfolioPage({
 	);
 }
 
-export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
-	context
-) => {
+import { loadPortfolio } from '@/lib/portfolio-api';
+import { loadSkillset } from '@/lib/skill-api';
+
+export async function getStaticProps() {
 	const journey = getAboutMeData('journey', ['content']);
 	const principles = getAboutMeData('principles', ['content']);
-
-	const res = await fetch('http://localhost:3000/api/portfolio');
-	const data = await res.json();
-	const projects: Content[] = data.projects;
-	console.log(projects[0].title);
-
-	const tags = projects.map((project) => project.tags).flat();
-	const uniqueTags = Array.from(new Set(tags));
+	const { projects, uniqueTags } = await loadPortfolio();
+	const { skills, skillFilters } = await loadSkillset();
 
 	if (!projects) {
 		return {
@@ -113,11 +135,12 @@ export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 	return {
 		props: {
 			allProjects: projects,
+			allSkills: skills,
 			uniqueTags: uniqueTags,
 			journey,
 			principles,
 		},
 	};
-};
+}
 
 export default PortfolioPage;
