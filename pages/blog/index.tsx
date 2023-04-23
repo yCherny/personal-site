@@ -1,4 +1,3 @@
-import { getAllPosts } from '@/lib/api';
 import { Fragment, useState, useEffect } from 'react';
 import Head from 'next/head';
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
@@ -6,15 +5,14 @@ import FilterPanel from '@/components/filter/filter-panel';
 import Header from '../../components/header/header';
 import Content from '@/interfaces/content';
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
-import { IPost, Post } from '@/lib/db-utils';
 import { GetServerSideProps } from 'next';
 
 type Props = {
 	allPosts: Content[];
-	// uniqueTags: string[];
+	uniqueTags: string[];
 };
 
-function BlogPage({ allPosts /*uniqueTags*/ }: Props) {
+function BlogPage({ allPosts, uniqueTags }: Props) {
 	return (
 		<Fragment>
 			<Head>
@@ -36,63 +34,37 @@ function BlogPage({ allPosts /*uniqueTags*/ }: Props) {
 					}
 					subtitle={'the ramblings of a madman'}
 				/>
-				{/* <StickyNavBar>
+				<StickyNavBar>
 					<FilterPanel options={uniqueTags} path={'blog'} />
 				</StickyNavBar>
-				*/}
 				<MasonryGrid type={DataType.Post} data={allPosts} />
 			</div>
 		</Fragment>
 	);
 }
 
-// export function getStaticProps() {
-// 	const allPosts = getAllPosts([
-// 		'slug',
-// 		'createdDate',
-// 		'editedDate',
-// 		'title',
-// 		'excerpt',
-// 		'tags',
-// 		'color',
-// 		'coverImage',
-// 		'authors',
-// 	]);
-
-// 	const tags = allPosts.map((post) => post['tags']).flat();
-// 	const uniqueTags = Array.from(new Set(tags));
-
-// 	return {
-// 		props: { allPosts, uniqueTags },
-// 	};
-// }
-
 export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 	context
 ) => {
-	try {
-		const res = await fetch('http://localhost:3000/api/blog');
-		const data = await res.json();
-		const posts = data.posts;
-		console.log(posts[0].createdAt);
+	const res = await fetch('http://localhost:3000/api/blog');
+	const data = await res.json();
+	const posts: Content[] = data.posts;
 
-		// const tags = posts.map((post) => post['tags']).flat();
-		// const uniqueTags = Array.from(new Set(tags));
+	const tags = posts.map((post) => post.tags).flat();
+	const uniqueTags = Array.from(new Set(tags));
 
-		if (!data) {
-			return {
-				notFound: true,
-			};
-		}
-
+	if (!posts) {
 		return {
-			props: {
-				allPosts: posts,
-			},
+			notFound: true,
 		};
-	} catch (err) {
-		console.log(`Error: ${err}`);
 	}
+
+	return {
+		props: {
+			allPosts: posts,
+			uniqueTags: uniqueTags,
+		},
+	};
 };
 
 export default BlogPage;

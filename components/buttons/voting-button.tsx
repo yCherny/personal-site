@@ -23,7 +23,7 @@ function VotingButton({
 	const [hovered, setHovered] = useState(false);
 
 	function buttonClicked() {
-		onClick();
+		onClick(upvote);
 	}
 
 	const upvoteButton = (

@@ -17,19 +17,23 @@ export default function DetailContent({ type, data }: Props) {
 		<div className='max-w-6xl mx-auto min-h-screen'>
 			<StickyNavBar>
 				<Header title={type} subheader>
-					<FeedbackPanel />
+					<FeedbackPanel
+						views={data.views?.length ?? 0}
+						slug={data.slug}
+						type={data.type}
+					/>
 				</Header>
 			</StickyNavBar>
 			<div className='grid grid-cols-1 mt-16 gap-5'>
 				<div className='flex flex-col'>
 					<h2 className='text-lg font-bold text-gray-400 dark:text-gray-500'>
-						<DateFormatter dateString={data.createdDate} />
+						<DateFormatter dateString={data.createdAt} />
 					</h2>
 
-					{data.editedDate && (
+					{data.updatedAt && (
 						<h2 className='text-lg font-bold text-gray-500 dark:text-[#A59DB9]'>
 							Last Updated:{' '}
-							<DateFormatter dateString={data.editedDate} />
+							<DateFormatter dateString={data.updatedAt} />
 						</h2>
 					)}
 				</div>

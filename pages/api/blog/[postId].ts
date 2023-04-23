@@ -9,62 +9,10 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	// const postId = req.query.postId as string;
-	// let client;
-	// try {
-	// 	client = await databaseConnect();
-	// } catch (err) {
-	// 	res.status(500).json({ error: 'Connecting to the database failed.' });
-	// 	return;
-	// }
-
-	// // Upload Post
-	// if (req.method === 'POST') {
-	// 	let result;
-	// 	const postData = JSON.parse(req.body);
-
-	// 	try {
-	// 		result = await insertDocument(
-	// 			client,
-	// 			process.env.DATABASE_NAME,
-	// 			'posts',
-	// 			postData
-	// 		);
-	// 	} catch (err) {
-	// 		res.status(500).json({ error: err });
-	// 		client.close();
-	// 		return;
-	// 	}
-
-	// 	res.status(200).send({
-	// 		message: `Post ${result} successfully uploaded!`,
-	// 	});
-	// }
-
-	// // Get Post by Id
-	// if (req.method === 'GET') {
-	// 	let post;
-
-	// 	try {
-	// 		post = await getDocumentById(
-	// 			client,
-	// 			process.env.DATABASE_NAME,
-	// 			'posts',
-	// 			postId
-	// 		);
-	// 	} catch (err) {
-	// 		res.status(500).json({ error: err });
-	// 		client.close();
-	// 		return;
-	// 	}
-
-	// 	res.status(200).json({ post: post });
-	// }
-
-	// client.close();
-
 	const session = await getServerSession(req, res, authOptions);
 	const postSlug = req.query.postId as string;
+
+	console.log(`REQUEST POST: ${JSON.stringify(req.body)}`);
 
 	let client;
 	try {
@@ -77,10 +25,10 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			let post;
-			const query = Post.where({ slug: postSlug });
 			try {
+				const query = Post.where({ slug: postSlug });
 				post = await query.findOne();
-				console.log(`Retrieved Post: ${post}`);
+				// console.log(`Retrieved Post: ${post}`);
 			} catch (err) {
 				res.status(500).json({ error: err });
 				client.connection.close();
@@ -88,6 +36,57 @@ export default async function handler(
 			}
 
 			res.status(200).json({ post: post });
+			break;
+		case 'POST':
+			// Handle Cookies Here
+			console.log(`Asked to Update Post`);
+			const data = req.body;
+			const view = data.view as boolean;
+			const upvote = data.upvote as boolean;
+			const userID = data.cookie as string;
+
+			console.log(
+				`[${postSlug}] Asked to Perform the Following Operations on Post: (upvote: ${upvote}) (visitor_uuid: ${userID}), (view: ${view})`
+			);
+
+			if (view) {
+				try {
+					await Post.updateOne(
+						{
+							slug: postSlug,
+						},
+						{
+							$addToSet: { views: userID },
+						}
+					);
+				} catch (err) {
+					res.status(500).json({ error: err });
+					client.connection.close();
+					return;
+				}
+			} else {
+				try {
+					await Post.updateOne(
+						{
+							slug: postSlug,
+						},
+						{
+							$addToSet: upvote
+								? { upvotes: userID }
+								: { downvotes: userID },
+							$pull: upvote
+								? { downvotes: userID }
+								: { upvotes: userID },
+						}
+					);
+				} catch (err) {
+					res.status(500).json({ error: err });
+					client.connection.close();
+					return;
+				}
+			}
+
+			res.status(202).json({ message: `Successfully updated` });
 			break;
 		case 'DELETE':
 			if (session) {
@@ -102,7 +101,7 @@ export default async function handler(
 			}
 			break;
 		default:
-			res.setHeader('Allow', ['GET', 'DELETE']);
+			res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
 			res.status(405).end(`Method ${req.method} Not Allowed`);
 			break;
 	}

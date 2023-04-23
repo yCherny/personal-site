@@ -22,8 +22,9 @@ export default async function handler(
 	switch (req.method) {
 		case 'GET':
 			let posts;
+			const query = Post.where({ type: 'blog' });
 			try {
-				posts = await Post.find();
+				posts = await query.find();
 				console.log(posts);
 			} catch (err) {
 				res.status(500).json({ error: err });

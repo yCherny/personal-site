@@ -3,13 +3,23 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Header from '../../components/header/header';
 import Markdown from '@/components/sections/markdown';
+import DateFormatter from '@/components/layout/date-formatter';
 import { getAboutMeData } from '@/lib/aboutApi';
+import {
+	AccordionList,
+	Accordion,
+	AccordionHeader,
+	AccordionBody,
+} from '@tremor/react';
 
 type Props = {
-	data: [key: string];
+	summary: [key: string];
+	lore: [key: string];
+	journey: [key: string];
+	principles: [key: string];
 };
 
-function AboutPage({ data }: Props) {
+function AboutPage({ summary, lore, journey, principles }: Props) {
 	return (
 		<Fragment>
 			<Head>
@@ -39,45 +49,89 @@ function AboutPage({ data }: Props) {
 				/>
 				<div className='grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-24'>
 					<div className='flex flex-col gap-4 col-span-1 md:col-span-2'>
-						<Markdown content={data['content']} />
-					</div>
-					<div className='flex flex-col col-span-1 border-gray-500 border items-center p-5 gap-3 order-first sm:order-last'>
-						<h3 className='font-bold dark:text-white'>
-							Yegor Chernyshev
-						</h3>
-						<Image
-							alt='Image of Yegor Chernyshev'
-							src='/assets/me_full.jpg'
-							width={300}
-							height={800}
-						/>
-						<p className='text-gray-500 text-md'>
-							A photo of Yegor in 2023
+						<Markdown content={summary['content']} />
+						<AccordionList className='w-full'>
+							<Accordion className='dark:bg-[#534670] border-none'>
+								<AccordionHeader className='dark:text-white md:text-2xl font-bold'>
+									The Lore Continues
+								</AccordionHeader>
+								<AccordionBody>
+									<Markdown content={lore['content']} />
+								</AccordionBody>
+							</Accordion>
+							<Accordion className='dark:bg-[#534670] border-none'>
+								<AccordionHeader className='dark:text-white md:text-2xl font-bold'>
+									The Lore Continues
+								</AccordionHeader>
+								<AccordionBody>
+									<Markdown content={lore['content']} />
+								</AccordionBody>
+							</Accordion>
+						</AccordionList>
+						<p className='text-gray-400 dark:text-gray-500'>
+							Pretty much slapped this together for the sake of
+							deploying the website sooner. I will certainly come
+							up with a more visually appealing way to talk about
+							myself later. No one likes reading essays.
 						</p>
-						<table className='table-auto dark:text-white border-separate border-spacing-4'>
-							<tbody>
-								<tr className='align-top'>
-									<td className='font-semibold'>Born</td>
-									<td>July 1997</td>
-								</tr>
-								<tr className='align-top'>
-									<td className='font-semibold'>Education</td>
-									<td>
-										Baruch College (BA) New York University
-										(MS)
-									</td>
-								</tr>
-								<tr className='align-top'>
-									<td className='font-semibold'>
-										Occupations
-									</td>
-									<td>
-										Software engineer, lifelong learner,
-										night-owl
-									</td>
-								</tr>
-							</tbody>
-						</table>
+						<div className='flex flex-col'>
+							<h2 className='text-lg font-bold text-gray-400 dark:text-gray-500'>
+								{`Created At: `}
+								<DateFormatter
+									dateString={'2023-04-22T15:28:36.548+00:00'}
+								/>
+							</h2>
+
+							<h2 className='text-lg font-bold text-gray-500 dark:text-[#A59DB9]'>
+								Last Updated:{' '}
+								<DateFormatter
+									dateString={'2023-04-22T15:28:36.548+00:00'}
+								/>
+							</h2>
+						</div>
+					</div>
+					<div className='flex flex-col col-span-1 order-first sm:order-last'>
+						<div className='flex flex-col border rounded-lg bg-white items-center p-5 gap-3 drop-shadow-md'>
+							<h3 className='font-bold dark:text-black'>
+								Yegor Chernyshev
+							</h3>
+							<Image
+								alt='Image of Yegor Chernyshev'
+								src='/assets/me_full.jpg'
+								width={300}
+								height={800}
+								className='rounded-md'
+							/>
+							<p className='text-gray-500 text-md'>
+								A photo of Yegor in 2023
+							</p>
+							<table className='table-auto border-separate border-spacing-4'>
+								<tbody>
+									<tr className='align-top'>
+										<td className='font-semibold'>Born</td>
+										<td>July 1997</td>
+									</tr>
+									<tr className='align-top'>
+										<td className='font-semibold'>
+											Education
+										</td>
+										<td>
+											Baruch College (BA) New York
+											University (MS)
+										</td>
+									</tr>
+									<tr className='align-top'>
+										<td className='font-semibold'>
+											Occupations
+										</td>
+										<td>
+											Software engineer, lifelong learner,
+											night-owl
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -86,13 +140,22 @@ function AboutPage({ data }: Props) {
 }
 
 export async function getStaticProps() {
-	const data = getAboutMeData(['content', 'createdDate', 'editedDate']);
+	const summary = getAboutMeData('summary', ['content']);
+	const journey = getAboutMeData('journey', ['content']);
+	const principles = getAboutMeData('principles', ['content']);
+
+	const lore = getAboutMeData('lore', [
+		'content',
+		'createdDate',
+		'editedDate',
+	]);
 
 	return {
 		props: {
-			data: {
-				...data,
-			},
+			summary,
+			lore,
+			journey,
+			principles,
 		},
 	};
 }

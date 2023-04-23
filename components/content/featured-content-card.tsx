@@ -11,10 +11,7 @@ type Props = {
 
 function FeaturedContentCard({ path, data }: Props) {
 	return (
-		<Link
-			href={`/${path}/${data.title.split(' ').join('-').toLowerCase()}`}
-			className='drop-shadow-2xl'
-		>
+		<Link href={`/${path}/${data.slug}`} className='drop-shadow-2xl'>
 			<div className='max-w-full rounded-xl overflow-hidden transition duration-500 hover:scale-105 bg-white dark:bg-black relative h-96 grid grid-cols-5 sm:grid-cols-4'>
 				<Image
 					src={data.coverImage.url}

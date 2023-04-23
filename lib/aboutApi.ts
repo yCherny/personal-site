@@ -4,8 +4,8 @@ import matter from 'gray-matter';
 
 const aboutDirectory = join(process.cwd(), '_about');
 
-export function getAboutMeData(fields: string[] = []) {
-	const fullPath = join(aboutDirectory, `about.md`);
+export function getAboutMeData(file: string, fields: string[] = []) {
+	const fullPath = join(aboutDirectory, `${file}.md`);
 	const fileContents = fs.readFileSync(fullPath, 'utf8');
 	const { data, content } = matter(fileContents);
 

@@ -20,9 +20,9 @@ export interface IPost {
 	githubLink: string;
 
 	// Metadata
-	downvotes: number;
-	upvotes: number;
-	views: number;
+	downvotes: [string];
+	upvotes: [string];
+	views: [string];
 }
 
 export const postSchema = new Schema<IPost>(
@@ -50,9 +50,9 @@ export const postSchema = new Schema<IPost>(
 		githubLink: { type: String },
 
 		// Metadata
-		downvotes: { type: Number, required: false, default: 0 },
-		upvotes: { type: Number, required: false, default: 0 },
-		views: { type: Number, required: false, default: 0 },
+		downvotes: { type: [String], required: false, default: [] },
+		upvotes: { type: [String], required: false, default: [] },
+		views: { type: [String], required: false, default: [] },
 	},
 	{ timestamps: true }
 );
@@ -79,9 +79,9 @@ type Content = {
 	color?: string;
 	externalLink?: string;
 	githubLink?: string;
-	downvotes?: number;
-	upvotes?: number;
-	views?: number;
+	downvotes?: string[];
+	upvotes?: string[];
+	views?: string[];
 };
 
 export default Content;

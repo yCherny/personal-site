@@ -14,7 +14,7 @@ type Props = {
 
 export default function MasonryGrid({ type, data }: Props) {
 	return (
-		<div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 mt-5 mb-28 '>
+		<div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:mt-5 mb-28 '>
 			{data.map((d: any, postIndex) =>
 				postIndex === 0 ? (
 					<div
@@ -26,13 +26,14 @@ export default function MasonryGrid({ type, data }: Props) {
 							data={data[0]}
 						/>
 					</div>
-				) : // <ContentCard
-				// 	path={type === DataType.Post ? 'blog' : 'portfolio'}
-				// 	data={d}
-				// 	expanded={postIndex !== 0 && postIndex !== 2}
-				// 	key={postIndex}
-				// />
-				null
+				) : (
+					<ContentCard
+						path={type === DataType.Post ? 'blog' : 'portfolio'}
+						data={d}
+						expanded={postIndex !== 0 && postIndex !== 2}
+						key={postIndex}
+					/>
+				)
 			)}
 		</div>
 	);

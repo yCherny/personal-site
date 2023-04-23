@@ -6,7 +6,7 @@ import { Text, Button } from '@tremor/react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Content from '@/interfaces/content';
-import CircularButton from '../../../components/buttons/circular-button';
+import CircularButton from '../../../../components/buttons/circular-button';
 import {
 	ArrowSmallLeftIcon,
 	PlusCircleIcon,
@@ -21,8 +21,6 @@ import { getPostBySlug } from '@/lib/api';
 import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
 import * as Yup from 'yup';
 import FormikRadioGroup from '@/components/content/formik-radio-group';
-
-const plans = [{ name: 'Blog' }, { name: 'Project' }];
 
 type Props = {
 	content?: Content;
@@ -69,7 +67,8 @@ export default function EditPane({ content = undefined }: Props) {
 		authors: content?.authors ?? [
 			{
 				name: 'Yegor Chernyshev',
-				picture: '/assets/me.jpg',
+				picture:
+					'https://www.dropbox.com/s/h3q3r022pfu3qru/me.jpg?dl=1',
 				url: '',
 			},
 		],
@@ -87,20 +86,20 @@ export default function EditPane({ content = undefined }: Props) {
 	const uploadData = async (jsonData: string) => {
 		console.log(`Passed In Data: ${jsonData}`);
 
-		// try {
-		// 	let res = await fetch('http://localhost:3000/api/blog', {
-		// 		method: 'POST',
-		// 		body: jsonData,
-		// 		headers: {
-		// 			Accept: 'application/json',
-		// 			'Content-Type': 'application/json',
-		// 		},
-		// 	});
-		// 	res = await res.json();
-		// 	router.back();
-		// } catch (err) {
-		// 	console.log(`Error: ${err}`);
-		// }
+		try {
+			let res = await fetch('http://localhost:3000/api/blog', {
+				method: 'POST',
+				body: jsonData,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+			});
+			res = await res.json();
+			router.back();
+		} catch (err) {
+			console.log(`Error: ${err}`);
+		}
 	};
 
 	return (
@@ -167,8 +166,8 @@ export default function EditPane({ content = undefined }: Props) {
 													value: 'blog',
 												},
 												{
-													label: 'Project',
-													value: 'project',
+													label: 'Portfolio',
+													value: 'portfolio',
 												},
 											]}
 										/>
@@ -475,16 +474,15 @@ export default function EditPane({ content = undefined }: Props) {
 }
 
 type Params = {
-	query: {
+	params: {
 		slug: string;
-		type: string;
 	};
 };
 
 export async function getServerSideProps(context: Params) {
 	try {
 		const res = await fetch(
-			`http://localhost:3000/api/blog/${context.query.slug}`
+			`http://localhost:3000/api/blog/${context.params.slug}`
 		);
 		const data = await res.json();
 		const post = data.post;

@@ -5,7 +5,8 @@ import Navbar from '@/components/navigation/nav-bar';
 import SideBar from '@/components/navigation/side-bar';
 import DataFlow from '@/components/layout/data-flow';
 import Content from '@/interfaces/content';
-import { useState } from 'react';
+import Head from 'next/head';
+import { Fragment, useState } from 'react';
 
 type Props = {
 	allContent: Content[];
@@ -39,48 +40,62 @@ function Uploads({ allContent }: Props) {
 	}
 
 	return (
-		<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
-			<Navbar user={'Jimmy'} />
-			<div className='grid grid-cols-1 md:grid-cols-3 gap-10 mt-5'>
-				<SideBar onClick={filterContent} />
-				<div className='col-span-2'>
-					<DataFlow
-						content={filter === '' ? allContent : filteredContent}
-					/>
+		<Fragment>
+			<Head>
+				<title>Yegor Chernyshev | Uploads</title>
+				<meta
+					name='description'
+					content='Uploads by Yegor Chernyshev'
+				/>
+			</Head>
+			<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
+				<Navbar user={'Jimmy'} />
+				<div className='grid grid-cols-1 md:grid-cols-3 gap-10 mt-5'>
+					<SideBar onClick={filterContent} />
+					<div className='col-span-2'>
+						<DataFlow
+							content={
+								filter === '' ? allContent : filteredContent
+							}
+						/>
+					</div>
 				</div>
 			</div>
-		</div>
+		</Fragment>
 	);
 }
 
 export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
 	context
 ) => {
-	try {
-		const res = await fetch('http://localhost:3000/api/blog');
-		const data = await res.json();
-		const posts = data.posts;
-		console.log(posts[0].createdAt);
+	// Get Blogs
+	const res = await fetch('http://localhost:3000/api/blog');
+	const data = await res.json();
+	const blogs: Content[] = data.posts;
 
-		if (!data) {
-			return {
-				notFound: true,
-			};
-		}
+	// Get Projects
+	const resProject = await fetch('http://localhost:3000/api/portfolio');
+	const projectData = await resProject.json();
+	const projects: Content[] = projectData.projects;
 
+	const allContent = blogs.concat(projects);
+
+	if (!blogs && !projects) {
 		return {
-			props: {
-				allContent: posts,
-				session: await getServerSession(
-					context.req,
-					context.res,
-					authOptions
-				),
-			},
+			notFound: true,
 		};
-	} catch (err) {
-		console.log(`Error: ${err}`);
 	}
+
+	return {
+		props: {
+			allContent: allContent,
+			session: await getServerSession(
+				context.req,
+				context.res,
+				authOptions
+			),
+		},
+	};
 };
 
 export default Uploads;

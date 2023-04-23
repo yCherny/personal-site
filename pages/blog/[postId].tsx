@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
-import { getPostBySlug, getAllPosts } from '../../lib/api';
 import Head from 'next/head';
 import Content from '@/interfaces/content';
 import DetailContent from '@/components/content/detail-content';
+import { useEffect } from 'react';
+import { updateViewCount } from '@/lib/cookie-helpers';
 
 type Props = {
 	post: Content;
@@ -11,6 +12,10 @@ type Props = {
 };
 
 export default function PostDetail({ post }: Props) {
+	useEffect(() => {
+		updateViewCount(post.type, post.slug);
+	}, []);
+
 	const router = useRouter();
 	if (!router.isFallback && !post?.slug) {
 		return <ErrorPage statusCode={404} />;
@@ -25,42 +30,22 @@ type Params = {
 	};
 };
 
-export async function getStaticProps({ params }: Params) {
-	const post = getPostBySlug(params.postId, [
-		'slug',
-		'createdDate',
-		'editedDate',
-		'title',
-		'excerpt',
-		'tags',
-		'color',
-		'externalLink',
-		'githubLink',
-		'coverImage',
-		'authors',
-		'content',
-	]);
+export async function getServerSideProps(context: Params) {
+	const res = await fetch(
+		`http://localhost:3000/api/blog/${context.params.postId}`
+	);
+	const data = await res.json();
+	const post: Content = data.post;
+
+	if (!data) {
+		return {
+			props: {},
+		};
+	}
 
 	return {
 		props: {
-			post: {
-				...post,
-			},
+			post: post,
 		},
-	};
-}
-
-export async function getStaticPaths() {
-	const posts = getAllPosts(['slug']);
-
-	return {
-		paths: posts.map((post) => {
-			return {
-				params: {
-					postId: post.slug,
-				},
-			};
-		}),
-		fallback: false,
 	};
 }

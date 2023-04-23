@@ -13,7 +13,7 @@ authors:
         { name: Yegor Chernyshev, picture: '/assets/me.jpg', url: '' },
         {
             name: Yulian Kraynyak,
-            picture: 'https://yulian.codes/static/media/avatar-hex.d1abb4fbe6d7e23733af.webp',
+            picture: 'https://www.dropbox.com/s/4yfv1j69hwowt4c/cat.jpg?dl=1',
             url: 'https://yulian.codes',
         },
     ]
