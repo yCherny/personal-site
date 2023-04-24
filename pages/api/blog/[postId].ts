@@ -66,19 +66,39 @@ export default async function handler(
 				}
 			} else {
 				try {
-					await Post.updateOne(
-						{
-							slug: postSlug,
-						},
-						{
-							$addToSet: upvote
-								? { upvotes: userID }
-								: { downvotes: userID },
-							$pull: upvote
-								? { downvotes: userID }
-								: { upvotes: userID },
-						}
-					);
+					const match = upvote
+						? { slug: postSlug, upvotes: userID }
+						: { slug: postSlug, downvotes: userID };
+					const voteExists = await Post.findOne(match);
+
+					if (voteExists) {
+						// Delete the Vote
+						await Post.updateOne(
+							{
+								slug: postSlug,
+							},
+							{
+								$pull: upvote
+									? { upvotes: userID }
+									: { downvotes: userID },
+							}
+						);
+					} else {
+						// Set the Vote
+						await Post.updateOne(
+							{
+								slug: postSlug,
+							},
+							{
+								$addToSet: upvote
+									? { upvotes: userID }
+									: { downvotes: userID },
+								$pull: upvote
+									? { downvotes: userID }
+									: { upvotes: userID },
+							}
+						);
+					}
 				} catch (err) {
 					res.status(500).json({ error: err });
 					client.connection.close();

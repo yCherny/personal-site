@@ -7,19 +7,30 @@ import Content from '@/interfaces/content';
 type Props = {
 	path: string;
 	data: Content;
-	expanded?: boolean;
+	compressed?: boolean;
+	featured?: boolean;
 };
 
-function ContentCard({ path, data, expanded = false }: Props) {
+function ContentCard({
+	path,
+	data,
+	compressed = false,
+	featured = false,
+}: Props) {
 	return (
-		<div className={expanded ? 'row-span-2' : 'row-span-1'}>
-			<Link
-				href={`/${path}/${data.slug}`}
-				className='drop-shadow-2xl'
-			>
+		<div
+			className={`${compressed ? 'row-span-2' : 'row-span-1'} ${
+				featured ? 'md:col-span-3' : 'col-span-1'
+			}`}
+		>
+			<Link href={`/${path}/${data.slug}`} className='drop-shadow-2xl'>
 				<div className='group h-auto max-w-full rounded-xl overflow-hidden transition duration-500 hover:scale-105 bg-white dark:bg-black relative drop-shadow-lg'>
 					<div
-						className={expanded ? 'h-96' : 'h-48 group-hover:h-96'}
+						className={
+							compressed
+								? 'h-96 md:h-48 sm:group-hover:h-96'
+								: 'h-96'
+						}
 					>
 						<Image
 							src={data.coverImage.url}

@@ -7,20 +7,41 @@ import DateFormatter from '../layout/date-formatter';
 import StickyNavBar from '../layout/sticky-nav-bar';
 import VotingButton from '@/components/buttons/voting-button';
 
+import { useEffect, useState } from 'react';
+import { checkUsersVote } from '@/lib/cookie-helpers';
+import { updateVoteCount } from '@/lib/cookie-helpers';
+
+export enum Vote {
+	Upvote,
+	Downvote,
+	None,
+}
+
 type Props = {
 	type: string;
 	data: Content;
 };
 
 export default function DetailContent({ type, data }: Props) {
+	const [userVote, setUserVote] = useState<Vote>(Vote.None);
+
+	useEffect(() => {
+		setUserVote(checkUsersVote(data));
+	}, []);
+
+	function handleVoteChange(vote: Vote) {
+		setUserVote(userVote === vote ? Vote.None : vote);
+		updateVoteCount(vote, data.type, data.slug);
+	}
+
 	return (
 		<div className='max-w-6xl mx-auto min-h-screen'>
 			<StickyNavBar>
 				<Header title={type} subheader>
 					<FeedbackPanel
 						views={data.views?.length ?? 0}
-						slug={data.slug}
-						type={data.type}
+						currentVote={userVote}
+						onVote={handleVoteChange}
 					/>
 				</Header>
 			</StickyNavBar>
@@ -102,8 +123,15 @@ export default function DetailContent({ type, data }: Props) {
 						How was this article?
 					</h2>
 					<div className='flex flex-row gap-3'>
-						<VotingButton upvote />
-						<VotingButton />
+						<VotingButton
+							onClick={() => handleVoteChange(Vote.Upvote)}
+							selected={userVote === Vote.Upvote}
+							upvote
+						/>
+						<VotingButton
+							onClick={() => handleVoteChange(Vote.Downvote)}
+							selected={userVote === Vote.Downvote}
+						/>
 					</div>
 				</div>
 			</div>

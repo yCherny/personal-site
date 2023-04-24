@@ -6,32 +6,33 @@ import { Fragment, useState } from 'react';
 
 import Navbar from '@/components/navigation/nav-bar';
 import SideBar from '@/components/navigation/side-bar';
-import SkillContent from '@/interfaces/skill';
-
+import SectionContent from '@/interfaces/about';
+import AboutCard from '@/components/content/about-card';
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 
 type Props = {
-	allSkills?: SkillContent[];
+	allSections: SectionContent[];
+	allSectionFilters: string[];
 	session: Session;
 };
 
-function About({ allSkills, session }: Props) {
-	// const [filteredContent, setFilteredContent] =
-	// 	useState<Content[]>(allContent);
-	// const [filter, setFilter] = useState<string>('');
+function About({ allSections, allSectionFilters, session }: Props) {
+	const [filteredContent, setFilteredContent] =
+		useState<SectionContent[]>(allSections);
+	const [filter, setFilter] = useState<string>('');
 
-	// function filterContent(type: string) {
-	// 	if (type === filter) {
-	// 		setFilter('');
-	// 	} else {
-	// 		const filteredContent = allContent.filter(
-	// 			(data) => data.type === type
-	// 		);
-	// 		setFilter(type);
-	// 		setFilteredContent(filteredContent);
-	// 	}
-	// }
+	function filterContent(type: string) {
+		if (type === filter) {
+			setFilter('');
+		} else {
+			const filteredContent = allSections.filter(
+				(data) => data.page === type
+			);
+			setFilter(type);
+			setFilteredContent(filteredContent);
+		}
+	}
 
 	return (
 		<Fragment>
@@ -42,17 +43,23 @@ function About({ allSkills, session }: Props) {
 			<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
 				<Navbar user={'Yegor'} />
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>
-					{/* <SideBar onClick={filterContent} /> */}
+					<SideBar
+						onClick={filterContent}
+						filterOptions={allSectionFilters}
+						newPath={'/admin/about/edit/new'}
+					/>
 					<div className='col-span-2'>
 						<div className='flex flex-col gap-5'>
-							{allSkills &&
-								allSkills.map(
-									(skill: SkillContent, skillIndex) => (
-										<div key={skill.name}>
-											<h1>{skill.name}</h1>
-										</div>
-									)
-								)}
+							{(filter === ''
+								? allSections
+								: filteredContent
+							).map((section: SectionContent) => (
+								<AboutCard
+									section={section}
+									path={'admin/about/edit'}
+									key={section.title}
+								/>
+							))}
 						</div>
 					</div>
 				</div>
@@ -61,14 +68,15 @@ function About({ allSkills, session }: Props) {
 	);
 }
 
-import { loadSkillset } from '@/lib/skill-api';
+import { loadAboutSections } from '@/lib/about-api';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const skills = await loadSkillset();
+	const { sections, filterOptions } = await loadAboutSections();
 
 	return {
 		props: {
-			allSkills: skills,
+			allSections: sections,
+			allSectionFilters: filterOptions,
 			session: await getServerSession(
 				context.req,
 				context.res,

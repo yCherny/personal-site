@@ -4,11 +4,9 @@ import Header from '../../components/header/header';
 import Content from '@/interfaces/content';
 import SkillContent from '@/interfaces/skill';
 import FilterPanel from '@/components/filter/filter-panel';
-
+import SectionContent from '@/interfaces/about';
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
-import { GetServerSideProps } from 'next';
 import { SkillsetDashboard } from '@/components/content/skillset-dashboard';
-import { getAboutMeData } from '@/lib/aboutApi';
 import Markdown from '@/components/sections/markdown';
 import {
 	AccordionList,
@@ -23,16 +21,14 @@ type Props = {
 	allProjects: Content[];
 	allSkills: SkillContent[];
 	uniqueTags: string[];
-	journey: [key: string];
-	principles: [key: string];
+	sections: SectionContent[];
 };
 
 function PortfolioPage({
 	allProjects,
 	allSkills,
 	uniqueTags,
-	journey,
-	principles,
+	sections,
 }: Props) {
 	const [filteredContent, setFilteredContent] =
 		useState<Content[]>(allProjects);
@@ -90,25 +86,22 @@ function PortfolioPage({
 							data={filter === '' ? allProjects : filteredContent}
 						/>
 					</div>
-					<div className='flex flex-col col-span-1 order-first lg:order-last py-5 gap-5'>
+					<div className='flex flex-col col-span-1 order-first lg:order-last pt-5 gap-5'>
 						<SkillsetDashboard skills={allSkills} />
 						<AccordionList className='w-full'>
-							<Accordion className='dark:bg-[#534670] border-none'>
-								<AccordionHeader className='dark:text-white text-lg md:text-xl font-bold'>
-									Software Engineering Journey
-								</AccordionHeader>
-								<AccordionBody>
-									<Markdown content={journey['content']} />
-								</AccordionBody>
-							</Accordion>
-							<Accordion className='dark:bg-[#534670] border-none'>
-								<AccordionHeader className='dark:text-white text-lg md:text-xl font-bold'>
-									Principles
-								</AccordionHeader>
-								<AccordionBody>
-									<Markdown content={principles['content']} />
-								</AccordionBody>
-							</Accordion>
+							{sections.map((section, index) => (
+								<Accordion
+									className='dark:bg-[#534670] border-none'
+									key={index}
+								>
+									<AccordionHeader className='dark:text-white text-lg md:text-xl font-bold'>
+										{section.title}
+									</AccordionHeader>
+									<AccordionBody>
+										<Markdown content={section.content} />
+									</AccordionBody>
+								</Accordion>
+							))}
 						</AccordionList>
 					</div>
 				</div>
@@ -119,12 +112,15 @@ function PortfolioPage({
 
 import { loadPortfolio } from '@/lib/portfolio-api';
 import { loadSkillset } from '@/lib/skill-api';
+import { loadAboutSections } from '@/lib/about-api';
 
 export async function getStaticProps() {
-	const journey = getAboutMeData('journey', ['content']);
-	const principles = getAboutMeData('principles', ['content']);
+	const { sections, filterOptions } = await loadAboutSections();
 	const { projects, uniqueTags } = await loadPortfolio();
 	const { skills, skillFilters } = await loadSkillset();
+	const programmingSections = sections.filter(
+		(section) => section.page === 'portfolio'
+	);
 
 	if (!projects) {
 		return {
@@ -137,8 +133,7 @@ export async function getStaticProps() {
 			allProjects: projects,
 			allSkills: skills,
 			uniqueTags: uniqueTags,
-			journey,
-			principles,
+			sections: programmingSections,
 		},
 	};
 }

@@ -1,6 +1,6 @@
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import FilterOption from './filter-option';
-import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 type Props = {
 	onClick: any;
@@ -9,10 +9,11 @@ type Props = {
 };
 
 function FilterPanel({ onClick, filterOptions, path }: Props) {
-	const router = useRouter();
-	function findContentHandler(tag: string) {
-		const fullPath = `/${path}/${tag}`;
-		router.push(fullPath);
+	const [selected, setSelected] = useState<number | null>(null);
+
+	function handleOptionSelect(option: string, index: number) {
+		setSelected(selected === index ? null : index);
+		onClick(option);
 	}
 
 	return (
@@ -30,7 +31,10 @@ function FilterPanel({ onClick, filterOptions, path }: Props) {
 					<FilterOption
 						text={option}
 						key={index}
-						onPress={() => onClick(option)}
+						selected={selected === index}
+						onPress={(option: string) =>
+							handleOptionSelect(option, index)
+						}
 					/>
 				);
 			})}

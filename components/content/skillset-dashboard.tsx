@@ -106,7 +106,7 @@ export function SkillsetDashboard({ skills }: Props) {
 	};
 
 	return (
-		<Card className='max-w-full'>
+		<div className='rounded-lg bg-white p-5 drop-shadow-md'>
 			<Flex>
 				<Title className='font-bold'>Skillset</Title>
 				<Dropdown
@@ -137,6 +137,6 @@ export function SkillsetDashboard({ skills }: Props) {
 				valueFormatter={valueFormat}
 				className='mt-2'
 			/>
-		</Card>
+		</div>
 	);
 }

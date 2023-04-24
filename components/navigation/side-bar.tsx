@@ -6,6 +6,7 @@ import {
 	NewspaperIcon,
 	PlusCircleIcon,
 } from '@heroicons/react/24/outline';
+import FilterOption from '../filter/filter-option';
 
 type Props = {
 	onClick: any;
@@ -17,28 +18,28 @@ export default function SideBar({ onClick, filterOptions, newPath }: Props) {
 	const router = useRouter();
 	const [selected, setSelected] = useState<number | null>(null);
 
+	function handleOptionSelect(option: string, index: number) {
+		setSelected(selected === index ? null : index);
+		onClick(option);
+	}
+
 	return (
 		<div className='flex flex-col gap-4 mb-5 md:mb-0'>
+			<Title className='font-bold text-2xl'>Filters</Title>
 			{filterOptions.map((option, index) => {
 				return (
-					<Button
+					<FilterOption
+						text={option}
 						key={index}
-						size='lg'
-						onClick={() => {
-							setSelected(selected === index ? null : index);
-							onClick(option);
-						}}
-						className={`${
-							selected === 0
-								? 'bg-blue-500'
-								: 'bg-black border-none'
-						}`}
-					>
-						{option}
-					</Button>
+						selected={selected === index}
+						onPress={(option: string) =>
+							handleOptionSelect(option, index)
+						}
+					/>
 				);
 			})}
 
+			<Title className='font-bold text-2xl'>Actions</Title>
 			<Button
 				size='lg'
 				icon={PlusCircleIcon}

@@ -4,22 +4,20 @@ import Image from 'next/image';
 import Header from '../../components/header/header';
 import Markdown from '@/components/sections/markdown';
 import DateFormatter from '@/components/layout/date-formatter';
-import { getAboutMeData } from '@/lib/aboutApi';
 import {
 	AccordionList,
 	Accordion,
 	AccordionHeader,
 	AccordionBody,
 } from '@tremor/react';
+import SectionContent from '@/interfaces/about';
 
 type Props = {
-	summary: [key: string];
-	lore: [key: string];
-	journey: [key: string];
-	principles: [key: string];
+	summary: SectionContent;
+	sections: SectionContent[];
 };
 
-function AboutPage({ summary, lore, journey, principles }: Props) {
+function AboutPage({ summary, sections }: Props) {
 	return (
 		<Fragment>
 			<Head>
@@ -32,7 +30,7 @@ function AboutPage({ summary, lore, journey, principles }: Props) {
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header
 					title={
-						<h1>
+						<h1 className='flex flex-wrap'>
 							<span className='text-gray-400 dark:text-[#A59DB9]'>
 								wiki/
 							</span>
@@ -49,24 +47,21 @@ function AboutPage({ summary, lore, journey, principles }: Props) {
 				/>
 				<div className='grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-24'>
 					<div className='flex flex-col gap-4 col-span-1 md:col-span-2'>
-						<Markdown content={summary['content']} />
+						<Markdown content={summary.content} />
 						<AccordionList className='w-full'>
-							<Accordion className='dark:bg-[#534670] border-none'>
-								<AccordionHeader className='dark:text-white md:text-2xl font-bold'>
-									The Lore Continues
-								</AccordionHeader>
-								<AccordionBody>
-									<Markdown content={lore['content']} />
-								</AccordionBody>
-							</Accordion>
-							<Accordion className='dark:bg-[#534670] border-none'>
-								<AccordionHeader className='dark:text-white md:text-2xl font-bold'>
-									The Lore Continues
-								</AccordionHeader>
-								<AccordionBody>
-									<Markdown content={lore['content']} />
-								</AccordionBody>
-							</Accordion>
+							{sections.map((section) => (
+								<Accordion
+									className='dark:bg-[#534670] border-none'
+									key={section.title}
+								>
+									<AccordionHeader className='dark:text-white md:text-2xl font-bold'>
+										{section.title}
+									</AccordionHeader>
+									<AccordionBody>
+										<Markdown content={section.content} />
+									</AccordionBody>
+								</Accordion>
+							))}
 						</AccordionList>
 						<p className='text-gray-400 dark:text-gray-500'>
 							Pretty much slapped this together for the sake of
@@ -139,23 +134,19 @@ function AboutPage({ summary, lore, journey, principles }: Props) {
 	);
 }
 
-export async function getStaticProps() {
-	const summary = getAboutMeData('summary', ['content']);
-	const journey = getAboutMeData('journey', ['content']);
-	const principles = getAboutMeData('principles', ['content']);
+import { loadAboutSections } from '@/lib/about-api';
 
-	const lore = getAboutMeData('lore', [
-		'content',
-		'createdDate',
-		'editedDate',
-	]);
+export async function getStaticProps() {
+	const { sections, filterOptions } = await loadAboutSections();
+	const summary = sections.filter((section) => section.title === 'Summary');
+	const aboutSections = sections.filter(
+		(section) => section.page === 'about' && section.title !== 'Summary'
+	);
 
 	return {
 		props: {
-			summary,
-			lore,
-			journey,
-			principles,
+			summary: summary[0],
+			sections: aboutSections,
 		},
 	};
 }

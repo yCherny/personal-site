@@ -28,19 +28,23 @@ function VotingButton({
 
 	const upvoteButton = (
 		<div className='text-emerald-400'>
-			{hovered ? <UpvoteSolid /> : <UpvoteOutline />}
+			{hovered || selected ? <UpvoteSolid /> : <UpvoteOutline />}
 		</div>
 	);
 
 	const downvoteButton = (
 		<div className='text-pink-500'>
-			{hovered ? <DownvoteSolid /> : <DownvoteOutline />}
+			{hovered || selected ? <DownvoteSolid /> : <DownvoteOutline />}
 		</div>
 	);
 
 	return (
 		<button
-			className={`rounded-full w-11 p-2.5 backdrop-blur-md transition duration-500 bg-black/10  dark:bg-black/10 hover:scale-110 hover:bg-black hover:dark:bg-white`}
+			className={`${
+				selected
+					? 'bg-black dark:bg-white dark:text-black font-bold'
+					: 'bg-black/10  dark:bg-black/10'
+			} rounded-full w-11 p-2.5 backdrop-blur-md transition duration-500 hover:scale-110  hover:font-bold hover:bg-black hover:text-white hover:dark:bg-white hover:dark:text-black`}
 			onClick={buttonClicked}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
