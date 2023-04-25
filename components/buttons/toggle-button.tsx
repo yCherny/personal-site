@@ -27,9 +27,19 @@ export default function ToggleButton({ disabledIcon, enabledIcon }: Props) {
 	}
 
 	return (
-		<CircularButton
-			icon={theme === 'light' ? disabledIcon : enabledIcon}
+		<button
+			className={`rounded-full w-10 h-10 p-2.5 flex flex-col items-center
+		
+		backdrop-blur-md transition duration-500 text-white
+		
+		bg-black/10 text-black 
+		hover:bg-black hover:text-white 
+		
+		dark:bg-black/10  dark:hover:bg-white dark:hover:text-black
+		`}
 			onClick={handleOnClick}
-		/>
+		>
+			{theme === 'light' ? disabledIcon : enabledIcon}
+		</button>
 	);
 }
