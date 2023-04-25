@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import VotingButton from '@/components/buttons/voting-button';
 import { Vote } from '../content/detail-content';

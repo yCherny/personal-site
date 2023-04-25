@@ -8,8 +8,7 @@ import StickyNavBar from '../layout/sticky-nav-bar';
 import VotingButton from '@/components/buttons/voting-button';
 
 import { useEffect, useState } from 'react';
-import { checkUsersVote } from '@/lib/cookie-helpers';
-import { updateVoteCount } from '@/lib/cookie-helpers';
+import { checkUsersVote, updateVoteCount } from '@/lib/cookie-helpers';
 
 export enum Vote {
 	Upvote,

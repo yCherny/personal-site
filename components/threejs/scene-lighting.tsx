@@ -1,23 +1,15 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { Vector3 } from 'three';
-import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import React, { useEffect, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 import {
-	Center,
-	AccumulativeShadows,
-	RandomizedLight,
-	Environment,
-	useGLTF,
-	useDepthBuffer,
-	SpotLight,
-	SoftShadows,
-	Float,
 	ContactShadows,
+	Environment,
 	Sky,
+	SpotLight,
+	Sparkles,
+	useDepthBuffer,
 } from '@react-three/drei';
-// import { PointLightShadow } from 'three';
-// import { Pathtracer } from '@react-three/gpu-pathtracer';
-
 import { easing } from 'maath';
+import { useTheme } from 'next-themes';
 
 function Light() {
 	const ref = useRef();
@@ -72,50 +64,15 @@ function Light() {
 				intensity={0.15}
 			/>
 
-			{/* <directionalLight
-				position={[-1, 1, -1]}
-				color={'#FFB8FD'}
-				castShadow
-				intensity={0.3}
-				shadow-mapSize={2048}
-				shadow-bias={-0.001}
-			>
-				<orthographicCamera
-					attach='shadow-camera'
-					args={[-8.5, 8.5, 8.5, -8.5, 0.1, 20]}
-				/>
-			</directionalLight> */}
-		</group>
-	);
-}
+			{/* Mobile Phone Light */}
 
-function Spot({ vec = new Vector3(), ...props }) {
-	const light = useRef();
-	const viewport = useThree((state) => state.viewport);
-	useFrame((state) => {
-		light.current.target.position.lerp(
-			vec.set(
-				(state.mouse.x * viewport.width) / 2,
-				(state.mouse.y * viewport.height) / 2,
-				0
-			),
-			0.1
-		);
-		light.current.target.updateMatrixWorld();
-	});
-	return (
-		<SpotLight
-			castShadow
-			ref={light}
-			penumbra={1} //  Percent of the spotlight cone that is attenuated due to penumbra. Takes values between zero and 1. Default is zero.
-			distance={6} //Maximum range of the light. Default is 0 (no limit).
-			angle={0.35} // Width of Beam
-			attenuation={5}
-			anglePower={4}
-			intensity={2}
-			decay={0} // The amount the light dims along the distance of the light.
-			{...props}
-		/>
+			{/* Desktop Case Power Button Light */}
+			<pointLight
+				position={[-0.66, 1.92, -1.01]}
+				color={'#FFF'}
+				intensity={0.1}
+			/>
+		</group>
 	);
 }
 
@@ -124,18 +81,17 @@ type Props = {
 };
 
 function SceneLighting({ enabled = true }: Props) {
-	const depthBuffer = useDepthBuffer({ frames: 1 });
+	const { theme, setTheme } = useTheme();
 
 	if (enabled) {
 		return (
 			<>
-				{/* {enabled && (
-				<SoftShadows
-					{...config}
-					samples={bad ? Math.min(6, samples) : samples}
-				/>
-			)} */}
-				<ambientLight intensity={1} color={'#6959BB'} />
+				{theme === 'light' && (
+					<>
+						<ambientLight intensity={1} color={'#6959BB'} />
+					</>
+				)}
+
 				<ContactShadows
 					resolution={512}
 					position={[0, -0.8, 0]}
@@ -144,19 +100,61 @@ function SceneLighting({ enabled = true }: Props) {
 					blur={2}
 					far={0.8}
 				/>
-
 				<Light />
+				{/* Table Lamp */}
+				<rectAreaLight
+					// castShadow
+					width={0.08}
+					height={0.08}
+					intensity={1.5}
+					color={'#FFF'}
+					position={[-0.41, 2.24, -0.05]}
+					rotation={[-Math.PI / 2, 0, 0]}
+				/>
 
-				<Spot
-					depthBuffer={depthBuffer}
-					color='#0c8cbf'
-					position={[3, 2.05, -0.79]}
-				/>
-				<Spot
-					depthBuffer={depthBuffer}
-					color='#b00c3f'
-					position={[1, 3, 0]}
-				/>
+				{theme === 'dark' && (
+					<>
+						{/* Standing Lamp */}
+						<SpotLight
+							castShadow
+							position={[2.85, 2.51, -0.72]}
+							color={'#FDFD96'}
+							penumbra={1}
+							angle={0.5}
+							distance={5}
+							attenuation={3}
+							intensity={2}
+							anglePower={5}
+							onUpdate={(self) => {
+								self.target.position.set(4.12, 0.35, 0.909);
+								self.target.updateMatrixWorld();
+							}}
+						/>
+
+						<SpotLight
+							castShadow
+							position={[2.98, 2.05, -0.78]}
+							color={'#FDFD96'}
+							penumbra={1}
+							angle={0.5}
+							distance={5}
+							attenuation={3}
+							intensity={2}
+							anglePower={5} // Diffuse-cone anglePower (default: 5)
+							onUpdate={(self) => {
+								self.target.position.set(3.8, 1.5, -0.4);
+								self.target.updateMatrixWorld();
+							}}
+						/>
+
+						<Sparkles
+							position={[4.2, 1.4, 0.3]}
+							scale={1.6}
+							opacity={0.25}
+							speed={0.5}
+						/>
+					</>
+				)}
 			</>
 		);
 	} else {

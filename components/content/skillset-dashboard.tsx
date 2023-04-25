@@ -1,14 +1,5 @@
-import { Fragment, useState } from 'react';
-import {
-	BarList,
-	Card,
-	Title,
-	Bold,
-	Flex,
-	Text,
-	Dropdown,
-	DropdownItem,
-} from '@tremor/react';
+import { useState } from 'react';
+import { BarList, Title, Flex, Dropdown, DropdownItem } from '@tremor/react';
 
 import SkillContent from '@/interfaces/skill';
 import Image from 'next/image';

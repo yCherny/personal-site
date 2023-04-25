@@ -9,11 +9,11 @@ export default function DataFlow({ content }: Props) {
 	return (
 		<div className='flex flex-col gap-5'>
 			{content &&
-				content.map((d: any, postIndex) => (
+				content.map((d: Content) => (
 					<ContentCard
 						path={'/admin/uploads/edit'}
 						data={d}
-						key={postIndex}
+						key={d.slug}
 					/>
 				))}
 		</div>

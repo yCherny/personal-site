@@ -30,7 +30,7 @@ function FilterPanel({ onClick, filterOptions, path }: Props) {
 				return (
 					<FilterOption
 						text={option}
-						key={index}
+						key={option}
 						selected={selected === index}
 						onPress={(option: string) =>
 							handleOptionSelect(option, index)

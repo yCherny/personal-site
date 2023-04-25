@@ -1,5 +1,5 @@
 import SectionContent from '@/interfaces/about';
-import { Card, Subtitle, Title, Flex, Text } from '@tremor/react';
+import { Card, Subtitle, Title, Flex } from '@tremor/react';
 import Link from 'next/link';
 
 type Props = {

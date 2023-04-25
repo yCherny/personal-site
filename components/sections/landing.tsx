@@ -14,10 +14,10 @@ function Landing() {
 			<h1 className='text-xl text-center font-bold md:text-6xl md:text-left'>
 				Software Engineer
 			</h1>
-			<p className='text-sm text-center text-gray-400 dark:text-gray-600 md:text-lg md:text-left'>
+			<p className='text-sm text-center text-gray-400 dark:text-gray-500 md:text-lg md:text-left'>
 				Night-owl. Enjoyer of precious things. Has a million thoughts
 				running through his head.
-				<span className='font-bold text-white dark:text-gray-500'>
+				<span className='font-bold text-white dark:text-gray-400'>
 					{' '}
 					Essentially if gollum found a computer.
 				</span>

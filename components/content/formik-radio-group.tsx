@@ -1,9 +1,6 @@
 import { useField, useFormikContext } from 'formik';
 import React from 'react';
-import CustomRadioGroup, {
-	CustomRadioGroupOption,
-	CustomRadioGroupProps,
-} from './custom-radio-group';
+import CustomRadioGroup, { CustomRadioGroupOption } from './custom-radio-group';
 
 type FormikRadioGroupProps<TValue> = {
 	name: string;
@@ -17,11 +14,9 @@ const FormikRadioGroup = <TValue,>(props: FormikRadioGroupProps<TValue>) => {
 	return (
 		<CustomRadioGroup
 			options={props.options}
-			// use field.value for value
 			value={field.value}
 			label={props.label}
 			onChange={(val) => {
-				// use setFieldValue to modify the formikContext
 				setFieldValue(props.name, val);
 			}}
 		/>

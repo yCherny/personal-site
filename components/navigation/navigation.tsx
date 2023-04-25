@@ -9,17 +9,11 @@ import {
 	NewspaperIcon,
 	MoonIcon,
 	SunIcon,
+	MegaphoneIcon,
 } from '@heroicons/react/24/outline';
-import Player from '../buttons/player';
 
 function NavigationBar() {
-	const [darkModeEnabled, setDarkModeEnabled] = useState(false);
-	const [musicEnabled, setMusicEnabled] = useState(false);
 	const [selectedTab, setSelectedTab] = useState(0);
-
-	function handleThemeChange() {
-		setDarkModeEnabled(!darkModeEnabled);
-	}
 
 	function tabSelected(title: string) {
 		switch (title) {
@@ -31,6 +25,9 @@ function NavigationBar() {
 				break;
 			case 'Blog':
 				setSelectedTab(3);
+				break;
+			case 'Contact':
+				setSelectedTab(4);
 				break;
 			default:
 				setSelectedTab(0);
@@ -76,7 +73,13 @@ function NavigationBar() {
 				/>
 			</NavigationGroup>
 			<NavigationGroup>
-				<Player url={'/assets/chill-ambient-coma-media.mp3'} />
+				<NavigationItem
+					path={'/contact'}
+					title={'Contact'}
+					icon={<MegaphoneIcon />}
+					onPress={tabSelected}
+					selected={selectedTab === 4}
+				/>
 			</NavigationGroup>
 		</div>
 	);

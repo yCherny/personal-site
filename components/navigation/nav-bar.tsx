@@ -1,6 +1,5 @@
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
-import { TabList, Tab } from '@tremor/react';
 import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -15,6 +14,7 @@ const navigation = [
 	{ name: 'About', href: '/admin/about' },
 	{ name: 'Uploads', href: '/admin/uploads' },
 	{ name: 'Skills', href: '/admin/skills' },
+	{ name: 'Contact', href: '/admin/contact' },
 ];
 
 export default function Navbar({ user }: { user: any }) {

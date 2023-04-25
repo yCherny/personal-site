@@ -17,7 +17,7 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 			<RadioGroup.Label className='sr-only'>
 				{props.label}
 			</RadioGroup.Label>
-			<div className='flex flex-row gap-4'>
+			<div className='flex flex-wrap gap-4'>
 				{props.options.map((option) => (
 					<RadioGroup.Option
 						key={option.label}
@@ -25,10 +25,10 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 						className={({ active, checked }) =>
 							`${
 								checked
-									? 'bg-black dark:bg-gray-600'
+									? 'bg-black dark:bg-white'
 									: 'bg-white dark:bg-gray-800'
 							}
-                    relative flex w-1/2 cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
+                    relative flex w-full sm:w-auto cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
 						}
 					>
 						{({ active, checked }) => (
@@ -38,9 +38,9 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 										<div className='text-sm'>
 											<RadioGroup.Label
 												as='p'
-												className={`font-medium  ${
+												className={`font-medium ${
 													checked
-														? 'text-white'
+														? 'text-white dark:text-black dark:font-black'
 														: 'text-gray-900 dark:text-gray-400'
 												}`}
 											>
@@ -49,7 +49,7 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 										</div>
 									</div>
 									{checked && (
-										<div className='shrink-0 text-white'>
+										<div className='shrink-0 text-white dark:bg-black dark:rounded-full'>
 											<CheckIcon className='h-6 w-6' />
 										</div>
 									)}

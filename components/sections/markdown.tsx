@@ -1,4 +1,3 @@
-import markdownStyles from './markdown-styles.module.css';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -11,11 +10,12 @@ function Markdown({ content }: Props) {
 	return (
 		<div className='mx-auto'>
 			<ReactMarkdown
-				children={content}
 				remarkPlugins={[remarkGfm]}
 				rehypePlugins={[rehypeHighlight]}
 				className='prose lg:prose-xl dark:prose-invert'
-			/>
+			>
+				{content}
+			</ReactMarkdown>
 		</div>
 	);
 }

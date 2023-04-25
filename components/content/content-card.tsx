@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import Tag from '../portfolio/tag';
+import Tag from './tag';
 import DateFormatter from '../layout/date-formatter';
 import Content from '@/interfaces/content';
 
