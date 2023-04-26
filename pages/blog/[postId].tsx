@@ -1,10 +1,7 @@
 import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
-import Head from 'next/head';
 import Content from '@/interfaces/content';
 import DetailContent from '@/components/content/detail-content';
-import { useEffect } from 'react';
-import { updateViewCount } from '@/lib/cookie-helpers';
 
 type Props = {
 	post: Content;
@@ -12,10 +9,6 @@ type Props = {
 };
 
 export default function PostDetail({ post }: Props) {
-	useEffect(() => {
-		updateViewCount(post.type, post.slug);
-	}, []);
-
 	const router = useRouter();
 	if (!router.isFallback && !post?.slug) {
 		return <ErrorPage statusCode={404} />;

@@ -1,5 +1,5 @@
-import { Post } from '@/interfaces/content';
 import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -12,8 +12,7 @@ export default async function handler(
 	const session = await getServerSession(req, res, authOptions);
 	const postSlug = req.query.postId as string;
 
-	console.log(`REQUEST POST: ${JSON.stringify(req.body)}`);
-
+	// Database Connection
 	let client;
 	try {
 		client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
@@ -24,45 +23,30 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let post;
 			try {
 				const query = Post.where({ slug: postSlug });
-				post = await query.findOne();
-				// console.log(`Retrieved Post: ${post}`);
+				const post = await query.findOne();
+				res.status(200).json({ post: post });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ post: post });
 			break;
 		case 'POST':
-			// Handle Cookies Here
-			console.log(`Asked to Update Post`);
 			const data = req.body;
 			const view = data.view as boolean;
 			const upvote = data.upvote as boolean;
 			const userID = data.cookie as string;
 
-			console.log(
-				`[${postSlug}] Asked to Perform the Following Operations on Post: (upvote: ${upvote}) (visitor_uuid: ${userID}), (view: ${view})`
-			);
-
 			if (view) {
+				const query = await Post.findOne({ slug: postSlug });
 				try {
-					await Post.updateOne(
-						{
-							slug: postSlug,
-						},
-						{
-							$addToSet: { views: userID },
-						}
+					const updatedPost = await Post.updateOne(
+						{ slug: postSlug },
+						{ $addToSet: { views: userID } }
 					);
+					res.status(202).json({ message: `Successfully updated` });
 				} catch (err) {
 					res.status(500).json({ error: err });
-					client.connection.close();
-					return;
 				}
 			} else {
 				try {
@@ -72,11 +56,8 @@ export default async function handler(
 					const voteExists = await Post.findOne(match);
 
 					if (voteExists) {
-						// Delete the Vote
 						await Post.updateOne(
-							{
-								slug: postSlug,
-							},
+							{ slug: postSlug },
 							{
 								$pull: upvote
 									? { upvotes: userID }
@@ -84,11 +65,8 @@ export default async function handler(
 							}
 						);
 					} else {
-						// Set the Vote
 						await Post.updateOne(
-							{
-								slug: postSlug,
-							},
+							{ slug: postSlug },
 							{
 								$addToSet: upvote
 									? { upvotes: userID }
@@ -99,22 +77,17 @@ export default async function handler(
 							}
 						);
 					}
+
+					res.status(202).json({ message: `Successfully updated` });
 				} catch (err) {
 					res.status(500).json({ error: err });
-					client.connection.close();
-					return;
 				}
 			}
-
-			res.status(202).json({ message: `Successfully updated` });
 			break;
 		case 'DELETE':
 			if (session) {
-				console.log(`API DELETE: ${postSlug}`);
 				await Post.deleteOne({ slug: postSlug });
-				res.status(202).json({
-					deleted: `Post ${postSlug}`,
-				});
+				res.status(202).json({ deleted: `/blog/${postSlug}` });
 			} else {
 				res.status(401).json({
 					error: `Unauthorized to access this api point`,
@@ -126,5 +99,6 @@ export default async function handler(
 			res.status(405).end(`Method ${req.method} Not Allowed`);
 			break;
 	}
+
 	client.connection.close();
 }

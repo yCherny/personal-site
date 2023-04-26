@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 import { Fragment, useEffect, useState } from 'react';
-import { Card, Metric, Text, Flex, Grid, Title, BarList } from '@tremor/react';
+import { Card, Metric, Text, Flex, Title } from '@tremor/react';
 import Head from 'next/head';
 import Navbar from '@/components/navigation/nav-bar';
 import Content from '@/interfaces/content';
@@ -12,15 +12,30 @@ import type { Session } from 'next-auth';
 
 type Props = {
 	allContent: Content[];
+	allSections: SectionContent[];
+	allSkills: SkillContent[];
 	session: Session;
 };
 
-export default function Dashboard({ allContent, session }: Props) {
+export default function Dashboard({
+	allContent,
+	allSections,
+	allSkills,
+	session,
+}: Props) {
 	const [blogCount, setBlogCount] = useState<number>(0);
 	const [projectCount, setProjectCount] = useState<number>(0);
 	const [viewCount, setViewCount] = useState<number>(0);
 	const [upvoteCount, setUpvoteCount] = useState<number>(0);
 	const [downvoteCount, setDownvoteCount] = useState<number>(0);
+	const [allContacts, setAllContacts] = useState<ContactContent[]>();
+
+	async function getContactData() {
+		const res = await fetch('http://localhost:3000/api/contact');
+		const data = await res.json();
+		const contacts: ContactContent[] = data.contacts;
+		setAllContacts(contacts);
+	}
 
 	useEffect(() => {
 		let blogCount = 0;
@@ -46,6 +61,7 @@ export default function Dashboard({ allContent, session }: Props) {
 		setUpvoteCount(upvoteCount);
 		setDownvoteCount(downvoteCount);
 		setViewCount(viewCount);
+		getContactData();
 	}, []);
 
 	return (
@@ -130,6 +146,54 @@ export default function Dashboard({ allContent, session }: Props) {
 								</Card>
 							</div>
 						</div>
+
+						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
+							<Title className='font-black'>About</Title>
+							<div className='flex flex-row gap-5'>
+								<Card>
+									<Flex alignItems='start'>
+										<Text>Sections</Text>
+									</Flex>
+									<Flex
+										className='space-x-3 truncate'
+										justifyContent='start'
+										alignItems='baseline'
+									>
+										<Metric>{allSections.length}</Metric>
+									</Flex>
+								</Card>
+								<Card>
+									<Flex alignItems='start'>
+										<Text>Skills</Text>
+									</Flex>
+									<Flex
+										className='space-x-3 truncate'
+										justifyContent='start'
+										alignItems='baseline'
+									>
+										<Metric>{allSkills.length}</Metric>
+									</Flex>
+								</Card>
+							</div>
+						</div>
+
+						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
+							<Title className='font-black'>Contact</Title>
+							<div className='flex flex-row gap-5'>
+								<Card>
+									<Flex alignItems='start'>
+										<Text>Inquiries</Text>
+									</Flex>
+									<Flex
+										className='space-x-3 truncate'
+										justifyContent='start'
+										alignItems='baseline'
+									>
+										<Metric>{allContacts?.length}</Metric>
+									</Flex>
+								</Card>
+							</div>
+						</div>
 					</div>
 				</div>
 			</main>
@@ -137,23 +201,26 @@ export default function Dashboard({ allContent, session }: Props) {
 	);
 }
 
+import { loadAboutSections } from '@/lib/about-api';
 import { loadBlog } from '@/lib/blog-api';
 import { loadPortfolio } from '@/lib/portfolio-api';
+import { loadSkillset } from '@/lib/skill-api';
+import SectionContent from '@/interfaces/about';
+import SkillContent from '@/interfaces/skill';
+import ContactContent from '@/interfaces/contact';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const { posts, uniqueTags: postTags } = await loadBlog();
-	const { projects, uniqueTags: projectTags } = await loadPortfolio();
+	const { sections } = await loadAboutSections();
+	const { posts } = await loadBlog();
+	const { projects } = await loadPortfolio();
+	const { skills } = await loadSkillset();
 	const allContent = posts.concat(projects);
-
-	if (!posts && !projects) {
-		return {
-			notFound: true,
-		};
-	}
 
 	return {
 		props: {
 			allContent: allContent,
+			allSections: sections,
+			allSkills: skills,
 			session: await getServerSession(
 				context.req,
 				context.res,

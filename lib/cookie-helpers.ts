@@ -9,7 +9,7 @@ export async function updateViewCount(type: string, slug: string) {
 		setCookie('visitor_uid', uuid, { maxAge: 60 * 6 * 24 });
 	}
 
-	const userCookie = getCookie('visitor_uid');
+	const userCookie = getCookie('visitor_uid')?.valueOf() as string;
 	const viewDoc = { view: true, cookie: userCookie };
 	const viewJSON = JSON.stringify(viewDoc);
 

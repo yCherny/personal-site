@@ -1,5 +1,5 @@
-import { Section } from '@/interfaces/about';
 import mongoose from 'mongoose';
+import { Section } from '@/interfaces/about';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -22,24 +22,19 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let section;
 			try {
 				const query = Section.where({ title: sectionSlug });
-				section = await query.findOne();
+				const section = await query.findOne();
+				res.status(200).json({ section: section });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ section: section });
 			break;
 		case 'DELETE':
 			if (session) {
-				console.log(`API DELETE: ${sectionSlug}`);
 				await Section.deleteOne({ title: sectionSlug });
 				res.status(202).json({
-					deleted: `Section ${sectionSlug}`,
+					deleted: `/about/${sectionSlug}`,
 				});
 			} else {
 				res.status(401).json({

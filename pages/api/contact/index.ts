@@ -21,18 +21,13 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let contacts;
 			if (session) {
 				try {
-					contacts = await Contact.find();
-					console.log(contacts);
+					const contacts = await Contact.find();
+					res.status(200).json({ contacts: contacts });
 				} catch (err) {
 					res.status(500).json({ error: err });
-					client.connection.close();
-					return;
 				}
-
-				res.status(200).json({ contacts: contacts });
 			} else {
 				res.status(401).json({
 					error: `Unauthorized to access this api point`,
@@ -42,17 +37,14 @@ export default async function handler(
 			break;
 		case 'POST':
 			const newContact = new Contact(req.body);
-			let contactUpload;
 			try {
-				contactUpload = await newContact.save();
-				console.log(`Response: ${contactUpload}`);
+				const contactUpload = await newContact.save();
+				res.status(202).json({ message: `uploaded` });
 			} catch (err) {
 				res.status(500).json({ error: err });
 				client.connection.close();
 				return;
 			}
-
-			res.status(202).json({ message: `uploaded` });
 			break;
 		default:
 			res.setHeader('Allow', ['GET', 'POST']);

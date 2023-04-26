@@ -1,5 +1,5 @@
-import { Skill } from '@/interfaces/skill';
 import mongoose from 'mongoose';
+import { Skill } from '@/interfaces/skill';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -21,35 +21,24 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let skills;
 			try {
-				skills = await Skill.find();
-				console.log(skills);
+				const skills = await Skill.find();
+				res.status(200).json({ skills: skills });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ skills: skills });
 			break;
 		case 'POST':
 			if (session) {
 				let skill = await Skill.exists({ name: req.body.name });
 				if (skill) {
-					// Skill Already Exists -> Update it;
 					await Skill.updateOne({ name: req.body.name }, req.body);
 				} else {
-					// New Post, Who Dis?
 					const newSkill = new Skill(req.body);
-					let skillUpload;
 					try {
-						skillUpload = await newSkill.save();
-						console.log(`Response: ${skillUpload}`);
+						const skillUpload = await newSkill.save();
 					} catch (err) {
 						res.status(500).json({ error: err });
-						client.connection.close();
-						return;
 					}
 				}
 

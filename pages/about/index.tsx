@@ -1,9 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Header from '../../components/header/header';
 import Markdown from '@/components/sections/markdown';
-import DateFormatter from '@/components/layout/date-formatter';
 import {
 	AccordionList,
 	Accordion,
@@ -69,21 +68,6 @@ function AboutPage({ summary, sections }: Props) {
 							up with a more visually appealing way to talk about
 							myself later. No one likes reading essays.
 						</p>
-						<div className='flex flex-col'>
-							<h2 className='text-lg font-bold text-gray-400 dark:text-gray-500'>
-								{`Created At: `}
-								<DateFormatter
-									dateString={'2023-04-22T15:28:36.548+00:00'}
-								/>
-							</h2>
-
-							<h2 className='text-lg font-bold text-gray-500 dark:text-[#A59DB9]'>
-								Last Updated:{' '}
-								<DateFormatter
-									dateString={'2023-04-22T15:28:36.548+00:00'}
-								/>
-							</h2>
-						</div>
 					</div>
 					<div className='flex flex-col col-span-1 order-first sm:order-last'>
 						<div className='flex flex-col border rounded-lg bg-white items-center p-5 gap-3 drop-shadow-md'>

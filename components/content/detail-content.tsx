@@ -6,9 +6,12 @@ import Content from '@/interfaces/content';
 import DateFormatter from '../layout/date-formatter';
 import StickyNavBar from '../layout/sticky-nav-bar';
 import VotingButton from '@/components/buttons/voting-button';
-
 import { useEffect, useState } from 'react';
-import { checkUsersVote, updateVoteCount } from '@/lib/cookie-helpers';
+import {
+	checkUsersVote,
+	updateViewCount,
+	updateVoteCount,
+} from '@/lib/cookie-helpers';
 
 export enum Vote {
 	Upvote,
@@ -25,6 +28,7 @@ export default function DetailContent({ type, data }: Props) {
 	const [userVote, setUserVote] = useState<Vote>(Vote.None);
 
 	useEffect(() => {
+		updateViewCount(data.type, data.slug);
 		setUserVote(checkUsersVote(data));
 	}, []);
 
@@ -44,6 +48,7 @@ export default function DetailContent({ type, data }: Props) {
 					/>
 				</Header>
 			</StickyNavBar>
+
 			<div className='grid grid-cols-1 mt-16 gap-5'>
 				<div className='flex flex-col'>
 					<h2 className='text-lg font-bold text-gray-400 dark:text-gray-500'>

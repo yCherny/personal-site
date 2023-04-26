@@ -1,5 +1,5 @@
-import { Post } from '@/interfaces/content';
 import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -21,36 +21,27 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let posts;
-			const query = Post.where({ type: 'blog' });
 			try {
-				posts = await query.find();
-				console.log(posts);
+				const query = Post.where({ type: 'blog' });
+				const posts = await query.find();
+				res.status(200).json({ posts: posts });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ posts: posts });
 			break;
 		case 'POST':
 			if (session) {
 				let post = await Post.exists({ slug: req.body.slug });
 				if (post) {
-					// Post Already Exists -> Update it;
 					await Post.updateOne({ slug: req.body.slug }, req.body);
 				} else {
-					// New Post, Who Dis?
 					const newPost = new Post(req.body);
-					let postUpload;
 					try {
-						postUpload = await newPost.save({ timestamps: true });
-						console.log(`Response: ${postUpload}`);
+						const postUpload = await newPost.save({
+							timestamps: true,
+						});
 					} catch (err) {
 						res.status(500).json({ error: err });
-						client.connection.close();
-						return;
 					}
 				}
 

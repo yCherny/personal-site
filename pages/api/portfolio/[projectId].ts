@@ -1,5 +1,5 @@
-import { Post } from '@/interfaces/content';
 import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -12,8 +12,6 @@ export default async function handler(
 	const session = await getServerSession(req, res, authOptions);
 	const projectSlug = req.query.projectId as string;
 
-	console.log(`REQUEST PORTFOLIO: ${JSON.stringify(req.body)}`);
-
 	let client;
 	try {
 		client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
@@ -24,45 +22,30 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let project;
 			try {
 				const query = Post.where({ slug: projectSlug });
-				project = await query.findOne();
-				// console.log(`Retrieved Post: ${project}`);
+				const project = await query.findOne();
+				res.status(200).json({ project: project });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ project: project });
 			break;
 		case 'POST':
-			// Handle Cookies Here
-			console.log(`Asked to Update Project`);
 			const data = req.body;
 			const view = data.view as boolean;
 			const upvote = data.upvote as boolean;
 			const userID = data.cookie as string;
 
-			console.log(
-				`[${projectSlug}] Asked to Perform the Following Operations on Project: (upvote: ${upvote}) (visitor_uuid: ${userID}), (view: ${view})`
-			);
-
 			if (view) {
+				const query = await Post.findOne({ slug: projectSlug });
 				try {
-					await Post.updateOne(
-						{
-							slug: projectSlug,
-						},
-						{
-							$addToSet: { views: userID },
-						}
+					const updatedProject = await Post.updateOne(
+						{ slug: projectSlug },
+						{ $addToSet: { views: userID } }
 					);
+					res.status(202).json({ message: `Successfully updated` });
 				} catch (err) {
 					res.status(500).json({ error: err });
-					client.connection.close();
-					return;
 				}
 			} else {
 				try {
@@ -72,11 +55,8 @@ export default async function handler(
 					const voteExists = await Post.findOne(match);
 
 					if (voteExists) {
-						// Delete the Vote
 						await Post.updateOne(
-							{
-								slug: projectSlug,
-							},
+							{ slug: projectSlug },
 							{
 								$pull: upvote
 									? { upvotes: userID }
@@ -84,11 +64,8 @@ export default async function handler(
 							}
 						);
 					} else {
-						// Set the Vote
 						await Post.updateOne(
-							{
-								slug: projectSlug,
-							},
+							{ slug: projectSlug },
 							{
 								$addToSet: upvote
 									? { upvotes: userID }
@@ -99,21 +76,17 @@ export default async function handler(
 							}
 						);
 					}
+
+					res.status(202).json({ message: `Successfully updated` });
 				} catch (err) {
 					res.status(500).json({ error: err });
-					client.connection.close();
-					return;
 				}
 			}
-
-			res.status(202).json({ message: `Successfully updated` });
 			break;
 		case 'DELETE':
 			if (session) {
-				const deletedPost = await Post.deleteOne({ name: req.body });
-				res.status(202).json({
-					message: `deleted post: ${deletedPost}`,
-				});
+				await Post.deleteOne({ slug: projectSlug });
+				res.status(202).json({ deleted: `/portolio/${projectSlug}` });
 			} else {
 				res.status(401).json({
 					error: `Unauthorized to access this api point`,
@@ -125,5 +98,6 @@ export default async function handler(
 			res.status(405).end(`Method ${req.method} Not Allowed`);
 			break;
 	}
+
 	client.connection.close();
 }

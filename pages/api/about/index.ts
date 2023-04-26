@@ -1,5 +1,5 @@
-import { Section } from '@/interfaces/about';
 import mongoose from 'mongoose';
+import { Section } from '@/interfaces/about';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -21,17 +21,12 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let sections;
 			try {
-				sections = await Section.find();
-				console.log(sections);
+				const sections = await Section.find();
+				res.status(200).json({ sections: sections });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ sections: sections });
 			break;
 		case 'POST':
 			if (session) {
@@ -43,14 +38,10 @@ export default async function handler(
 					);
 				} else {
 					const newSection = new Section(req.body);
-					let sectionUpload;
 					try {
-						sectionUpload = await newSection.save();
-						console.log(`Response: ${sectionUpload}`);
+						const sectionUpload = await newSection.save();
 					} catch (err) {
 						res.status(500).json({ error: err });
-						client.connection.close();
-						return;
 					}
 				}
 

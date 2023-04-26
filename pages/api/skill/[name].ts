@@ -1,5 +1,5 @@
-import { Skill } from '@/interfaces/skill';
 import mongoose from 'mongoose';
+import { Skill } from '@/interfaces/skill';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -22,35 +22,25 @@ export default async function handler(
 
 	switch (req.method) {
 		case 'GET':
-			let skill;
 			try {
 				const query = Skill.where({ name: skillName });
-				skill = await query.findOne();
+				const skill = await query.findOne();
+				res.status(200).json({ skill: skill });
 			} catch (err) {
 				res.status(500).json({ error: err });
-				client.connection.close();
-				return;
 			}
-
-			res.status(200).json({ skill: skill });
 			break;
 		case 'POST':
 			if (session) {
 				let skill = await Skill.exists({ name: req.body.name });
 				if (skill) {
-					// Skill Already Exists -> Update it;
 					await Skill.updateOne({ name: req.body.name }, req.body);
 				} else {
-					// New Post, Who Dis?
 					const newSkill = new Skill(req.body);
-					let skillUpload;
 					try {
-						skillUpload = await newSkill.save();
-						console.log(`Response: ${skillUpload}`);
+						const skillUpload = await newSkill.save();
 					} catch (err) {
 						res.status(500).json({ error: err });
-						client.connection.close();
-						return;
 					}
 				}
 
@@ -64,9 +54,7 @@ export default async function handler(
 		case 'DELETE':
 			if (session) {
 				await Skill.deleteOne({ name: skillName });
-				res.status(202).json({
-					deleted: `Skill ${skillName}`,
-				});
+				res.status(202).json({ deleted: `/skill/${skillName}` });
 			} else {
 				res.status(401).json({
 					error: `Unauthorized to access this api point`,
