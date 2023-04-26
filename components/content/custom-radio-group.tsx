@@ -26,7 +26,7 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 							`${
 								checked
 									? 'bg-black dark:bg-white'
-									: 'bg-white dark:bg-gray-800'
+									: 'bg-white dark:bg-[#A59DB9]'
 							}
                     relative flex w-full sm:w-auto cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
 						}
@@ -41,7 +41,7 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 												className={`font-medium ${
 													checked
 														? 'text-white dark:text-black dark:font-black'
-														: 'text-gray-900 dark:text-gray-400'
+														: 'text-gray-900 dark:text-white'
 												}`}
 											>
 												{option.label}

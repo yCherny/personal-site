@@ -16,7 +16,7 @@ export async function updateViewCount(type: string, slug: string) {
 	console.log(`Doc: ${viewJSON} | Type: ${type} | Slug: ${slug}`);
 
 	try {
-		let res = await fetch(`http://localhost:3000/api/${type}/${slug}`, {
+		let res = await fetch(`http://192.168.1.169:3000/api/${type}/${slug}`, {
 			method: 'POST',
 			body: viewJSON,
 			headers: {
@@ -44,7 +44,7 @@ export async function updateVoteCount(vote: Vote, type: string, slug: string) {
 	console.log(`Doc: ${voteJSON} | Type: ${type} | Slug: ${slug}`);
 
 	try {
-		let res = await fetch(`http://localhost:3000/api/${type}/${slug}`, {
+		let res = await fetch(`http://192.168.1.169:3000/api/${type}/${slug}`, {
 			method: 'POST',
 			body: voteJSON,
 			headers: {

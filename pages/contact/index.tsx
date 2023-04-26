@@ -28,7 +28,7 @@ function ContactPage() {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch('http://localhost:3000/api/contact', {
+			let res = await fetch('http://192.168.1.169:3000/api/contact', {
 				method: 'POST',
 				body: jsonData,
 				headers: {
@@ -59,7 +59,7 @@ function ContactPage() {
 					href='https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css'
 				/>
 			</Head>
-			<div className='max-w-7xl mx-auto min-h-screen'>
+			<div className='max-w-7xl mx-auto min-h-screen mb-20'>
 				<Header
 					title={
 						<h1>
@@ -122,8 +122,8 @@ function ContactPage() {
 					>
 						<Form>
 							<div className='flex flex-col gap-5'>
-								<div className='flex flex-col w-full gap-5 p-5 rounded-md drop-shadow-md bg-gray-200 dark:bg-[#433660]'>
-									<div className='flex flex-col gap-1 border border-gray-400 dark:border-gray-500 p-3 rounded-md'>
+								<div className='flex flex-col w-full gap-5 p-5 rounded-md drop-shadow-md bg-gray-200 dark:bg-[#2F2050]'>
+									<div className='flex flex-col gap-1 border border-gray-400 dark:border-[#413D57] p-3 rounded-md'>
 										<label
 											htmlFor='type'
 											className='block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-md font-bold mb-2'
@@ -159,7 +159,7 @@ function ContactPage() {
 											<ErrorMessage name='type' />
 										</div>
 									</div>
-									<div className='flex flex-col gap-1 border border-gray-400 dark:border-gray-500 p-3 rounded-md'>
+									<div className='flex flex-col gap-1 border border-gray-400 dark:border-[#413D57] p-3 rounded-md'>
 										<label
 											htmlFor='name'
 											className='block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-md font-bold mb-2'
@@ -177,7 +177,7 @@ function ContactPage() {
 											<ErrorMessage name='name' />
 										</div>
 									</div>
-									<div className='flex flex-col gap-1 border border-gray-400 dark:border-gray-500 p-3 rounded-md'>
+									<div className='flex flex-col gap-1 border border-gray-400 dark:border-[#413D57] p-3 rounded-md'>
 										<label
 											htmlFor='contactInfo'
 											className='block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-md font-bold mb-2'
@@ -202,7 +202,7 @@ function ContactPage() {
 											<ErrorMessage name='contactInfo' />
 										</div>
 									</div>
-									<div className='flex flex-col gap-1 border border-gray-400 dark:border-gray-500 p-3 rounded-md'>
+									<div className='flex flex-col gap-1 border border-gray-400 dark:border-[#413D57] p-3 rounded-md'>
 										<label
 											htmlFor={'message'}
 											className='block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-md font-bold mb-2'

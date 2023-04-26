@@ -40,6 +40,17 @@ export default function Home() {
 
 				{showAttribution && (
 					<FixedOverlay>
+						<h1 className='font-bold text-2xl'>Controls 🎮</h1>
+						<h4 className='text-gray-500'>
+							This page is still under development and full
+							interactivity is coming. But in the meantime,{' '}
+							<span className='font-bold'>
+								you can use your fingers or mouse to pan around
+								the room and zoom in
+							</span>
+							. Please check out the other pages on my site below.
+						</h4>
+						<hr />
 						<h1 className='font-bold text-2xl'>Attribution ❤️</h1>
 						<h4 className='text-gray-500'>
 							I may wear many hats, but unfortunately my talents

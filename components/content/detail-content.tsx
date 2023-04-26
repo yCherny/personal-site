@@ -6,6 +6,8 @@ import Content from '@/interfaces/content';
 import DateFormatter from '../layout/date-formatter';
 import StickyNavBar from '../layout/sticky-nav-bar';
 import VotingButton from '@/components/buttons/voting-button';
+import FixedOverlay from '../layout/fixed-overlay';
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import {
 	checkUsersVote,
@@ -25,12 +27,17 @@ type Props = {
 };
 
 export default function DetailContent({ type, data }: Props) {
+	const [showAttribution, setShowAttribution] = useState(false);
 	const [userVote, setUserVote] = useState<Vote>(Vote.None);
 
 	useEffect(() => {
 		updateViewCount(data.type, data.slug);
 		setUserVote(checkUsersVote(data));
 	}, []);
+
+	function toggleAttribution() {
+		setShowAttribution(!showAttribution);
+	}
 
 	function handleVoteChange(vote: Vote) {
 		setUserVote(userVote === vote ? Vote.None : vote);
@@ -49,7 +56,7 @@ export default function DetailContent({ type, data }: Props) {
 				</Header>
 			</StickyNavBar>
 
-			<div className='grid grid-cols-1 mt-16 gap-5'>
+			<div className='grid grid-cols-1 mt-5 sm:mt-16 gap-5'>
 				<div className='flex flex-col'>
 					<h2 className='text-lg font-bold text-gray-400 dark:text-gray-500'>
 						<DateFormatter dateString={data.createdAt} />
@@ -112,13 +119,12 @@ export default function DetailContent({ type, data }: Props) {
 						className='rounded-xl aspect-video object-cover'
 					/>
 					{data.coverImage.copyrightLink && (
-						<a href={data.coverImage.copyrightLink}>
-							{data.coverImage.copyrightOwner && (
-								<h4 className='absolute bottom-0 text-white px-2 py-1 border-2 rounded-lg m-3 opacity-50 hover:opacity-100 hover:scale-105'>
-									© {data.coverImage.copyrightOwner}
-								</h4>
-							)}
-						</a>
+						<button
+							onClick={toggleAttribution}
+							className='absolute top-5 right-5 h-8 w-8 text-gray-500 z-50 rounded-full transition duration-500 hover:scale-105'
+						>
+							<InformationCircleIcon />
+						</button>
 					)}
 				</div>
 				<Markdown content={data.content} />
@@ -139,6 +145,27 @@ export default function DetailContent({ type, data }: Props) {
 					</div>
 				</div>
 			</div>
+			{showAttribution && (
+				<FixedOverlay>
+					<h1 className='font-bold text-2xl'>Attribution ❤️</h1>
+					<ul className='flex flex-col gap-2'>
+						<li>
+							<a href={data.coverImage.copyrightLink}>
+								<span className='font-bold underline'>
+									Image Source
+								</span>{' '}
+								© {data.coverImage.copyrightOwner}
+							</a>
+						</li>
+					</ul>
+					<button
+						className='rounded-full bg-black px-3 py-2 text-white font-bold'
+						onClick={toggleAttribution}
+					>
+						Dismiss
+					</button>
+				</FixedOverlay>
+			)}
 		</div>
 	);
 }

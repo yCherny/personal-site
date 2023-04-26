@@ -24,7 +24,7 @@ function Scene() {
 				rotation={[0.955324, 0, 0.785398]}
 				scale={14.123}
 				near={1}
-				far={1000}
+				far={10}
 				position={[30.60861, 30.60861, 30.60861]}
 				ref={myCamera}
 			/>

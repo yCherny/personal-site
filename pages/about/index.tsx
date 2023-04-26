@@ -44,13 +44,13 @@ function AboutPage({ summary, sections }: Props) {
 						"Not important enough to have a Wikipedia article written about me. Guess I'll have to do it myself."
 					}
 				/>
-				<div className='grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-24'>
+				<div className='grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-20'>
 					<div className='flex flex-col gap-4 col-span-1 md:col-span-2'>
 						<Markdown content={summary.content} />
 						<AccordionList className='w-full'>
 							{sections.map((section) => (
 								<Accordion
-									className='dark:bg-[#534670] border-none'
+									className='dark:bg-[#534670] border-none rounded-md'
 									key={section.title}
 								>
 									<AccordionHeader className='dark:text-white md:text-2xl font-bold'>

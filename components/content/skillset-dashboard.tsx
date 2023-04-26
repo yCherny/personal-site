@@ -126,6 +126,7 @@ export function SkillsetDashboard({ skills }: Props) {
 			<BarList
 				data={dataSouce()}
 				valueFormatter={valueFormat}
+				color='purple'
 				className='mt-2'
 			/>
 		</div>

@@ -79,7 +79,7 @@ function PortfolioPage({
 					/>
 				</StickyNavBar>
 
-				<div className='grid grid-cols-1 lg:grid-cols-3 mb-24 lg:gap-5'>
+				<div className='grid grid-cols-1 lg:grid-cols-3 lg:gap-5'>
 					<div className='flex flex-col col-span-1 lg:col-span-2'>
 						<MasonryGrid
 							type={DataType.Project}
@@ -91,10 +91,14 @@ function PortfolioPage({
 						<AccordionList className='w-full'>
 							{sections.map((section, index) => (
 								<Accordion
-									className='dark:bg-[#534670] border-none'
+									className={
+										index === 0
+											? 'border-x-0 border-t-0 border-b-[#413D57] dark:bg-[#534670]'
+											: 'border-none dark:bg-[#534670]'
+									}
 									key={index}
 								>
-									<AccordionHeader className='dark:text-white text-lg md:text-xl font-bold'>
+									<AccordionHeader className='dark:text-white text-left text-lg md:text-xl font-bold'>
 										{section.title}
 									</AccordionHeader>
 									<AccordionBody>

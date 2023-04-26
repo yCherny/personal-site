@@ -13,7 +13,7 @@ type Props = {
 
 export default function MasonryGrid({ type, data }: Props) {
 	return (
-		<div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 mt-5 mb-28 '>
+		<div className='grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 mt-5 mb-16 '>
 			{data.map((d: any, postIndex) => (
 				<ContentCard
 					key={d.slug}

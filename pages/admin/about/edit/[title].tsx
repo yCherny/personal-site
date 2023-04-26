@@ -48,7 +48,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch('http://localhost:3000/api/about', {
+			let res = await fetch('http://192.168.1.169:3000/api/about', {
 				method: 'POST',
 				body: jsonData,
 				headers: {
@@ -71,14 +71,17 @@ export default function EditPane({ content = undefined, session }: Props) {
 		const slugJSON = JSON.stringify(slug);
 
 		try {
-			let res = await fetch(`http://localhost:3000/api/about/${slug}`, {
-				method: 'DELETE',
-				body: slugJSON,
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-			});
+			let res = await fetch(
+				`http://192.168.1.169:3000/api/about/${slug}`,
+				{
+					method: 'DELETE',
+					body: slugJSON,
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json',
+					},
+				}
+			);
 			res = await res.json();
 			setIsDeleting(false);
 			router.back();
@@ -239,7 +242,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	try {
 		const res = await fetch(
-			`http://localhost:3000/api/about/${context.query.title}`
+			`http://192.168.1.169:3000/api/about/${context.query.title}`
 		);
 		const data = await res.json();
 		const section = data.section;
