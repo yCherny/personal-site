@@ -1,5 +1,5 @@
 import { Button, Title } from '@tremor/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import FilterOption from '../filter/filter-option';

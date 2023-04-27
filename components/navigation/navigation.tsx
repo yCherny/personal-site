@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import NavigationItem from './navigation-item';
 import NavigationGroup from './navigation-group';

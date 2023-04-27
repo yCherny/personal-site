@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 
@@ -12,6 +12,7 @@ interface ButtonProps {
 
 function CircularButton({ icon, onClick, selected = false }: ButtonProps) {
 	const router = useRouter();
+	
 	const [loading, setLoading] = useState(false);
 	const { theme } = useTheme();
 
@@ -21,9 +22,10 @@ function CircularButton({ icon, onClick, selected = false }: ButtonProps) {
 	}
 
 	useEffect(() => {
-		router.events.on('routeChangeComplete', () => {
-			setLoading(false);
-		});
+		
+		// router.events.on('routeChangeComplete', () => {
+		// 	setLoading(false);
+		// });
 	}, [router]);
 
 	return (

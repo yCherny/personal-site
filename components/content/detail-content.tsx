@@ -1,3 +1,5 @@
+'use client';
+
 import FeedbackPanel from '@/components/feedback/feedback';
 import Header from '@/components/header/header';
 import Image from 'next/image';
