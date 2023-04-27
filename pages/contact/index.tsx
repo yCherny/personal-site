@@ -54,10 +54,6 @@ function ContactPage() {
 			<Head>
 				<title>Yegor Chernyshev | Portfolio</title>
 				<meta name='description' content='Contact Yegor Chernyshev' />
-				<link
-					rel='stylesheet'
-					href='https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css'
-				/>
 			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen mb-20'>
 				<Header

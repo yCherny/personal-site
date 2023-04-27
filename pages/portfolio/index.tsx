@@ -54,21 +54,11 @@ function PortfolioPage({
 					name='description'
 					content='Various projects made by Yegor Chernyshev'
 				/>
-				<link
-					rel='stylesheet'
-					href='https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css'
-				/>
 			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen'>
 				<Header
-					title={
-						<h1>
-							Portfol
-							<span className='text-gray-400 dark:text-[#A59DB9]'>
-								.io
-							</span>
-						</h1>
-					}
+					titlePrimary={'Portfol'}
+					titleSecondary={'.io'}
 					subtitle={'precious trinkets I made'}
 				/>
 				<StickyNavBar>

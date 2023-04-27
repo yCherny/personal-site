@@ -1,11 +1,10 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import Head from 'next/head';
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
 import FilterPanel from '@/components/filter/filter-panel';
 import Header from '../../components/header/header';
 import Content from '@/interfaces/content';
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
-import { GetServerSideProps } from 'next';
 
 type Props = {
 	allPosts: Content[];
@@ -39,14 +38,8 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 			</Head>
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header
-					title={
-						<h1>
-							B
-							<span className='text-gray-400 dark:text-[#A59DB9]'>
-								log(n)
-							</span>
-						</h1>
-					}
+					titlePrimary={'B'}
+					titleSecondary={'log(n)'}
 					subtitle={'the ramblings of a madman'}
 				/>
 				<StickyNavBar>

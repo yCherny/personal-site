@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Tag from './tag';
 import DateFormatter from '../layout/date-formatter';
 import Content from '@/interfaces/content';
+import AuthorTag from './author-tag';
 import { useState } from 'react';
 
 type Props = {
@@ -78,20 +79,11 @@ function ContentCard({
 									style={{ backgroundColor: data.color }}
 								>
 									{data.authors.map((author, index) => (
-										<div
-											className='flex flex-row items-center gap-4 rounded-full p-1 backdrop-blur-md bg-black/20'
+										<AuthorTag
+											authorName={author.name}
+											authorPicture={author.picture}
 											key={index}
-										>
-											<a href={author.url}>
-												<Image
-													src={author.picture}
-													alt={'Author Profile Image'}
-													width={30}
-													height={30}
-													className='rounded-full aspect-square'
-												/>
-											</a>
-										</div>
+										/>
 									))}
 								</div>
 								<div className='absolute top-5 right-5'>

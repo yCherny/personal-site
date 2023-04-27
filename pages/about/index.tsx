@@ -28,18 +28,8 @@ function AboutPage({ summary, sections }: Props) {
 			</Head>
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header
-					title={
-						<h1 className='flex flex-wrap'>
-							<span className='text-gray-400 dark:text-[#A59DB9]'>
-								wiki/
-							</span>
-							Yegor
-							<span className='text-gray-400 dark:text-[#A59DB9]'>
-								_
-							</span>
-							Chernyshev
-						</h1>
-					}
+					titlePrimary={'wiki/'}
+					titleSecondary={'Yegor-Chernyshev'}
 					subtitle={
 						"Not important enough to have a Wikipedia article written about me. Guess I'll have to do it myself."
 					}

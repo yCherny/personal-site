@@ -3,14 +3,16 @@ import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/router';
 
 interface HeaderData {
-	title: React.ReactNode;
+	titlePrimary: string;
+	titleSecondary?: string;
 	subtitle?: string;
 	subheader?: boolean;
 	children?: string | JSX.Element | JSX.Element[];
 }
 
 function Header({
-	title,
+	titlePrimary,
+	titleSecondary = undefined,
 	subtitle = undefined,
 	subheader = false,
 	children,
@@ -41,7 +43,12 @@ function Header({
 										: 'text-4xl md:text-6xl'
 								} dark:text-white`}
 							>
-								{title}
+								{titlePrimary}
+								{titleSecondary && (
+									<span className='text-gray-400 dark:text-[#A59DB9]'>
+										{titleSecondary}
+									</span>
+								)}
 							</h1>
 
 							{subtitle && (
