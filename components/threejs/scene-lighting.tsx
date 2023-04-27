@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import {

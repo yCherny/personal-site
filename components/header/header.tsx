@@ -6,7 +6,7 @@ interface HeaderData {
 	title: React.ReactNode;
 	subtitle?: string;
 	subheader?: boolean;
-	children: string | JSX.Element | JSX.Element[];
+	children?: string | JSX.Element | JSX.Element[];
 }
 
 function Header({

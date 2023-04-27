@@ -288,7 +288,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 										type='text'
 										name='color'
 										placeholder='Color'
-										onKeyUp={(e) =>
+										onKeyUp={(e: any) =>
 											setContentColor(e.target.value)
 										}
 										style={{
@@ -403,7 +403,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 										type='text'
 										name='coverImage.url'
 										placeholder='Cover Image URL'
-										onKeyUp={(e) =>
+										onKeyUp={(e: any) =>
 											setImageURL(e.target.value)
 										}
 									/>
@@ -462,7 +462,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 										placeholder='Mardown content...'
 										name='content'
 										type='text'
-										onKeyUp={(e) =>
+										onKeyUp={(e: any) =>
 											setContentMarkdown(e.target.value)
 										}
 									/>

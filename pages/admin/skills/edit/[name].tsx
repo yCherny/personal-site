@@ -201,7 +201,7 @@ export default function EditPane({ skill = undefined, session }: Props) {
 										type='text'
 										name='icon'
 										placeholder='Icon Image URL'
-										onKeyUp={(e) =>
+										onKeyUp={(e: any) =>
 											setImageURL(e.target.value)
 										}
 									/>

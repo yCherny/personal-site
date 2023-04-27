@@ -180,7 +180,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 										placeholder='Section content...'
 										name={'content'}
 										type='text'
-										onKeyUp={(e) =>
+										onKeyUp={(e: any) =>
 											setContentMarkdown(e.target.value)
 										}
 									/>

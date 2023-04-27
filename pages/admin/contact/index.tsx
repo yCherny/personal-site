@@ -76,16 +76,17 @@ function About({ session }: Props) {
 					/>
 					<div className='col-span-2'>
 						<div className='flex flex-col gap-5'>
-							{(filter === ''
-								? allContacts
-								: filteredContent
-							).map((contact: ContactContent) => (
-								<ContactCard
-									contact={contact}
-									path={'admin/contact/edit'}
-									key={contact.name}
-								/>
-							))}
+							{filteredContent
+								? filteredContent.map(
+										(contact: ContactContent) => (
+											<ContactCard
+												contact={contact}
+												path={'admin/contact/edit'}
+												key={contact.name}
+											/>
+										)
+								  )
+								: null}
 						</div>
 					</div>
 				</div>

@@ -63,7 +63,7 @@ const CustomRadioGroup = <TValue,>(props: CustomRadioGroupProps<TValue>) => {
 	);
 };
 
-function CheckIcon(props) {
+function CheckIcon(props: any) {
 	return (
 		<svg viewBox='0 0 24 24' fill='none' {...props}>
 			<circle cx={12} cy={12} r={12} fill='#fff' opacity='0.2' />

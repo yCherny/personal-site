@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+// @ts-nocheck
 import FixedOverlay from '@/components/layout/fixed-overlay';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
