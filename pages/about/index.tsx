@@ -70,6 +70,7 @@ function AboutPage({ summary, sections }: Props) {
 								width={300}
 								height={800}
 								className='rounded-md'
+								priority
 							/>
 							<p className='text-gray-500 text-md'>
 								A photo of Yegor in 2023

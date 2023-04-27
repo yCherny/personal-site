@@ -25,7 +25,7 @@ type Params = {
 
 export async function getServerSideProps(context: Params) {
 	const res = await fetch(
-		`http://192.168.1.169:3000/api/blog/${context.params.postId}`
+		`http://localhost:3000/api/blog/${context.params.postId}`
 	);
 	const data = await res.json();
 	const post: Content = data.post;

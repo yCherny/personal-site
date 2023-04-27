@@ -31,7 +31,7 @@ export default function Dashboard({
 	const [allContacts, setAllContacts] = useState<ContactContent[]>();
 
 	async function getContactData() {
-		const res = await fetch('http://192.168.1.169:3000/api/contact');
+		const res = await fetch('http://localhost:3000/api/contact');
 		const data = await res.json();
 		const contacts: ContactContent[] = data.contacts;
 		setAllContacts(contacts);

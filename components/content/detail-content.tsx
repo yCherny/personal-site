@@ -47,7 +47,7 @@ export default function DetailContent({ type, data }: Props) {
 	return (
 		<div className='max-w-6xl mx-auto min-h-screen'>
 			<StickyNavBar>
-				<Header title={type} subheader>
+				<Header titlePrimary={type} subheader>
 					<FeedbackPanel
 						views={data.views?.length ?? 0}
 						currentVote={userVote}

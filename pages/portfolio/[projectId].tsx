@@ -24,7 +24,7 @@ type Params = {
 
 export async function getServerSideProps(context: Params) {
 	const res = await fetch(
-		`http://192.168.1.169:3000/api/portfolio/${context.params.projectId}`
+		`http://localhost:3000/api/portfolio/${context.params.projectId}`
 	);
 
 	const data = await res.json();

@@ -46,7 +46,7 @@ export default function EditPane({ skill = undefined, session }: Props) {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch('http://192.168.1.169:3000/api/skill', {
+			let res = await fetch('http://localhost:3000/api/skill', {
 				method: 'POST',
 				body: jsonData,
 				headers: {
@@ -69,17 +69,14 @@ export default function EditPane({ skill = undefined, session }: Props) {
 		const nameJSON = JSON.stringify(name);
 
 		try {
-			let res = await fetch(
-				`http://192.168.1.169:3000/api/skill/${name}`,
-				{
-					method: 'DELETE',
-					body: nameJSON,
-					headers: {
-						Accept: 'application/json',
-						'Content-Type': 'application/json',
-					},
-				}
-			);
+			let res = await fetch(`http://localhost:3000/api/skill/${name}`, {
+				method: 'DELETE',
+				body: nameJSON,
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+			});
 			res = await res.json();
 			setIsDeleting(false);
 			router.back();
@@ -252,7 +249,7 @@ export default function EditPane({ skill = undefined, session }: Props) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	try {
 		const res = await fetch(
-			`http://192.168.1.169:3000/api/skill/${context.query.name}`
+			`http://localhost:3000/api/skill/${context.query.name}`
 		);
 		const data = await res.json();
 		const skill = data.skill;

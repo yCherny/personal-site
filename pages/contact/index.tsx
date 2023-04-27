@@ -28,7 +28,7 @@ function ContactPage() {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch('http://192.168.1.169:3000/api/contact', {
+			let res = await fetch('http://localhost:3000/api/contact', {
 				method: 'POST',
 				body: jsonData,
 				headers: {
@@ -57,14 +57,8 @@ function ContactPage() {
 			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen mb-20'>
 				<Header
-					title={
-						<h1>
-							Cont
-							<span className='text-gray-400 dark:text-[#A59DB9]'>
-								act
-							</span>
-						</h1>
-					}
+					titlePrimary={'Cont'}
+					titleSecondary={'act'}
 					subtitle={'ground control to major Tom'}
 				/>
 				{(submitted || error) && (

@@ -1,7 +1,7 @@
 import Content from '@/interfaces/content';
 
 export async function loadPortfolio() {
-	const res = await fetch('http://192.168.1.169:3000/api/portfolio');
+	const res = await fetch('http://localhost:3000/api/portfolio');
 	const data = await res.json();
 	const projects: Content[] = data.projects;
 	const tags = projects.map((project) => project.tags).flat();
