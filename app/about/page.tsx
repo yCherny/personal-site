@@ -1,5 +1,5 @@
 // Import Client Component
-import AboutPage from '../../components/pages/about-page';
+import AboutPage from './about-page';
 import { loadAboutSections } from '@/lib/about-api';
 
 export const metadata = {

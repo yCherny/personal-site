@@ -1,10 +1,8 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import Head from 'next/head';
-import Header from '../header/header';
-import { Text, Button, Callout, Flex } from '@tremor/react';
-// Forms
+import Header from '../../components/header/header';
+import { Button, Callout, Flex } from '@tremor/react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import FormikRadioGroup from '@/components/content/formik-radio-group';
@@ -172,19 +170,19 @@ function ContactPage() {
 										>
 											You can reach me back at
 										</label>
-										<label className='block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2'>
+										<label className='block tracking-wide text-gray-700 dark:text-gray-500 text-xs font-bold mb-2'>
 											You can provide a phone number,
 											email address, social media handle,
-											pigeonmail address, etc. Honestly
-											any method you prefer, simply enter
-											it below.
+											pigeonmail address, etc. Just enter
+											the information and tell me for
+											what.
 										</label>
 										<Field
 											className='appearance-none block w-full bg-gray-200 text-gray-700 dark:text-white dark:bg-gray-900 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:dark:bg-gray-700'
 											id='grid-first-name'
 											name='contactInfo'
 											type='text'
-											placeholder='+1 (000) 000-0000  hello@myshop.com'
+											placeholder='@hello : Twitter'
 										/>
 										<div className='text-red-500 font-bold text-sm'>
 											<ErrorMessage name='contactInfo' />

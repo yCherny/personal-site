@@ -1,7 +1,6 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import Head from 'next/head';
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
 import FilterPanel from '@/components/filter/filter-panel';
 import Header from '../../components/header/header';

@@ -1,9 +1,8 @@
 'use client';
 
 import { Fragment } from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
-import Header from '../header/header';
+import Header from '../../components/header/header';
 import Markdown from '@/components/sections/markdown';
 import {
 	AccordionList,
