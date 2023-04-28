@@ -2,7 +2,6 @@
 
 import NavigationBar from '@/components/navigation/navigation';
 import '@/styles/globals.css';
-import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';

@@ -57,7 +57,7 @@ function ContentCard({
 											color={
 												data.color ? data.color : '#FFF'
 											}
-											key={index}
+											key={tag}
 										/>
 									))}
 								</div>
@@ -82,7 +82,7 @@ function ContentCard({
 										<AuthorTag
 											authorName={author.name}
 											authorPicture={author.picture}
-											key={index}
+											key={author.picture}
 										/>
 									))}
 								</div>

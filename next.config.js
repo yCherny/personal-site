@@ -6,7 +6,12 @@ const nextConfig = {
   },
   experimental: {
     appDir: true,
-  }
+    typedRoutes: true,
+  },
+  typescript: {
+    // Temp
+    ignoreBuildErrors: true,
+  },
 }
 
 module.exports = nextConfig

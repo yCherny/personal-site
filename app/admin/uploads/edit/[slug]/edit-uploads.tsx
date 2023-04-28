@@ -1,6 +1,6 @@
 'use client';
 import { Text, Button } from '@tremor/react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Content from '@/interfaces/content';
 import CircularButton from '../../../../../components/buttons/circular-button';
@@ -12,7 +12,7 @@ import Markdown from '@/components/sections/markdown';
 import { useRouter } from 'next/navigation';
 
 // Forms
-import { Formik, Field, Form, ErrorMessage, useField } from 'formik';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import FormikRadioGroup from '@/components/content/formik-radio-group';
 
@@ -78,7 +78,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch('http://localhost:3000/api/blog', {
+			await fetch('http://localhost:3000/api/blog', {
 				method: 'POST',
 				body: jsonData,
 				headers: {
@@ -86,7 +86,6 @@ export default function EditPane({ content = undefined, session }: Props) {
 					'Content-Type': 'application/json',
 				},
 			});
-			res = await res.json();
 			setIsSubmitting(false);
 			router.back();
 		} catch (err) {
@@ -101,7 +100,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 		const slugJSON = JSON.stringify(slug);
 
 		try {
-			let res = await fetch(`http://localhost:3000/api/blog/${slug}`, {
+			await fetch(`http://localhost:3000/api/blog/${slug}`, {
 				method: 'DELETE',
 				body: slugJSON,
 				headers: {
@@ -109,7 +108,6 @@ export default function EditPane({ content = undefined, session }: Props) {
 					'Content-Type': 'application/json',
 				},
 			});
-			res = await res.json();
 			setIsDeleting(false);
 			router.back();
 		} catch (err) {

@@ -7,7 +7,6 @@ import { loadAboutSections } from '@/lib/about-api';
 import { loadBlog } from '@/lib/blog-api';
 import { loadPortfolio } from '@/lib/portfolio-api';
 import { loadSkillset } from '@/lib/skill-api';
-import type { GetServerSidePropsContext } from 'next';
 
 async function getData() {
 	const { sections } = await loadAboutSections();
@@ -19,7 +18,7 @@ async function getData() {
 	return { allContent, sections, skills };
 }
 
-export default async function Page(context: GetServerSidePropsContext) {
+export default async function Page() {
 	const { allContent, sections, skills } = await getData();
 	const session = await getServerSession(authOptions);
 

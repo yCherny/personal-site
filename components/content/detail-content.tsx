@@ -94,7 +94,7 @@ export default function DetailContent({ type, data }: Props) {
 							style={{ backgroundColor: data.color }}
 						>
 							{data.authors.map((author, index) => (
-								<a href={author.url} key={index}>
+								<a href={author.url} key={author.picture}>
 									<div className='flex flex-row items-center gap-2 rounded-full pl-2 py-2 pr-4 backdrop-blur-md bg-gray-400/30 dark:bg-black/20'>
 										<Image
 											src={author.picture}

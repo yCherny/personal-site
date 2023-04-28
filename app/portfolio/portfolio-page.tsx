@@ -88,7 +88,7 @@ function PortfolioPage({
 											? 'border-x-0 border-t-0 border-b-[#413D57] dark:bg-[#534670]'
 											: 'border-none dark:bg-[#534670]'
 									}
-									key={index}
+									key={section.title}
 								>
 									<AccordionHeader className='dark:text-white text-left text-lg md:text-xl font-bold'>
 										{section.title}

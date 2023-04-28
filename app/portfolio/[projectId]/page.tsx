@@ -7,21 +7,15 @@ type Params = {
 	};
 };
 
-export async function getProject({ params }: Params) {
-	const res = await fetch(
-		`http://localhost:3000/api/portfolio/${params.projectId}`
-	);
+export async function getProject(projectId?: string) {
+	const res = await fetch(`http://localhost:3000/api/portfolio/${projectId}`);
 
 	const data = await res.json();
 	const project: Content = data.project;
 	return project;
 }
 
-type Props = {
-	project: Content;
-};
-
-export default async function ProjectDetail(params: Params) {
-	const project = await getProject(params);
+export default async function ProjectDetail({ params }: Params) {
+	const project = await getProject(params.projectId);
 	return <DetailContent data={project} type={'project'} />;
 }

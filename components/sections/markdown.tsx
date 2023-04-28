@@ -1,6 +1,5 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 
 type Props = {
 	content: string;
@@ -11,7 +10,6 @@ function Markdown({ content }: Props) {
 		<div className='mx-auto'>
 			<ReactMarkdown
 				remarkPlugins={[remarkGfm]}
-				rehypePlugins={[rehypeHighlight]}
 				className='prose lg:prose-xl dark:prose-invert'
 			>
 				{content}

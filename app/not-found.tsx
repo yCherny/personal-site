@@ -2,6 +2,7 @@
 
 // eslint-disable-next-line
 // @ts-nocheck
+import * as THREE from 'three';
 import FixedOverlay from '@/components/layout/fixed-overlay';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';

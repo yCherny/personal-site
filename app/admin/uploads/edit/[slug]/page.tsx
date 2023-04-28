@@ -2,7 +2,6 @@ import EditPane from './edit-uploads';
 
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import type { GetServerSidePropsContext } from 'next';
 
 type Params = {
 	params: {
@@ -24,10 +23,7 @@ async function getContent({ params }: Params) {
 	return post;
 }
 
-export default async function getServerSideProps(
-	params: Params,
-	context: GetServerSidePropsContext
-) {
+export default async function getServerSideProps(params: Params) {
 	const content = await getContent(params);
 	const session = await getServerSession(authOptions);
 

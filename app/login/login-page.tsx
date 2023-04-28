@@ -1,8 +1,14 @@
-import { ClientSafeProvider, signIn } from 'next-auth/react';
+'use client';
+
+import { ClientSafeProvider, signIn, LiteralUnion } from 'next-auth/react';
 import { Button } from '@tremor/react';
+import { BuiltInProviderType } from 'next-auth/providers';
 
 type Props = {
-	providers: ClientSafeProvider;
+	providers: Record<
+		LiteralUnion<BuiltInProviderType, string>,
+		ClientSafeProvider
+	> | null;
 };
 
 function LoginPage({ providers }: Props) {
@@ -12,20 +18,21 @@ function LoginPage({ providers }: Props) {
 				<h1 className='font-bold text-black text-2xl'>
 					Shoo, Pepping Toms
 				</h1>
-				{Object.values(providers).map((provider) => (
-					<div key={provider.name}>
-						<Button
-							className='bg-black border-none'
-							onClick={() =>
-								signIn(provider.id, {
-									callbackUrl: `${window.location.origin}/admin`,
-								})
-							}
-						>
-							Sign In
-						</Button>
-					</div>
-				))}
+				{providers &&
+					Object.values(providers).map((provider) => (
+						<div key={provider.name}>
+							<Button
+								className='bg-black border-none'
+								onClick={() =>
+									signIn(provider.id, {
+										callbackUrl: `${window.location.origin}/admin`,
+									})
+								}
+							>
+								Sign In
+							</Button>
+						</div>
+					))}
 			</div>
 		</div>
 	);

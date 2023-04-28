@@ -8,12 +8,6 @@ import Header from '../../components/header/header';
 import Content from '@/interfaces/content';
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
 
-import { loadBlog } from '@/lib/blog-api';
-async function getPosts() {
-	const { posts, uniqueTags } = await loadBlog();
-	return { posts, uniqueTags };
-}
-
 type Props = {
 	allPosts: Content[];
 	uniqueTags: string[];

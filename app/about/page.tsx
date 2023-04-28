@@ -3,7 +3,7 @@ import AboutPage from '../../components/pages/about-page';
 import { loadAboutSections } from '@/lib/about-api';
 
 async function getPosts() {
-	const { sections, filterOptions } = await loadAboutSections();
+	const { sections } = await loadAboutSections();
 	const summary = sections.filter((section) => section.title === 'Summary');
 	const aboutSections = sections.filter(
 		(section) => section.page === 'about' && section.title !== 'Summary'

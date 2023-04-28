@@ -4,9 +4,9 @@ import { loadSkillset } from '@/lib/skill-api';
 import { loadAboutSections } from '@/lib/about-api';
 
 async function getProjects() {
-	const { sections, filterOptions } = await loadAboutSections();
+	const { sections } = await loadAboutSections();
+	const { skills } = await loadSkillset();
 	const { projects, uniqueTags } = await loadPortfolio();
-	const { skills, skillFilters } = await loadSkillset();
 	const programmingSections = sections.filter(
 		(section) => section.page === 'portfolio'
 	);
