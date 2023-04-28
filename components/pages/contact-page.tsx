@@ -30,7 +30,7 @@ function ContactPage() {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch(process.env.API_URL + '/api/contact', {
+			let res = await fetch('http://localhost:3000/api/contact', {
 				method: 'POST',
 				body: jsonData,
 				headers: {

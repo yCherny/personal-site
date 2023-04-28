@@ -78,7 +78,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			await fetch(process.env.API_URL + '/api/blog', {
+			await fetch('http://localhost:3000/api/blog', {
 				method: 'POST',
 				body: jsonData,
 				headers: {

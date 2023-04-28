@@ -1,7 +1,7 @@
 import ContactContent from '@/interfaces/contact';
 
 export async function loadContactSections() {
-	const res = await fetch(process.env.API_URL + '/api/contact');
+	const res = await fetch('http://localhost:3000/api/contact');
 	const data = await res.json();
 
 	const contacts: ContactContent[] = data.contacts;

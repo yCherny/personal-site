@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { loadSkillset } from '@/lib/skill-api';
 
-export default async function Page() {
+export default async function getServerSideProps() {
 	const { skills, skillFilters } = await loadSkillset();
 	const session = await getServerSession(authOptions);
 
