@@ -21,6 +21,9 @@ import FormikRadioGroup from '@/components/content/formik-radio-group';
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 
+import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
+
 type Props = {
 	content?: Content;
 	session: Session;
@@ -514,15 +517,17 @@ export default function EditPane({ content = undefined, session }: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	try {
-		const res = await fetch(
-			`http://localhost:3000/api/blog/${context.query.slug}`
+		let client = await mongoose.connect(
+			process.env.MONGO_INSTANCE as string
 		);
-		const data = await res.json();
-		const post = data.post;
+
+		const query = Post.where({ slug: context.query.slug });
+		const post = await query.findOne();
+		const jsonPosts = JSON.parse(JSON.stringify(post));
 
 		return {
 			props: {
-				content: post,
+				content: jsonPosts,
 				session: await getServerSession(
 					context.req,
 					context.res,

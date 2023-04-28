@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import ErrorPage from 'next/error';
 import Content from '@/interfaces/content';
 import DetailContent from '@/components/content/detail-content';
+import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
 
 type Props = {
 	post: Content;
@@ -24,13 +26,15 @@ type Params = {
 };
 
 export async function getServerSideProps(context: Params) {
-	const res = await fetch(
-		`http://localhost:3000/api/blog/${context.params.postId}`
-	);
-	const data = await res.json();
-	const post: Content = data.post;
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
 
-	if (!data) {
+	// Get Post Content
+	const query = Post.where({ slug: context.params.postId });
+	const post = await query.findOne();
+	const jsonPost = JSON.parse(JSON.stringify(post));
+	client.connection.close();
+
+	if (!post) {
 		return {
 			props: {},
 		};
@@ -38,7 +42,7 @@ export async function getServerSideProps(context: Params) {
 
 	return {
 		props: {
-			post: post,
+			post: jsonPost,
 		},
 	};
 }

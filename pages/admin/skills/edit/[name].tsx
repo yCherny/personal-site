@@ -17,6 +17,9 @@ import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 import SkillContent from '@/interfaces/skill';
 
+import mongoose from 'mongoose';
+import { Skill } from '@/interfaces/skill';
+
 type Props = {
 	skill?: SkillContent;
 	session: Session;
@@ -248,15 +251,20 @@ export default function EditPane({ skill = undefined, session }: Props) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	try {
-		const res = await fetch(
-			`http://localhost:3000/api/skill/${context.query.name}`
+		let client = await mongoose.connect(
+			process.env.MONGO_INSTANCE as string
 		);
-		const data = await res.json();
-		const skill = data.skill;
+
+		// Get Skills
+		const query = Skill.where({ name: context.query.name });
+		const skill = await query.findOne();
+		const jsonSkill = JSON.parse(JSON.stringify(skill));
+
+		client.connection.close();
 
 		return {
 			props: {
-				skill: skill,
+				skill: jsonSkill,
 				session: await getServerSession(
 					context.req,
 					context.res,

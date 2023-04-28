@@ -12,6 +12,9 @@ import Content from '@/interfaces/content';
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 
+import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
+
 type Props = {
 	allContent: Content[];
 	allContentFilters: string[];
@@ -65,15 +68,24 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
 	);
 }
 
-import { loadBlog } from '@/lib/blog-api';
-import { loadPortfolio } from '@/lib/portfolio-api';
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const { posts, uniqueTags: postTags } = await loadBlog();
-	const { projects, uniqueTags: projectTags } = await loadPortfolio();
-	const allContent = posts.concat(projects);
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
 
-	if (!posts && !projects) {
+	// Get Portfolio Content
+	const projectQuery = Post.where({ type: 'portfolio' });
+	const projects = await projectQuery.find();
+	const jsonProjects = JSON.parse(JSON.stringify(projects));
+
+	// Get Post Content
+	const postQuery = Post.where({ type: 'blog' });
+	const posts = await postQuery.find();
+	const jsonPosts = JSON.parse(JSON.stringify(posts));
+
+	client.connection.close();
+
+	const allContent = jsonProjects.concat(jsonPosts);
+
+	if (!projects && !posts) {
 		return {
 			notFound: true,
 		};

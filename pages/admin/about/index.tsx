@@ -11,6 +11,9 @@ import AboutCard from '@/components/content/about-card';
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 
+import { Section } from '@/interfaces/about';
+import mongoose from 'mongoose';
+
 type Props = {
 	allSections: SectionContent[];
 	allSectionFilters: string[];
@@ -68,14 +71,20 @@ function About({ allSections, allSectionFilters, session }: Props) {
 	);
 }
 
-import { loadAboutSections } from '@/lib/about-api';
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const { sections, filterOptions } = await loadAboutSections();
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+
+	// Get Sections
+	const sections = await Section.find();
+	const jsonSections = JSON.parse(JSON.stringify(sections));
+	const pageTypes = sections.map((section) => section.page).flat();
+	const filterOptions = Array.from(new Set(pageTypes));
+
+	client.connection.close();
 
 	return {
 		props: {
-			allSections: sections,
+			allSections: jsonSections,
 			allSectionFilters: filterOptions,
 			session: await getServerSession(
 				context.req,

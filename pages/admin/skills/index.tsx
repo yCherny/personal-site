@@ -7,6 +7,10 @@ import { Fragment, useState } from 'react';
 import Navbar from '@/components/navigation/nav-bar';
 import SideBar from '@/components/navigation/side-bar';
 import SkillContent from '@/interfaces/skill';
+import SkillCard from '@/components/content/skill-card';
+
+import { Skill } from '@/interfaces/skill';
+import mongoose from 'mongoose';
 
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
@@ -67,15 +71,20 @@ function Skills({ allSkills, allSkillFilters, session }: Props) {
 	);
 }
 
-import { loadSkillset } from '@/lib/skill-api';
-import SkillCard from '@/components/content/skill-card';
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const { skills, skillFilters } = await loadSkillset();
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+
+	// Get Skills
+	const skills = await Skill.find();
+	const jsonSkills = JSON.parse(JSON.stringify(skills));
+	const skillTypes = skills.map((skill) => skill.type).flat();
+	const skillFilters = Array.from(new Set(skillTypes));
+
+	client.connection.close();
 
 	return {
 		props: {
-			allSkills: skills,
+			allSkills: jsonSkills,
 			allSkillFilters: skillFilters,
 			session: await getServerSession(
 				context.req,

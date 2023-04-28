@@ -10,6 +10,14 @@ import Content from '@/interfaces/content';
 import type { GetServerSidePropsContext } from 'next';
 import type { Session } from 'next-auth';
 
+import mongoose from 'mongoose';
+import { Post } from '@/interfaces/content';
+import { Skill } from '@/interfaces/skill';
+import { Section } from '@/interfaces/about';
+import SectionContent from '@/interfaces/about';
+import SkillContent from '@/interfaces/skill';
+import ContactContent from '@/interfaces/contact';
+
 type Props = {
 	allContent: Content[];
 	allSections: SectionContent[];
@@ -201,26 +209,36 @@ export default function Dashboard({
 	);
 }
 
-import { loadAboutSections } from '@/lib/about-api';
-import { loadBlog } from '@/lib/blog-api';
-import { loadPortfolio } from '@/lib/portfolio-api';
-import { loadSkillset } from '@/lib/skill-api';
-import SectionContent from '@/interfaces/about';
-import SkillContent from '@/interfaces/skill';
-import ContactContent from '@/interfaces/contact';
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const { sections } = await loadAboutSections();
-	const { posts } = await loadBlog();
-	const { projects } = await loadPortfolio();
-	const { skills } = await loadSkillset();
-	const allContent = posts.concat(projects);
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+
+	// Get Portfolio Content
+	const projectQuery = Post.where({ type: 'portfolio' });
+	const projects = await projectQuery.find();
+	const jsonProjects = JSON.parse(JSON.stringify(projects));
+
+	// Get Post Content
+	const postQuery = Post.where({ type: 'blog' });
+	const posts = await postQuery.find();
+	const jsonPosts = JSON.parse(JSON.stringify(posts));
+
+	// Get Skills
+	const skills = await Skill.find();
+	const jsonSkills = JSON.parse(JSON.stringify(skills));
+
+	// Get Sections
+	const sections = await Section.find();
+	const jsonSections = JSON.parse(JSON.stringify(sections));
+
+	client.connection.close();
+
+	const allContent = jsonProjects.concat(jsonPosts);
 
 	return {
 		props: {
 			allContent: allContent,
-			allSections: sections,
-			allSkills: skills,
+			allSections: jsonSections,
+			allSkills: jsonSkills,
 			session: await getServerSession(
 				context.req,
 				context.res,
