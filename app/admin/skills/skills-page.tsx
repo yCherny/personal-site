@@ -1,6 +1,5 @@
 'use client';
 
-import Head from 'next/head';
 import { Fragment, useState } from 'react';
 
 import Navbar from '@/components/navigation/nav-bar';
@@ -35,10 +34,6 @@ function Skills({ allSkills, allSkillFilters, session }: Props) {
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Skills</title>
-				<meta name='description' content='Skills by Yegor Chernyshev' />
-			</Head>
 			<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
 				<Navbar user={'Yegor'} />
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>

@@ -2,7 +2,6 @@
 
 import { Fragment, useEffect, useState } from 'react';
 import { Card, Metric, Text, Flex, Title } from '@tremor/react';
-import Head from 'next/head';
 import Navbar from '@/components/navigation/nav-bar';
 import Content from '@/interfaces/content';
 
@@ -68,10 +67,6 @@ export default function Dashboard({
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Admin</title>
-				<meta name='description' content='Admin dashboard' />
-			</Head>
 			<main className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
 				<Navbar user={'Yegor'} />
 				<div className='flex flex-col gap-5 mt-5'>

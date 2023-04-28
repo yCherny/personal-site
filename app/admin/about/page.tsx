@@ -5,6 +5,10 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import About from './about-page';
 import { loadAboutSections } from '@/lib/about-api';
 
+export const metadata = {
+	title: 'Admin | About',
+};
+
 async function getData() {
 	const { sections, filterOptions } = await loadAboutSections();
 	return { sections, filterOptions };

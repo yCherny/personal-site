@@ -5,6 +5,10 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { loadBlog } from '@/lib/blog-api';
 import { loadPortfolio } from '@/lib/portfolio-api';
 
+export const metadata = {
+	title: 'Admin | Uploads',
+};
+
 export default async function getServerSideProps() {
 	const { posts } = await loadBlog();
 	const { projects } = await loadPortfolio();

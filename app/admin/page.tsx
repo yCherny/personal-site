@@ -8,6 +8,10 @@ import { loadBlog } from '@/lib/blog-api';
 import { loadPortfolio } from '@/lib/portfolio-api';
 import { loadSkillset } from '@/lib/skill-api';
 
+export const metadata = {
+	title: 'Dashboard',
+};
+
 async function getData() {
 	const { sections } = await loadAboutSections();
 	const { posts } = await loadBlog();
