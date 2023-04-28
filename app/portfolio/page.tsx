@@ -3,6 +3,11 @@ import { loadPortfolio } from '@/lib/portfolio-api';
 import { loadSkillset } from '@/lib/skill-api';
 import { loadAboutSections } from '@/lib/about-api';
 
+export const metadata = {
+	title: 'Portfolio',
+	description: 'Various projects made by Yegor Chernyshev',
+};
+
 async function getProjects() {
 	const { sections } = await loadAboutSections();
 	const { skills } = await loadSkillset();

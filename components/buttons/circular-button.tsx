@@ -1,9 +1,3 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import { onStart, onEnd } from '@/lib/router-events';
-
 interface ButtonProps {
 	icon: React.ReactNode;
 	onClick: any;
@@ -12,21 +6,9 @@ interface ButtonProps {
 }
 
 function CircularButton({ icon, onClick, selected = false }: ButtonProps) {
-	const router = useRouter();
-
-	const [loading, setLoading] = useState(false);
-	const { theme } = useTheme();
-
 	function buttonClicked() {
 		onClick();
-		setLoading(true);
 	}
-
-	useEffect(() => {
-		// router.events.on('routeChangeComplete', () => {
-		// 	setLoading(false);
-		// });
-	}, [router]);
 
 	return (
 		<button
@@ -43,20 +25,7 @@ function CircularButton({ icon, onClick, selected = false }: ButtonProps) {
 			}
 			onClick={buttonClicked}
 		>
-			{!loading ? (
-				icon
-			) : (
-				<Image
-					src={
-						theme === 'dark'
-							? '/assets/tail-spin-dark.svg'
-							: '/assets/tail-spin.svg'
-					}
-					alt='loading indicator'
-					height={20}
-					width={20}
-				/>
-			)}
+			{icon}
 		</button>
 	);
 }

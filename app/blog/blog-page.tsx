@@ -31,13 +31,6 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Blog</title>
-				<meta
-					name='description'
-					content='Various posts by Yegor Chernyshev'
-				/>
-			</Head>
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header
 					titlePrimary={'B'}

@@ -21,13 +21,6 @@ export type Props = {
 function AboutPage({ summary, sections }: Props) {
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | About</title>
-				<meta
-					name='description'
-					content='A page about Yegor Chernyshev'
-				/>
-			</Head>
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header
 					titlePrimary={'wiki/'}

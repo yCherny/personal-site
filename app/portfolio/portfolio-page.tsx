@@ -50,13 +50,6 @@ function PortfolioPage({
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Portfolio</title>
-				<meta
-					name='description'
-					content='Various projects made by Yegor Chernyshev'
-				/>
-			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen'>
 				<Header
 					titlePrimary={'Portfol'}

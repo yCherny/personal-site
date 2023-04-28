@@ -2,6 +2,11 @@
 import AboutPage from '../../components/pages/about-page';
 import { loadAboutSections } from '@/lib/about-api';
 
+export const metadata = {
+	title: 'About',
+	description: 'A page about Yegor Chernyshev',
+};
+
 async function getPosts() {
 	const { sections } = await loadAboutSections();
 	const summary = sections.filter((section) => section.title === 'Summary');

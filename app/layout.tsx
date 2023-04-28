@@ -6,11 +6,6 @@ import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';
 
-export const metadata = {
-	title: 'Home',
-	description: 'Welcome home',
-};
-
 export default function RootLayout({
 	// Layouts must accept a children prop.
 	// This will be populated with nested layouts or pages

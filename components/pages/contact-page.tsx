@@ -53,10 +53,6 @@ function ContactPage() {
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Portfolio</title>
-				<meta name='description' content='Contact Yegor Chernyshev' />
-			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen mb-20'>
 				<Header
 					titlePrimary={'Cont'}

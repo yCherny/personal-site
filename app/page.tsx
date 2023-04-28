@@ -8,6 +8,11 @@ import Landing from '@/components/sections/landing';
 import ThreeJSViewport from '@/components/sections/three-js-viewport';
 import FixedOverlay from '@/components/layout/fixed-overlay';
 
+export const metadata = {
+	title: 'Home',
+	description: `Yegor Chernyshev's Home Page`,
+};
+
 export default function Home() {
 	const [showAttribution, setShowAttribution] = useState(false);
 
@@ -17,18 +22,6 @@ export default function Home() {
 
 	return (
 		<>
-			<Head>
-				<title>Yegor Chernyshev</title>
-				<meta
-					name='description'
-					content="Yegor Chernyshev's Personal Site"
-				/>
-				<meta
-					name='viewport'
-					content='width=device-width, initial-scale=1.0, viewport-fit=cover'
-				/>
-				<link rel='icon' href='/favicon.ico' />
-			</Head>
 			<main>
 				<button
 					onClick={toggleAttribution}
