@@ -1,10 +1,10 @@
 import { Fragment, useState } from 'react';
 import Head from 'next/head';
 import Header from '../../components/header/header';
-import Content from '@/interfaces/content';
-import SkillContent from '@/interfaces/skill';
+import Content, { Post } from '@/interfaces/content';
+import SkillContent, { Skill } from '@/interfaces/skill';
 import FilterPanel from '@/components/filter/filter-panel';
-import SectionContent from '@/interfaces/about';
+import SectionContent, { Section } from '@/interfaces/about';
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
 import { SkillsetDashboard } from '@/components/content/skillset-dashboard';
 import Markdown from '@/components/sections/markdown';
@@ -16,6 +16,7 @@ import {
 } from '@tremor/react';
 
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
+import mongoose from 'mongoose';
 
 type Props = {
 	allProjects: Content[];
@@ -104,17 +105,28 @@ function PortfolioPage({
 	);
 }
 
-import { loadPortfolio } from '@/lib/portfolio-api';
-import { loadSkillset } from '@/lib/skill-api';
-import { loadAboutSections } from '@/lib/about-api';
-
 export async function getStaticProps() {
-	const { sections, filterOptions } = await loadAboutSections();
-	const { projects, uniqueTags } = await loadPortfolio();
-	const { skills, skillFilters } = await loadSkillset();
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+
+	// Get Portfolio Content
+	const query = Post.where({ type: 'portfolio' });
+	const projects = await query.find();
+	const jsonProjects = JSON.parse(JSON.stringify(projects));
+	const tags = projects.map((post) => post.tags).flat();
+	const uniqueTags = Array.from(new Set(tags));
+
+	// Get Skills
+	const skills = await Skill.find();
+	const jsonSkills = JSON.parse(JSON.stringify(skills));
+
+	// Get Sections
+	const sections = await Section.find();
 	const programmingSections = sections.filter(
 		(section) => section.page === 'portfolio'
 	);
+	const jsonSections = JSON.parse(JSON.stringify(programmingSections));
+
+	client.connection.close();
 
 	if (!projects) {
 		return {
@@ -124,10 +136,10 @@ export async function getStaticProps() {
 
 	return {
 		props: {
-			allProjects: projects,
-			allSkills: skills,
+			allProjects: jsonProjects,
+			allSkills: jsonSkills,
 			uniqueTags: uniqueTags,
-			sections: programmingSections,
+			sections: jsonSections,
 		},
 	};
 }

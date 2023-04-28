@@ -3,8 +3,9 @@ import Head from 'next/head';
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
 import FilterPanel from '@/components/filter/filter-panel';
 import Header from '../../components/header/header';
-import Content from '@/interfaces/content';
+import Content, { Post } from '@/interfaces/content';
 import StickyNavBar from '@/components/layout/sticky-nav-bar';
+import mongoose from 'mongoose';
 
 type Props = {
 	allPosts: Content[];
@@ -58,10 +59,15 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 	);
 }
 
-import { loadBlog } from '@/lib/blog-api';
-
 export async function getStaticProps() {
-	const { posts, uniqueTags } = await loadBlog();
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+	const query = Post.where({ type: 'blog' });
+	const posts = await query.find();
+	client.connection.close();
+
+	const jsonPosts = JSON.parse(JSON.stringify(posts));
+	const tags = posts.map((post) => post.tags).flat();
+	const uniqueTags = Array.from(new Set(tags));
 
 	if (!posts) {
 		return {
@@ -71,7 +77,7 @@ export async function getStaticProps() {
 
 	return {
 		props: {
-			allPosts: posts,
+			allPosts: jsonPosts,
 			uniqueTags: uniqueTags,
 		},
 	};

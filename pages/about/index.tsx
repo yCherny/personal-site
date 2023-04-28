@@ -9,7 +9,8 @@ import {
 	AccordionHeader,
 	AccordionBody,
 } from '@tremor/react';
-import SectionContent from '@/interfaces/about';
+import SectionContent, { Section } from '@/interfaces/about';
+import mongoose from 'mongoose';
 
 type Props = {
 	summary: SectionContent;
@@ -109,18 +110,22 @@ function AboutPage({ summary, sections }: Props) {
 	);
 }
 
-import { loadAboutSections } from '@/lib/about-api';
-
 export async function getStaticProps() {
-	const { sections, filterOptions } = await loadAboutSections();
-	const summary = sections.filter((section) => section.title === 'Summary');
-	const aboutSections = sections.filter(
+	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+	const sections = await Section.find();
+	client.connection.close();
+
+	const jsonSections: SectionContent[] = JSON.parse(JSON.stringify(sections));
+	const summary = jsonSections.filter(
+		(section) => section.title === 'Summary'
+	)[0];
+	const aboutSections = jsonSections.filter(
 		(section) => section.page === 'about' && section.title !== 'Summary'
 	);
 
 	return {
 		props: {
-			summary: summary[0],
+			summary: summary,
 			sections: aboutSections,
 		},
 	};
