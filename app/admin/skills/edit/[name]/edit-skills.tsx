@@ -44,7 +44,7 @@ export default function EditPane({ skill = undefined, session }: Props) {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			await fetch('http://localhost:3000/api/skill', {
+			await fetch(process.env.API_URL + '/api/skill', {
 				method: 'POST',
 				body: jsonData,
 				headers: {

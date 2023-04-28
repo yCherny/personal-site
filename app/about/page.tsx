@@ -1,8 +1,8 @@
 // Import Client Component
-import AboutPage from '../../components/pages/about-page';
+import AboutPage from './about-page';
 import { loadAboutSections } from '@/lib/about-api';
 
-async function getPosts() {
+async function getAboutData() {
 	const { sections } = await loadAboutSections();
 	const summary = sections.filter((section) => section.title === 'Summary');
 	const aboutSections = sections.filter(
@@ -13,8 +13,6 @@ async function getPosts() {
 }
 
 export default async function Page() {
-	// Fetch data directly in the Server Component
-	const { summary, aboutSections } = await getPosts();
-	// Forward fetched data to your Client Component
+	const { summary, aboutSections } = await getAboutData();
 	return <AboutPage summary={summary[0]} sections={aboutSections} />;
 }
