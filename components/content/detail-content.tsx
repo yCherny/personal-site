@@ -1,13 +1,17 @@
 import FeedbackPanel from '@/components/feedback/feedback';
 import Header from '@/components/header/header';
 import Image from 'next/image';
+import Link from 'next/link';
 import Markdown from '@/components/sections/markdown';
 import Content from '@/interfaces/content';
 import DateFormatter from '../layout/date-formatter';
 import StickyNavBar from '../layout/sticky-nav-bar';
 import VotingButton from '@/components/buttons/voting-button';
 import FixedOverlay from '../layout/fixed-overlay';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+import {
+	InformationCircleIcon,
+	GlobeAltIcon,
+} from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import {
 	checkUsersVote,
@@ -110,6 +114,35 @@ export default function DetailContent({ type, data }: Props) {
 						</div>
 					</div>
 				</div>
+				<div className='flex w-auto'>
+					{data.externalLink && (
+						<Link href={data.externalLink}>
+							<div
+								className='font-bold p-3 rounded-lg flex flex-row gap-2 items-center transition duration-500 hover:scale-105'
+								style={{ backgroundColor: data.color }}
+							>
+								<GlobeAltIcon height={20} width={20} />
+								Visit Page
+							</div>
+						</Link>
+					)}
+					{data.githubLink && (
+						<Link href={data.githubLink}>
+							<div
+								className='font-bold p-3 rounded-lg flex flex-row gap-2 items-center transition duration-500 hover:scale-105'
+								style={{ backgroundColor: data.color }}
+							>
+								<img
+									src='https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg'
+									height={20}
+									width={20}
+								/>
+								GitHub
+							</div>
+						</Link>
+					)}
+				</div>
+
 				<div className='relative'>
 					<Image
 						src={data.coverImage.url}

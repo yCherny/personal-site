@@ -11,7 +11,7 @@ type Props = {
 function SkillCard({ skill, path }: Props) {
 	return (
 		<Link href={`/${path}/${skill.name}`} className='drop-shadow-2xl'>
-			<Card key={skill.name}>
+			<Card key={skill.name} className='dark:bg-[#A59DB9]'>
 				<Flex>
 					<Image
 						src={skill.icon}
@@ -21,10 +21,14 @@ function SkillCard({ skill, path }: Props) {
 						className='mr-4'
 					/>
 					<Flex flexDirection='col' alignItems='start'>
-						<Title className='font-bold'>{skill.name}</Title>
-						<Subtitle>{skill.type}</Subtitle>
+						<Title className='font-bold dark:text-white'>
+							{skill.name}
+						</Title>
+						<Subtitle className='dark:text-slate-300'>{skill.type}</Subtitle>
 					</Flex>
-					<Title className='font-bold'>{skill.value}</Title>
+					<Title className='font-bold dark:text-white'>
+						{skill.value}
+					</Title>
 				</Flex>
 			</Card>
 		</Link>

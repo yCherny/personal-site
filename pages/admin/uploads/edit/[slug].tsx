@@ -24,6 +24,8 @@ import type { Session } from 'next-auth';
 import mongoose from 'mongoose';
 import { Post } from '@/interfaces/content';
 
+import ImageUpload from '@/components/upload/image-upload';
+
 type Props = {
 	content?: Content;
 	session: Session;
@@ -64,7 +66,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 			{
 				name: 'Yegor Chernyshev',
 				picture:
-					'https://www.dropbox.com/s/h3q3r022pfu3qru/me.jpg?dl=1',
+					'https://firebasestorage.googleapis.com/v0/b/yegor-codes.appspot.com/o/uploads%2Fme.jpg?alt=media&token=7d0cbba0-d197-405a-be8b-ad45f3bfb913',
 				url: '',
 			},
 		],
@@ -125,7 +127,7 @@ export default function EditPane({ content = undefined, session }: Props) {
 	};
 
 	return (
-		<div className='flex flex-col gap-4 bg-gray-100 dark:bg-black p-10 rounded-lg'>
+		<div className='flex flex-col gap-4 bg-gray-100 dark:bg-[#2F2050] p-10 rounded-lg'>
 			<CircularButton
 				icon={<ArrowSmallLeftIcon />}
 				onClick={() => router.back()}
@@ -166,10 +168,10 @@ export default function EditPane({ content = undefined, session }: Props) {
 				>
 					<Form>
 						<div className='flex flex-col gap-5'>
+							<ImageUpload />
 							<Text className='text-2xl font-bold'>
 								Main Information
 							</Text>
-
 							<div className='flex flex-col w-full gap-5'>
 								<div className='w-full px-3 mb-6 md:mb-0'>
 									<label

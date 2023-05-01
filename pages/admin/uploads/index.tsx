@@ -4,7 +4,6 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import Head from 'next/head';
 import { Fragment, useState } from 'react';
 
-import Navbar from '@/components/navigation/nav-bar';
 import SideBar from '@/components/navigation/side-bar';
 import DataFlow from '@/components/layout/data-flow';
 import Content from '@/interfaces/content';
@@ -14,6 +13,8 @@ import type { Session } from 'next-auth';
 
 import mongoose from 'mongoose';
 import { Post } from '@/interfaces/content';
+
+import AdminWrapper from '@/components/layout/admin-wrapper';
 
 type Props = {
 	allContent: Content[];
@@ -47,8 +48,7 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
 					content='Uploads by Yegor Chernyshev'
 				/>
 			</Head>
-			<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
-				<Navbar user={'Jimmy'} />
+			<AdminWrapper>
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>
 					<SideBar
 						onClick={filterContent}
@@ -63,7 +63,7 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
 						/>
 					</div>
 				</div>
-			</div>
+			</AdminWrapper>
 		</Fragment>
 	);
 }

@@ -67,7 +67,7 @@ function AboutPage({ summary, sections }: Props) {
 							</h3>
 							<Image
 								alt='Image of Yegor Chernyshev'
-								src='/assets/me_full.jpg'
+								src='https://firebasestorage.googleapis.com/v0/b/yegor-codes.appspot.com/o/me_full.jpg?alt=media&token=23d776c6-817e-4faf-bf7e-ee072c819550'
 								width={300}
 								height={800}
 								className='rounded-md'

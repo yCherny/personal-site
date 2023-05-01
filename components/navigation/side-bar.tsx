@@ -21,7 +21,9 @@ export default function SideBar({ onClick, filterOptions, newPath }: Props) {
 
 	return (
 		<div className='flex flex-col gap-4 mb-5 md:mb-0'>
-			<Title className='font-bold text-2xl'>Filters</Title>
+			<Title className='font-bold text-2xl dark:text-white'>
+				Filters
+			</Title>
 			{filterOptions.map((option, index) => {
 				return (
 					<FilterOption
@@ -35,7 +37,9 @@ export default function SideBar({ onClick, filterOptions, newPath }: Props) {
 				);
 			})}
 
-			<Title className='font-bold text-2xl'>Actions</Title>
+			<Title className='font-bold text-2xl dark:text-white'>
+				Actions
+			</Title>
 			<Button
 				size='lg'
 				icon={PlusCircleIcon}

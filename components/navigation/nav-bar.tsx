@@ -34,8 +34,8 @@ export default function Navbar({ user }: { user: any }) {
 											href={item.href}
 											className={classNames(
 												pathname === item.href
-													? 'border-slate-500 text-gray-900'
-													: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+													? 'border-slate-500 text-gray-900 dark:text-white'
+													: 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 hover:border-gray-300 hover:dark:text-white',
 												'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold'
 											)}
 											aria-current={
@@ -59,7 +59,7 @@ export default function Navbar({ user }: { user: any }) {
 											<Image
 												className='h-8 w-8 rounded-full'
 												src={
-													'https://www.dropbox.com/s/h3q3r022pfu3qru/me.jpg?dl=1'
+													'https://firebasestorage.googleapis.com/v0/b/yegor-codes.appspot.com/o/uploads%2Fme.jpg?alt=media&token=7d0cbba0-d197-405a-be8b-ad45f3bfb913'
 												}
 												height={32}
 												width={32}
@@ -174,7 +174,7 @@ export default function Navbar({ user }: { user: any }) {
 											<Image
 												className='h-8 w-8 rounded-full'
 												src={
-													'https://www.dropbox.com/s/h3q3r022pfu3qru/me.jpg?dl=1'
+													'https://firebasestorage.googleapis.com/v0/b/yegor-codes.appspot.com/o/uploads%2Fme.jpg?alt=media&token=7d0cbba0-d197-405a-be8b-ad45f3bfb913'
 												}
 												height={32}
 												width={32}
