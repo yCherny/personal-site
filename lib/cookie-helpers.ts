@@ -13,8 +13,6 @@ export async function updateViewCount(type: string, slug: string) {
 	const viewDoc = { view: true, cookie: userCookie };
 	const viewJSON = JSON.stringify(viewDoc);
 
-	console.log(`Doc: ${viewJSON} | Type: ${type} | Slug: ${slug}`);
-
 	try {
 		let res = await fetch(`http://localhost:3000/api/${type}/${slug}`, {
 			method: 'POST',
@@ -25,7 +23,6 @@ export async function updateViewCount(type: string, slug: string) {
 			},
 		});
 		res = await res.json();
-		console.log(res);
 	} catch (err) {
 		console.log(`Error: ${err}`);
 	}
@@ -41,8 +38,6 @@ export async function updateVoteCount(vote: Vote, type: string, slug: string) {
 	const voteDoc = { upvote: vote === Vote.Upvote, cookie: userCookie };
 	const voteJSON = JSON.stringify(voteDoc);
 
-	console.log(`Doc: ${voteJSON} | Type: ${type} | Slug: ${slug}`);
-
 	try {
 		let res = await fetch(`http://localhost:3000/api/${type}/${slug}`, {
 			method: 'POST',
@@ -53,7 +48,6 @@ export async function updateVoteCount(vote: Vote, type: string, slug: string) {
 			},
 		});
 		res = await res.json();
-		console.log(res);
 	} catch (err) {
 		console.log(`Error: ${err}`);
 	}

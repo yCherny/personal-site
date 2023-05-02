@@ -19,7 +19,7 @@ export default function MasonryGrid({ type, data }: Props) {
 					key={d.slug}
 					path={type === DataType.Post ? 'blog' : 'portfolio'}
 					data={d}
-					compressed={postIndex === 2}
+					compressed={false}
 					featured={postIndex === 0}
 				/>
 			))}

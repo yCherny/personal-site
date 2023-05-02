@@ -97,29 +97,32 @@ export function SkillsetDashboard({ skills }: Props) {
 	};
 
 	return (
-		<div className='rounded-lg bg-white p-5 drop-shadow-md'>
+		<div className='rounded-lg bg-white p-5 drop-shadow-md dark:bg-[#2F2050] dark:border-[#413D57]'>
 			<Flex>
-				<Title className='font-bold'>Skillset</Title>
+				<Title className='font-bold dark:text-white'>Skillset</Title>
 				<Dropdown
-					className='w-3/5'
 					value={value}
 					onValueChange={setValue}
 					placeholder='Render mode'
+					className='w-3/5 [&>button]:dark:bg-[#A59DB9] [&>button]:dark:text-white [&>button]:dark:border-[#413D57] [&>button>svg]:dark:text-white'
 				>
 					<DropdownItem
 						value='1'
 						text='Pure Languages'
 						icon={LanguageIcon}
+						className='dark:bg-[#A59DB9] dark:text-white'
 					/>
 					<DropdownItem
 						value='2'
 						text='Frameworks and Libraries'
 						icon={FrameworkIcon}
+						className='dark:bg-[#A59DB9] dark:text-white'
 					/>
 					<DropdownItem
 						value='3'
 						text='Data Hosting and Storage'
 						icon={DatabaseIcon}
+						className='dark:bg-[#A59DB9] dark:text-white'
 					/>
 				</Dropdown>
 			</Flex>
@@ -127,7 +130,7 @@ export function SkillsetDashboard({ skills }: Props) {
 				data={dataSouce()}
 				valueFormatter={valueFormat}
 				color='purple'
-				className='mt-2'
+				className='mt-2 [&>.tremor-BarList-bars>*]:dark:bg-[#A59DB9] [&>.tremor-BarList-bars>div>div>p]:dark:text-white [&>.text-right>div>*]:dark:text-gray-400'
 			/>
 		</div>
 	);
