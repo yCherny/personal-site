@@ -3,8 +3,7 @@ import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
 import { Fragment, useEffect, useState } from 'react';
 import { Card, Metric, Text, Flex, Title } from '@tremor/react';
-import Head from 'next/head';
-import Navbar from '@/components/navigation/nav-bar';
+import AdminWrapper from '@/components/layout/admin-wrapper';
 import Content from '@/interfaces/content';
 
 import type { GetServerSidePropsContext } from 'next';
@@ -74,17 +73,16 @@ export default function Dashboard({
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Admin</title>
-				<meta name='description' content='Admin dashboard' />
-			</Head>
-			<main className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
-				<Navbar user={'Yegor'} />
+			<AdminWrapper>
 				<div className='flex flex-col gap-5 mt-5'>
-					<Title className='font-black text-4xl'>Dashboard</Title>
+					<Title className='font-black text-4xl dark:text-white'>
+						Dashboard
+					</Title>
 					<div className='flex flex-col gap-5'>
-						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
-							<Title className='font-black'>Content</Title>
+						<div className='flex flex-col border border-gray-400 dark:border-[#413D57] rounded-lg p-5 gap-3'>
+							<Title className='font-black dark:text-white'>
+								Content
+							</Title>
 							<div className='flex flex-row gap-5'>
 								<Card>
 									<Flex alignItems='start'>
@@ -113,8 +111,10 @@ export default function Dashboard({
 							</div>
 						</div>
 
-						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
-							<Title className='font-black'>Metrics</Title>
+						<div className='flex flex-col border border-gray-400 dark:border-[#413D57] rounded-lg p-5 gap-3'>
+							<Title className='font-black dark:text-white'>
+								Metrics
+							</Title>
 							<div className='flex flex-row gap-5'>
 								<Card decoration='top' decorationColor='gray'>
 									<Flex alignItems='start'>
@@ -155,8 +155,10 @@ export default function Dashboard({
 							</div>
 						</div>
 
-						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
-							<Title className='font-black'>About</Title>
+						<div className='flex flex-col border border-gray-400 dark:border-[#413D57] rounded-lg p-5 gap-3'>
+							<Title className='font-black dark:text-white'>
+								About
+							</Title>
 							<div className='flex flex-row gap-5'>
 								<Card>
 									<Flex alignItems='start'>
@@ -185,8 +187,10 @@ export default function Dashboard({
 							</div>
 						</div>
 
-						<div className='flex flex-col border border-gray-400 rounded-lg p-5 gap-3'>
-							<Title className='font-black'>Contact</Title>
+						<div className='flex flex-col border border-gray-400 dark:border-[#413D57] rounded-lg p-5 gap-3'>
+							<Title className='font-black dark:text-white'>
+								Contact
+							</Title>
 							<div className='flex flex-row gap-5'>
 								<Card>
 									<Flex alignItems='start'>
@@ -204,7 +208,7 @@ export default function Dashboard({
 						</div>
 					</div>
 				</div>
-			</main>
+			</AdminWrapper>
 		</Fragment>
 	);
 }

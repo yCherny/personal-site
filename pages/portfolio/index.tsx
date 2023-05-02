@@ -54,6 +54,19 @@ function PortfolioPage({
 				<meta
 					name='description'
 					content='Various projects made by Yegor Chernyshev'
+					key={'desc'}
+				/>
+				<meta
+					property='og:title'
+					content='Yegor Chernyshev | Portfolio'
+				/>
+				<meta
+					property='og:description'
+					content='Various projects made by Yegor Chernyshev'
+				/>
+				<meta
+					property='og:url'
+					content='https://yegor.codes/portfolio'
 				/>
 			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen'>

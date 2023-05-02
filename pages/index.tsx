@@ -16,16 +16,21 @@ export default function Home() {
 	return (
 		<>
 			<Head>
-				<title>Yegor Chernyshev</title>
+				<title>Yegor Chernyshev | Software Engineer</title>
 				<meta
 					name='description'
 					content="Yegor Chernyshev's Personal Site"
+					key={'desc'}
 				/>
 				<meta
-					name='viewport'
-					content='width=device-width, initial-scale=1.0, viewport-fit=cover'
+					property='og:title'
+					content='Yegor Chernyshev | Software Engineer'
 				/>
-				<link rel='icon' href='/favicon.ico' />
+				<meta
+					property='og:description'
+					content="Yegor Chernyshev's Personal Site"
+				/>
+				<meta property='og:url' content='https://yegor.codes' />
 			</Head>
 			<main>
 				<button

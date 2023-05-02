@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-import Head from 'next/head';
 import { Fragment, useState } from 'react';
 
 import SideBar from '@/components/navigation/side-bar';
@@ -41,13 +40,6 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Uploads</title>
-				<meta
-					name='description'
-					content='Uploads by Yegor Chernyshev'
-				/>
-			</Head>
 			<AdminWrapper>
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>
 					<SideBar

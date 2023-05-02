@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-import Head from 'next/head';
 import { Fragment, useState } from 'react';
 
 import AdminWrapper from '@/components/layout/admin-wrapper';
@@ -39,10 +38,6 @@ function About({ allSections, allSectionFilters, session }: Props) {
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Skills</title>
-				<meta name='description' content='Skills by Yegor Chernyshev' />
-			</Head>
 			<AdminWrapper>
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>
 					<SideBar

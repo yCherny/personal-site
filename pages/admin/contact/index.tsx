@@ -1,10 +1,9 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 
-import Navbar from '@/components/navigation/nav-bar';
+import AdminWrapper from '@/components/layout/admin-wrapper';
 import SideBar from '@/components/navigation/side-bar';
 import ContactCard from '@/components/content/contact-card';
 import type { GetServerSidePropsContext } from 'next';
@@ -62,12 +61,7 @@ function About({ session }: Props) {
 
 	return (
 		<Fragment>
-			<Head>
-				<title>Yegor Chernyshev | Skills</title>
-				<meta name='description' content='Skills by Yegor Chernyshev' />
-			</Head>
-			<div className='p-4 md:p-10 mx-auto max-w-7xl bg-white rounded-lg'>
-				<Navbar user={'Yegor'} />
+			<AdminWrapper>
 				<div className='grid grid-cols-1 md:grid-cols-3 md:gap-10 mt-5'>
 					<SideBar
 						onClick={filterContent}
@@ -90,7 +84,7 @@ function About({ session }: Props) {
 						</div>
 					</div>
 				</div>
-			</div>
+			</AdminWrapper>
 		</Fragment>
 	);
 }

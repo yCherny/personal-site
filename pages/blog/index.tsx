@@ -34,8 +34,15 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 				<title>Yegor Chernyshev | Blog</title>
 				<meta
 					name='description'
-					content='Various posts by Yegor Chernyshev'
+					content='Various blog posts by Yegor Chernyshev'
+					key={'desc'}
 				/>
+				<meta property='og:title' content='Yegor Chernyshev | Blog' />
+				<meta
+					property='og:description'
+					content='Various blog posts by Yegor Chernyshev'
+				/>
+				<meta property='og:url' content='https://yegor.codes/blog' />
 			</Head>
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header

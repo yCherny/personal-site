@@ -52,8 +52,21 @@ function ContactPage() {
 	return (
 		<Fragment>
 			<Head>
-				<title>Yegor Chernyshev | Portfolio</title>
-				<meta name='description' content='Contact Yegor Chernyshev' />
+				<title>Yegor Chernyshev | Contact</title>
+				<meta
+					name='description'
+					content='Contact Yegor Chernyshev'
+					key={'desc'}
+				/>
+				<meta
+					property='og:title'
+					content='Yegor Chernyshev | Contact'
+				/>
+				<meta
+					property='og:description'
+					content='Contact Yegor Chernyshev'
+				/>
+				<meta property='og:url' content='https://yegor.codes/contact' />
 			</Head>
 			<div className='max-w-7xl mx-auto min-h-screen mb-20'>
 				<Header

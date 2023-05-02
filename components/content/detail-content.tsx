@@ -176,6 +176,15 @@ export default function DetailContent({ type, data }: Props) {
 							selected={userVote === Vote.Downvote}
 						/>
 					</div>
+
+					<p className='text-gray-400 dark:text-gray-500 w-1/2 text-center'>
+						If you want to send me specific feedback, please do so
+						on the{' '}
+						<Link href='/contact' className='font-bold underline'>
+							Contact Page
+						</Link>
+						. Thank you!
+					</p>
 				</div>
 			</div>
 			{showAttribution && (

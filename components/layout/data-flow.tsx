@@ -11,7 +11,7 @@ export default function DataFlow({ content }: Props) {
 			{content &&
 				content.map((d: Content) => (
 					<ContentCard
-						path={'/admin/uploads/edit'}
+						path={'admin/uploads/edit'}
 						data={d}
 						key={d.slug}
 					/>

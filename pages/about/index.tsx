@@ -24,8 +24,15 @@ function AboutPage({ summary, sections }: Props) {
 				<title>Yegor Chernyshev | About</title>
 				<meta
 					name='description'
-					content='A page about Yegor Chernyshev'
+					content='About Yegor Chernyshev'
+					key={'desc'}
 				/>
+				<meta property='og:title' content='Yegor Chernyshev | About' />
+				<meta
+					property='og:description'
+					content='About Yegor Chernyshev'
+				/>
+				<meta property='og:url' content='https://yegor.codes/about' />
 			</Head>
 			<div className='max-w-6xl mx-auto min-h-screen'>
 				<Header
@@ -53,12 +60,6 @@ function AboutPage({ summary, sections }: Props) {
 								</Accordion>
 							))}
 						</AccordionList>
-						<p className='text-gray-400 dark:text-gray-500'>
-							Pretty much slapped this together for the sake of
-							deploying the website sooner. I will certainly come
-							up with a more visually appealing way to talk about
-							myself later. No one likes reading essays.
-						</p>
 					</div>
 					<div className='flex flex-col col-span-1 order-first sm:order-last'>
 						<div className='flex flex-col border rounded-lg bg-white items-center p-5 gap-3 drop-shadow-md'>
