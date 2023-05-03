@@ -62,8 +62,8 @@ function AboutPage({ summary, sections }: Props) {
 						</AccordionList>
 					</div>
 					<div className='flex flex-col col-span-1 order-first sm:order-last'>
-						<div className='flex flex-col border rounded-lg bg-white items-center p-5 gap-3 drop-shadow-md dark:bg-[#2F2050] dark:border-[#413D57]'>
-							<h3 className='font-bold dark:text-white'>
+						<div className='flex flex-col border rounded-lg bg-white items-center p-5 gap-3 drop-shadow-md'>
+							<h3 className='font-bold dark:text-black'>
 								Yegor Chernyshev
 							</h3>
 							<Image
@@ -79,12 +79,12 @@ function AboutPage({ summary, sections }: Props) {
 							</p>
 							<table className='table-auto border-separate border-spacing-4'>
 								<tbody>
-									<tr className='align-top dark:text-white'>
+									<tr className='align-top'>
 										<td className='font-semibold'>Born</td>
 										<td>July 1997</td>
 									</tr>
-									<tr className='align-top dark:text-white'>
-										<td className='font-semibold '>
+									<tr className='align-top'>
+										<td className='font-semibold'>
 											Education
 										</td>
 										<td>
@@ -92,7 +92,7 @@ function AboutPage({ summary, sections }: Props) {
 											University (MS)
 										</td>
 									</tr>
-									<tr className='align-top dark:text-white'>
+									<tr className='align-top'>
 										<td className='font-semibold'>
 											Occupations
 										</td>

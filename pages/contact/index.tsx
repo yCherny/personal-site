@@ -1,8 +1,7 @@
 import { Fragment, useState } from 'react';
 import Head from 'next/head';
 import Header from '../../components/header/header';
-import { Button, Callout, Flex } from '@tremor/react';
-
+import { Text, Button, Callout, Flex } from '@tremor/react';
 // Forms
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -29,7 +28,7 @@ function ContactPage() {
 		console.log(`Passed In Data: ${jsonData}`);
 
 		try {
-			let res = await fetch('/api/contact', {
+			let res = await fetch('http://localhost:3000/api/contact', {
 				method: 'POST',
 				body: jsonData,
 				headers: {
