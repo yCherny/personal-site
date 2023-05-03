@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
-import { useThree } from '@react-three/fiber';
-import { OrthographicCamera, OrbitControls } from '@react-three/drei';
+import { OrthographicCamera, OrbitControls, Preload } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 
 // Local Components
@@ -9,8 +8,6 @@ import { Model } from './room-alpha';
 
 function Scene() {
 	const myCamera = React.useRef();
-	const regress = useThree((state) => state.performance.regress);
-
 	return (
 		<>
 			<OrthographicCamera
@@ -48,7 +45,9 @@ function Scene() {
 					<Vignette eskil={false} offset={0.1} darkness={1.1} />
 				</EffectComposer>
 			</Suspense>
+
 			<Model />
+			<Preload all />
 		</>
 	);
 }

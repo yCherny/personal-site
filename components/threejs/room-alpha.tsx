@@ -1165,12 +1165,6 @@ export function Model(props: any) {
 					geometry={nodes.Mesh.geometry}
 					material={materials.Matteplastic}
 				/>
-				<mesh
-					castShadow
-					receiveShadow
-					geometry={nodes.Mesh_1.geometry}
-					material={materials.BlackMetal}
-				/>
 			</group>
 			<mesh
 				castShadow
