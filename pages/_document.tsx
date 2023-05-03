@@ -21,7 +21,7 @@ export default function Document() {
 					}}
 				></Script>
 			</Head>
-			<body className='dark:bg-[#130F29]'>
+			<body className='bg-gray-200 dark:bg-[#130F29]'>
 				<noscript
 					dangerouslySetInnerHTML={{
 						__html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5LQPTXT"
