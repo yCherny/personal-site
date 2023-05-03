@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { useThree } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { OrthographicCamera, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 
@@ -7,12 +7,17 @@ import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import SceneLighting from './scene-lighting';
 import { Model } from './room-alpha';
 
+/*
+TrueISOCam Properties Taken from Reiner Prokein's Work:
+http://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Add_Mesh/Create_IsoCam
+*/
+
 function Scene() {
+	// Camera Ref
 	const myCamera = React.useRef();
-	const regress = useThree((state) => state.performance.regress);
 
 	return (
-		<>
+		<Canvas shadows>
 			<OrthographicCamera
 				makeDefault
 				zoom={1500}
@@ -37,8 +42,8 @@ function Scene() {
 				maxPolarAngle={Math.PI / 2.25}
 			/>
 
+			<SceneLighting enabled={true} />
 			<Suspense fallback={null}>
-				<SceneLighting enabled={true} />
 				<EffectComposer>
 					<Bloom
 						luminanceThreshold={0}
@@ -49,7 +54,7 @@ function Scene() {
 				</EffectComposer>
 			</Suspense>
 			<Model />
-		</>
+		</Canvas>
 	);
 }
 

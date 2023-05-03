@@ -5,22 +5,11 @@ import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from 'next-auth/react';
 import type { Session } from 'next-auth';
 import Head from 'next/head';
-import { useTheme } from 'next-themes';
-import React, { useEffect, useState } from 'react';
 
 export default function App({
 	Component,
 	pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
-	const { theme, setTheme } = useTheme();
-
-	useEffect(() => {
-		if (theme === 'light') {
-			return setTheme('light');
-		}
-		return setTheme('dark');
-	}, []);
-
 	return (
 		<>
 			<Head>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Scene from '@/components/threejs/canvas';
+import Scene from '@/components/threejs/scene';
 
 function ThreeJSViewport() {
 	return (
