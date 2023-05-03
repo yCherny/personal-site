@@ -13,9 +13,9 @@ export const authOptions: NextAuthOptions = {
 			token.userRole = 'admin';
 			return token;
 		},
-		// session({ session, token, user }) {
-		// 	return session;
-		// },
+		session({ session, token, user }) {
+			return session;
+		},
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 };
