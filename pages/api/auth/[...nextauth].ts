@@ -9,12 +9,12 @@ export const authOptions: NextAuthOptions = {
 		}),
 	],
 	callbacks: {
+		session({ session, token, user }) {
+			return session;
+		},
 		async jwt({ token }) {
 			token.userRole = 'admin';
 			return token;
-		},
-		session({ session, token, user }) {
-			return session;
 		},
 	},
 	secret: process.env.NEXTAUTH_SECRET,

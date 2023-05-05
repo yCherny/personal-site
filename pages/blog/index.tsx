@@ -44,7 +44,7 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 				/>
 				<meta property='og:url' content='https://yegor.codes/blog' />
 			</Head>
-			<div className='max-w-6xl mx-auto min-h-screen'>
+			<div className='max-w-6xl mx-auto'>
 				<Header
 					titlePrimary={'B'}
 					titleSecondary={'log(n)'}

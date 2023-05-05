@@ -49,6 +49,7 @@
 		"remark-gfm": "^3.0.1",
 		"remark-html": "^15.0.2",
 		"sharp": "^0.32.1",
+		"swr": "^2.1.5",
 		"tailwindcss-safe-area": "^0.2.2",
 		"three": "^0.151.3",
 		"typescript": "5.0.3",

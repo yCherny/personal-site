@@ -34,7 +34,7 @@ function AboutPage({ summary, sections }: Props) {
 				/>
 				<meta property='og:url' content='https://yegor.codes/about' />
 			</Head>
-			<div className='max-w-6xl mx-auto min-h-screen'>
+			<div className='max-w-6xl mx-auto'>
 				<Header
 					titlePrimary={'wiki/'}
 					titleSecondary={'Yegor-Chernyshev'}

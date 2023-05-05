@@ -2,6 +2,7 @@ import Content from '@/interfaces/content';
 import { getCookie, setCookie } from 'cookies-next';
 import { v4 as uuidv4 } from 'uuid';
 import { Vote } from '@/components/content/detail-content';
+import useSWR from 'swr';
 
 export async function updateViewCount(type: string, slug: string) {
 	if (!getCookie('visitor_uid')) {
@@ -14,8 +15,9 @@ export async function updateViewCount(type: string, slug: string) {
 	const viewJSON = JSON.stringify(viewDoc);
 
 	try {
-		let res = await fetch(`http://localhost:3000/api/${type}/${slug}`, {
+		let res = await fetch(`https://yegor.codes/api/${type}/${slug}`, {
 			method: 'POST',
+			mode: 'cors',
 			body: viewJSON,
 			headers: {
 				Accept: 'application/json',
@@ -39,8 +41,9 @@ export async function updateVoteCount(vote: Vote, type: string, slug: string) {
 	const voteJSON = JSON.stringify(voteDoc);
 
 	try {
-		let res = await fetch(`http://localhost:3000/api/${type}/${slug}`, {
+		let res = await fetch(`https://yegor.codes/api/${type}/${slug}`, {
 			method: 'POST',
+			mode: 'cors',
 			body: voteJSON,
 			headers: {
 				Accept: 'application/json',

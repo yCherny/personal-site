@@ -13,10 +13,13 @@ import {
 	Accordion,
 	AccordionHeader,
 	AccordionBody,
+	Button,
 } from '@tremor/react';
+import { useTheme } from 'next-themes';
 
 import MasonryGrid, { DataType } from '@/components/layout/masonry-grid';
 import mongoose from 'mongoose';
+import { useRouter } from 'next/router';
 
 type Props = {
 	allProjects: Content[];
@@ -31,6 +34,8 @@ function PortfolioPage({
 	uniqueTags,
 	sections,
 }: Props) {
+	const router = useRouter();
+	const { theme, setTheme } = useTheme();
 	const [filteredContent, setFilteredContent] =
 		useState<Content[]>(allProjects);
 	const [filter, setFilter] = useState<string>('');
@@ -69,7 +74,7 @@ function PortfolioPage({
 					content='https://yegor.codes/portfolio'
 				/>
 			</Head>
-			<div className='max-w-7xl mx-auto min-h-screen'>
+			<div className='max-w-7xl mx-auto'>
 				<Header
 					titlePrimary={'Portfol'}
 					titleSecondary={'.io'}
@@ -92,6 +97,26 @@ function PortfolioPage({
 					</div>
 					<div className='flex flex-col col-span-1 order-first lg:order-last pt-5 gap-5'>
 						<SkillsetDashboard skills={allSkills} />
+
+						<button
+							className='bg-white dark:bg-[#2F2050] rounded-lg text-black dark:text-white font-bold flex flex-col items-center p-3 drop-shadow-lg transition duration-500 hover:scale-105'
+							onClick={() =>
+								router.push('https://github.com/yCherny')
+							}
+						>
+							<div className='flex items-center gap-4'>
+								<img
+									src={
+										theme === 'dark'
+											? `assets/github-mark-white.png`
+											: `assets/github-mark.png`
+									}
+									height={25}
+									width={25}
+								/>
+								GitHub
+							</div>
+						</button>
 						<AccordionList className='w-full'>
 							{sections.map((section, index) => (
 								<Accordion
