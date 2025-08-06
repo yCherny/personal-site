@@ -38,6 +38,7 @@ export default function ToggleButton({ disabledIcon, enabledIcon }: Props) {
 		dark:bg-black/10  dark:hover:bg-white dark:hover:text-black
 		`}
 			onClick={handleOnClick}
+			data-cy='themeToggle'
 		>
 			{theme === 'light' ? disabledIcon : enabledIcon}
 		</button>

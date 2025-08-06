@@ -47,7 +47,6 @@ function Scene() {
 			</Suspense>
 
 			<Model />
-			<Preload all />
 		</>
 	);
 }
