@@ -1,47 +1,59 @@
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
-import Content from '@/interfaces/content';
-import DetailContent from '@/components/content/detail-content';
-import mongoose from 'mongoose';
-import { Post } from '@/interfaces/content';
+import { useRouter } from "next/router";
+import ErrorPage from "next/error";
+import Content from "@/interfaces/content";
+import DetailContent from "@/components/content/detail-content";
+import mongoose from "mongoose";
+import { Post } from "@/interfaces/content";
 
 type Props = {
-	project: Content;
+  project: Content;
 };
 
 export default function ProjectDetail({ project }: Props) {
-	const router = useRouter();
-	if (!router.isFallback && !project?.slug) {
-		return <ErrorPage statusCode={404} />;
-	}
+  const router = useRouter();
+  if (!router.isFallback && !project?.slug) {
+    return <ErrorPage statusCode={404} />;
+  }
 
-	return <DetailContent data={project} type={'project'} />;
+  return <DetailContent data={project} type={"project"} />;
 }
 
 type Params = {
-	params: {
-		projectId: string;
-	};
+  params: {
+    projectId: string;
+  };
 };
 
 export async function getServerSideProps(context: Params) {
-	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  let client;
 
-	// Get Portfolio Content
-	const query = Post.where({ slug: context.params.projectId });
-	const project = await query.findOne();
-	const jsonProject = JSON.parse(JSON.stringify(project));
-	client.connection.close();
+  try {
+    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
 
-	if (!project) {
-		return {
-			props: {},
-		};
-	}
+    // Get Portfolio Content
+    const query = Post.where({ slug: context.params.projectId });
+    const project = await query.findOne();
+    const jsonProject = JSON.parse(JSON.stringify(project));
 
-	return {
-		props: {
-			project: jsonProject,
-		},
-	};
+    if (!project) {
+      return {
+        props: {},
+      };
+    }
+
+    return {
+      props: {
+        project: jsonProject,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      notFound: true,
+    };
+  } finally {
+    if (client && client.connection) {
+      await client.connection.close();
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useRef } from 'react';
 import { Canvas as FiberCanvas } from '@react-three/fiber';
 import {
 	PerformanceMonitor,
@@ -20,7 +20,7 @@ http://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Add_Mesh/Create_IsoC
 */
 
 function Canvas() {
-	const myCamera = React.useRef();
+    const myCamera = useRef<THREE.OrthographicCamera>(null);
 
 	return (
 		<Suspense fallback={<Loading />}>
@@ -53,8 +53,8 @@ function Canvas() {
 					<SceneLighting enabled={true} />
 					<EffectComposer>
 						<Bloom
-							luminanceThreshold={0}
-							luminanceSmoothing={0.9}
+							luminanceThreshold={20}
+							luminanceSmoothing={0}
 							height={300}
 						/>
 						<Vignette eskil={false} offset={0.1} darkness={1.1} />

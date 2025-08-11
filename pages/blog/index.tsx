@@ -1,9 +1,9 @@
-import {Fragment, useState} from "react";
+import { Fragment, useState } from "react";
 import Head from "next/head";
-import MasonryGrid, {DataType} from "@/components/layout/masonry-grid";
+import MasonryGrid, { DataType } from "@/components/layout/masonry-grid";
 import FilterPanel from "@/components/filter/filter-panel";
 import Header from "../../components/header/header";
-import Content, {Post} from "@/interfaces/content";
+import Content, { Post } from "@/interfaces/content";
 import StickyNavBar from "@/components/layout/sticky-nav-bar";
 import mongoose from "mongoose";
 
@@ -12,7 +12,7 @@ type Props = {
   uniqueTags: string[];
 };
 
-function BlogPage({allPosts, uniqueTags}: Props) {
+function BlogPage({ allPosts, uniqueTags }: Props) {
   const [filteredContent, setFilteredContent] = useState<Content[]>(allPosts);
   const [filter, setFilter] = useState<string>("");
 
@@ -67,27 +67,40 @@ function BlogPage({allPosts, uniqueTags}: Props) {
 }
 
 export async function getStaticProps() {
-  let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
-  const query = Post.where({type: "blog"}).sort({createdAt: -1});
-  const posts = await query.find();
-  client.connection.close();
+  let client;
 
-  const jsonPosts = JSON.parse(JSON.stringify(posts));
-  const tags = posts.map((post) => post.tags).flat();
-  const uniqueTags = Array.from(new Set(tags));
+  try {
+    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
 
-  if (!posts) {
+    const query = Post.where({ type: "blog" }).sort({ createdAt: -1 });
+    const posts = await query.find();
+
+    const jsonPosts = JSON.parse(JSON.stringify(posts));
+    const tags = posts.map((post) => post.tags).flat();
+    const uniqueTags = Array.from(new Set(tags));
+
+    if (!posts) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        allPosts: jsonPosts,
+        uniqueTags: uniqueTags,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
     return {
       notFound: true,
     };
+  } finally {
+    if (client && client.connection) {
+      await client.connection.close();
+    }
   }
-
-  return {
-    props: {
-      allPosts: jsonPosts,
-      uniqueTags: uniqueTags,
-    },
-  };
 }
 
 export default BlogPage;

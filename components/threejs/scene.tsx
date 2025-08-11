@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useRef } from 'react';
 import { OrthographicCamera, OrbitControls, Preload } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 
@@ -7,7 +7,7 @@ import SceneLighting from './scene-lighting';
 import { Model } from './room-alpha';
 
 function Scene() {
-	const myCamera = React.useRef();
+	const myCamera = useRef<THREE.OrthographicCamera>(null);
 	return (
 		<>
 			<OrthographicCamera

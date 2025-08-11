@@ -1,12 +1,12 @@
-import {Fragment, useState} from "react";
+import { Fragment, useState } from "react";
 import Head from "next/head";
 import Header from "../../components/header/header";
-import Content, {Post} from "@/interfaces/content";
-import SkillContent, {Skill} from "@/interfaces/skill";
+import Content, { Post } from "@/interfaces/content";
+import SkillContent, { Skill } from "@/interfaces/skill";
 import FilterPanel from "@/components/filter/filter-panel";
-import SectionContent, {Section} from "@/interfaces/about";
+import SectionContent, { Section } from "@/interfaces/about";
 import StickyNavBar from "@/components/layout/sticky-nav-bar";
-import {SkillsetDashboard} from "@/components/content/skillset-dashboard";
+import { SkillsetDashboard } from "@/components/content/skillset-dashboard";
 import Markdown from "@/components/sections/markdown";
 import {
   AccordionList,
@@ -15,11 +15,11 @@ import {
   AccordionBody,
   Button,
 } from "@tremor/react";
-import {useTheme} from "next-themes";
+import { useTheme } from "next-themes";
 
-import MasonryGrid, {DataType} from "@/components/layout/masonry-grid";
+import MasonryGrid, { DataType } from "@/components/layout/masonry-grid";
 import mongoose from "mongoose";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 type Props = {
   allProjects: Content[];
@@ -28,9 +28,14 @@ type Props = {
   sections: SectionContent[];
 };
 
-function PortfolioPage({allProjects, allSkills, uniqueTags, sections}: Props) {
+function PortfolioPage({
+  allProjects,
+  allSkills,
+  uniqueTags,
+  sections,
+}: Props) {
   const router = useRouter();
-  const {theme, setTheme} = useTheme();
+  const { theme, setTheme } = useTheme();
   const [filteredContent, setFilteredContent] =
     useState<Content[]>(allProjects);
   const [filter, setFilter] = useState<string>("");
@@ -131,42 +136,48 @@ function PortfolioPage({allProjects, allSkills, uniqueTags, sections}: Props) {
 }
 
 export async function getStaticProps() {
-  let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  let client;
 
-  // Get Portfolio Content
-  const query = Post.where({type: "portfolio"}).sort({createdAt: -1});
-  const projects = await query.find();
-  const jsonProjects = JSON.parse(JSON.stringify(projects));
-  const tags = projects.map((post) => post.tags).flat();
-  const uniqueTags = Array.from(new Set(tags));
+  try {
+    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
 
-  // Get Skills
-  const skills = await Skill.find();
-  const jsonSkills = JSON.parse(JSON.stringify(skills));
+    // Get Portfolio Content
+    const query = Post.where({ type: "portfolio" }).sort({ createdAt: -1 });
+    const projects = await query.find();
+    const jsonProjects = JSON.parse(JSON.stringify(projects));
+    const tags = projects.map((post) => post.tags).flat();
+    const uniqueTags = Array.from(new Set(tags));
 
-  // Get Sections
-  const sections = await Section.find();
-  const programmingSections = sections.filter(
-    (section) => section.page === "portfolio"
-  );
-  const jsonSections = JSON.parse(JSON.stringify(programmingSections));
+    // Get Skills
+    const skills = await Skill.find();
+    const jsonSkills = JSON.parse(JSON.stringify(skills));
 
-  client.connection.close();
+    // Get Sections
+    const sections = await Section.find();
+    const programmingSections = sections.filter(
+      (section) => section.page === "portfolio"
+    );
+    const jsonSections = JSON.parse(JSON.stringify(programmingSections));
 
-  if (!projects) {
+    // Return props
+    return {
+      props: {
+        allProjects: jsonProjects,
+        allSkills: jsonSkills,
+        uniqueTags: uniqueTags,
+        sections: jsonSections,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
     return {
       notFound: true,
     };
+  } finally {
+    if (client && client.connection) {
+      await client.connection.close();
+    }
   }
-
-  return {
-    props: {
-      allProjects: jsonProjects,
-      allSkills: jsonSkills,
-      uniqueTags: uniqueTags,
-      sections: jsonSections,
-    },
-  };
 }
 
 export default PortfolioPage;
