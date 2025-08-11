@@ -189,8 +189,8 @@ export default function DetailContent({ type, data }: Props) {
 			</div>
 			{showAttribution && (
 				<FixedOverlay>
-					<h1 className='font-bold text-2xl'>Attribution ❤️</h1>
-					<ul className='flex flex-col gap-2'>
+					<h1 className='font-bold text-2xl dark:text-white'>Attribution ❤️</h1>
+					<ul className='flex flex-col gap-2 dark:text-white'>
 						<li>
 							<a href={data.coverImage.copyrightLink}>
 								<span className='font-bold underline'>
@@ -201,7 +201,7 @@ export default function DetailContent({ type, data }: Props) {
 						</li>
 					</ul>
 					<button
-						className='rounded-full bg-black px-3 py-2 text-white font-bold'
+						className='rounded-full bg-black px-3 py-2 text-white font-bold dark:bg-[#8143FC]'
 						onClick={toggleAttribution}
 					>
 						Dismiss

@@ -80,10 +80,6 @@ function AboutPage({ summary, sections }: Props) {
 							<table className='table-auto border-separate border-spacing-4'>
 								<tbody>
 									<tr className='align-top dark:text-white'>
-										<td className='font-semibold'>Born</td>
-										<td>July 1997</td>
-									</tr>
-									<tr className='align-top dark:text-white'>
 										<td className='font-semibold '>
 											Education
 										</td>

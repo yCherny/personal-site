@@ -56,7 +56,7 @@ export default function Home() {
 							. Please check out the other pages on my site below.
 						</h4>
 						<hr />
-						<h1 className='font-bold text-2xl'>Attribution ❤️</h1>
+						<h1 className='font-bold text-2xl dark:text-black'>Attribution ❤️</h1>
 						<h4 className='text-gray-500'>
 							I may wear many hats, but unfortunately my talents
 							only go so far. Below are the attributions to
