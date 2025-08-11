@@ -1,17 +1,17 @@
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import {Fragment, useState} from "react";
+import { Fragment, useState } from "react";
 
 import AdminWrapper from "@/components/layout/admin-wrapper";
 import SideBar from "@/components/navigation/side-bar";
 import SectionContent from "@/interfaces/about";
 import AboutCard from "@/components/content/about-card";
-import type {GetServerSidePropsContext} from "next";
-import type {Session} from "next-auth";
+import type { GetServerSidePropsContext } from "next";
+import type { Session } from "next-auth";
 
-import {Section} from "@/interfaces/about";
-import mongoose from "mongoose";
+import { Section } from "@/interfaces/about";
+import { dbConnect } from "@/lib/db-connect";
 
 type Props = {
   allSections: SectionContent[];
@@ -19,7 +19,7 @@ type Props = {
   session: Session;
 };
 
-function About({allSections, allSectionFilters, session}: Props) {
+function About({ allSections, allSectionFilters, session }: Props) {
   const [filteredContent, setFilteredContent] =
     useState<SectionContent[]>(allSections);
   const [filter, setFilter] = useState<string>("");
@@ -63,25 +63,33 @@ function About({allSections, allSectionFilters, session}: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  await dbConnect();
 
-  // Get Sections
-  const sections = await Section.find();
-  const jsonSections = JSON.parse(JSON.stringify(sections));
-  const pageTypes = sections.map((section) => section.page).flat();
-  const filterOptions = Array.from(new Set(pageTypes));
+  try {
+    // Get Sections
+    const sections = await Section.find();
+    const jsonSections = JSON.parse(JSON.stringify(sections));
+    const pageTypes = sections.map((section) => section.page).flat();
+    const filterOptions = Array.from(new Set(pageTypes));
+    const session = await getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  client.connection.close();
-
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  return {
-    props: {
-      allSections: jsonSections,
-      allSectionFilters: filterOptions,
-      // session: session,
-    },
-  };
+    return {
+      props: {
+        allSections: jsonSections,
+        allSectionFilters: filterOptions,
+        // session: session,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      notFound: true,
+    };
+  }
 }
 
 export default About;

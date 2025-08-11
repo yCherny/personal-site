@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
-import Content from "@/interfaces/content";
+import Content, { Post } from "@/interfaces/content";
 import DetailContent from "@/components/content/detail-content";
-import mongoose from "mongoose";
-import { Post } from "@/interfaces/content";
+import { dbConnect } from "@/lib/db-connect";
 
 type Props = {
   post: Content;
@@ -26,21 +25,13 @@ type Params = {
 };
 
 export async function getServerSideProps(context: Params) {
-  let client;
+  await dbConnect();
 
   try {
-    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
-
     // Get Post Content
     const query = Post.where({ slug: context.params.postId });
     const post = await query.findOne();
     const jsonPost = JSON.parse(JSON.stringify(post));
-
-    if (!post) {
-      return {
-        props: {},
-      };
-    }
 
     return {
       props: {
@@ -52,9 +43,5 @@ export async function getServerSideProps(context: Params) {
     return {
       notFound: true,
     };
-  } finally {
-    if (client && client.connection) {
-      await client.connection.close();
-    }
   }
 }

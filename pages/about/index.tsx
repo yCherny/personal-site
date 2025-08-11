@@ -10,7 +10,7 @@ import {
   AccordionBody,
 } from "@tremor/react";
 import SectionContent, { Section } from "@/interfaces/about";
-import mongoose from "mongoose";
+import { dbConnect } from "@/lib/db-connect";
 
 type Props = {
   summary: SectionContent;
@@ -91,13 +91,10 @@ function AboutPage({ summary, sections }: Props) {
 }
 
 export async function getStaticProps() {
-  let client;
+  await dbConnect();
 
   try {
-    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
-
     const sections = await Section.find();
-
     const jsonSections: SectionContent[] = JSON.parse(JSON.stringify(sections));
     const summary = jsonSections.filter(
       (section) => section.title === "Summary"
@@ -117,10 +114,6 @@ export async function getStaticProps() {
     return {
       notFound: true,
     };
-  } finally {
-    if (client && client.connection) {
-      await client.connection.close();
-    }
   }
 }
 

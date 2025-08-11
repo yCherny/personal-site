@@ -1,31 +1,34 @@
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import {Text, Button} from "@tremor/react";
-import {useState, useEffect} from "react";
+import { Text, Button } from "@tremor/react";
+import { useState, useEffect } from "react";
 import CircularButton from "../../../../components/buttons/circular-button";
-import {ArrowSmallLeftIcon, PlusCircleIcon} from "@heroicons/react/24/outline";
+import {
+  ArrowSmallLeftIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/24/outline";
 import Markdown from "@/components/sections/markdown";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
 // Forms
-import {Formik, Field, Form, ErrorMessage, useField} from "formik";
+import { Formik, Field, Form, ErrorMessage, useField } from "formik";
 import * as Yup from "yup";
 import FormikRadioGroup from "@/components/content/formik-radio-group";
 
-import type {GetServerSidePropsContext} from "next";
-import type {Session} from "next-auth";
+import type { GetServerSidePropsContext } from "next";
+import type { Session } from "next-auth";
 import SectionContent from "@/interfaces/about";
 
-import mongoose from "mongoose";
-import {Section} from "@/interfaces/about";
+import { dbConnect } from "@/lib/db-connect";
+import { Section } from "@/interfaces/about";
 
 type Props = {
   content?: SectionContent;
   session: Session;
 };
 
-export default function EditPane({content = undefined, session}: Props) {
+export default function EditPane({ content = undefined, session }: Props) {
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -227,14 +230,12 @@ export default function EditPane({content = undefined, session}: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  await dbConnect();
 
-    const query = Section.where({title: context.query.title});
+  try {
+    const query = Section.where({ title: context.query.title });
     const section = await query.findOne();
     const jsonSection = JSON.parse(JSON.stringify(section));
-
-    client.connection.close();
 
     return {
       props: {

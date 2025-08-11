@@ -1,31 +1,32 @@
-import {getServerSession} from "next-auth";
-import {authOptions} from "@/pages/api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import {Text, Button} from "@tremor/react";
-import {useState, useEffect, useRef, useCallback} from "react";
+import { Text, Button } from "@tremor/react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import CircularButton from "../../../../components/buttons/circular-button";
-import {ArrowSmallLeftIcon} from "@heroicons/react/24/outline";
-import {useRouter} from "next/router";
+import { ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import { dbConnect } from "@/lib/db-connect";
 
 // Forms
-import {Formik, Field, Form, ErrorMessage, useField} from "formik";
+import { Formik, Field, Form, ErrorMessage, useField } from "formik";
 import * as Yup from "yup";
 import FormikRadioGroup from "@/components/content/formik-radio-group";
 
-import type {GetServerSidePropsContext} from "next";
-import type {Session} from "next-auth";
+import type { GetServerSidePropsContext } from "next";
+import type { Session } from "next-auth";
 import SkillContent from "@/interfaces/skill";
 
 import mongoose from "mongoose";
-import {Skill} from "@/interfaces/skill";
+import { Skill } from "@/interfaces/skill";
 
 type Props = {
   skill?: SkillContent;
   session: Session;
 };
 
-export default function EditPane({skill = undefined, session}: Props) {
+export default function EditPane({ skill = undefined, session }: Props) {
   const router = useRouter();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -243,15 +244,13 @@ export default function EditPane({skill = undefined, session}: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  await dbConnect();
 
+  try {
     // Get Skills
-    const query = Skill.where({name: context.query.name});
+    const query = Skill.where({ name: context.query.name });
     const skill = await query.findOne();
     const jsonSkill = JSON.parse(JSON.stringify(skill));
-
-    client.connection.close();
 
     return {
       props: {

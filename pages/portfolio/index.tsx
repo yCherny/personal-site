@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import Head from "next/head";
+import Image from "next/image";
 import Header from "../../components/header/header";
 import Content, { Post } from "@/interfaces/content";
 import SkillContent, { Skill } from "@/interfaces/skill";
@@ -7,6 +8,7 @@ import FilterPanel from "@/components/filter/filter-panel";
 import SectionContent, { Section } from "@/interfaces/about";
 import StickyNavBar from "@/components/layout/sticky-nav-bar";
 import { SkillsetDashboard } from "@/components/content/skillset-dashboard";
+import { dbConnect } from "@/lib/db-connect";
 import Markdown from "@/components/sections/markdown";
 import {
   AccordionList,
@@ -97,14 +99,11 @@ function PortfolioPage({
               onClick={() => router.push("https://github.com/yCherny")}
             >
               <div className="flex items-center gap-4">
-                <img
-                  src={
-                    theme === "dark"
-                      ? `assets/github-mark-white.png`
-                      : `assets/github-mark.png`
-                  }
-                  height={25}
-                  width={25}
+                <Image
+                  src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+                  height={20}
+                  width={20}
+                  alt="Github Logo"
                 />
                 GitHub
               </div>
@@ -136,11 +135,9 @@ function PortfolioPage({
 }
 
 export async function getStaticProps() {
-  let client;
+  await dbConnect();
 
   try {
-    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
-
     // Get Portfolio Content
     const query = Post.where({ type: "portfolio" }).sort({ createdAt: -1 });
     const projects = await query.find();
@@ -173,10 +170,6 @@ export async function getStaticProps() {
     return {
       notFound: true,
     };
-  } finally {
-    if (client && client.connection) {
-      await client.connection.close();
-    }
   }
 }
 

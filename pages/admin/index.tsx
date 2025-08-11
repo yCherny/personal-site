@@ -1,18 +1,18 @@
-import {getServerSession} from "next-auth";
-import {authOptions} from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
-import type {GetServerSidePropsContext} from "next";
-import {useSession} from "next-auth/react";
+import type { GetServerSidePropsContext } from "next";
+import { useSession } from "next-auth/react";
 
-import {Fragment, useEffect, useState} from "react";
-import {Card, Metric, Text, Flex, Title} from "@tremor/react";
+import { Fragment, useEffect, useState } from "react";
+import { Card, Metric, Text, Flex, Title } from "@tremor/react";
 import AdminWrapper from "@/components/layout/admin-wrapper";
 import Content from "@/interfaces/content";
 
-import mongoose from "mongoose";
-import {Post} from "@/interfaces/content";
-import {Skill} from "@/interfaces/skill";
-import {Section} from "@/interfaces/about";
+import { dbConnect } from "@/lib/db-connect";
+import { Post } from "@/interfaces/content";
+import { Skill } from "@/interfaces/skill";
+import { Section } from "@/interfaces/about";
 import SectionContent from "@/interfaces/about";
 import SkillContent from "@/interfaces/skill";
 import ContactContent from "@/interfaces/contact";
@@ -23,7 +23,11 @@ type Props = {
   allSkills: SkillContent[];
 };
 
-export default function Dashboard({allContent, allSections, allSkills}: Props) {
+export default function Dashboard({
+  allContent,
+  allSections,
+  allSkills,
+}: Props) {
   const [blogCount, setBlogCount] = useState<number>(0);
   const [projectCount, setProjectCount] = useState<number>(0);
   const [viewCount, setViewCount] = useState<number>(0);
@@ -200,38 +204,45 @@ export default function Dashboard({allContent, allSections, allSkills}: Props) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  await dbConnect();
 
-  // Get Portfolio Content
-  const projectQuery = Post.where({type: "portfolio"});
-  const projects = await projectQuery.find();
-  const jsonProjects = JSON.parse(JSON.stringify(projects));
+  try {
+    // Get Portfolio Content
+    const projectQuery = Post.where({ type: "portfolio" });
+    const projects = await projectQuery.find();
+    const jsonProjects = JSON.parse(JSON.stringify(projects));
 
-  // Get Post Content
-  const postQuery = Post.where({type: "blog"});
-  const posts = await postQuery.find();
-  const jsonPosts = JSON.parse(JSON.stringify(posts));
+    // Get Post Content
+    const postQuery = Post.where({ type: "blog" });
+    const posts = await postQuery.find();
+    const jsonPosts = JSON.parse(JSON.stringify(posts));
 
-  // Get Skills
-  const skills = await Skill.find();
-  const jsonSkills = JSON.parse(JSON.stringify(skills));
+    // Get Skills
+    const skills = await Skill.find();
+    const jsonSkills = JSON.parse(JSON.stringify(skills));
 
-  // Get Sections
-  const sections = await Section.find();
-  const jsonSections = JSON.parse(JSON.stringify(sections));
+    // Get Sections
+    const sections = await Section.find();
+    const jsonSections = JSON.parse(JSON.stringify(sections));
 
-  client.connection.close();
+    const allContent = jsonProjects.concat(jsonPosts);
+    const session = await getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    );
 
-  const allContent = jsonProjects.concat(jsonPosts);
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  // console.log(`Session: ${session?.user?.image}`);
-
-  return {
-    props: {
-      allContent: allContent,
-      allSections: jsonSections,
-      allSkills: jsonSkills,
-    },
-  };
+    return {
+      props: {
+        allContent: allContent,
+        allSections: jsonSections,
+        allSkills: jsonSkills,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      notFound: true,
+    };
+  }
 }

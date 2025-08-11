@@ -5,7 +5,7 @@ import FilterPanel from "@/components/filter/filter-panel";
 import Header from "../../components/header/header";
 import Content, { Post } from "@/interfaces/content";
 import StickyNavBar from "@/components/layout/sticky-nav-bar";
-import mongoose from "mongoose";
+import { dbConnect } from "@/lib/db-connect";
 
 type Props = {
   allPosts: Content[];
@@ -67,23 +67,15 @@ function BlogPage({ allPosts, uniqueTags }: Props) {
 }
 
 export async function getStaticProps() {
-  let client;
+  await dbConnect();
 
   try {
-    client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
-
     const query = Post.where({ type: "blog" }).sort({ createdAt: -1 });
     const posts = await query.find();
 
     const jsonPosts = JSON.parse(JSON.stringify(posts));
     const tags = posts.map((post) => post.tags).flat();
     const uniqueTags = Array.from(new Set(tags));
-
-    if (!posts) {
-      return {
-        notFound: true,
-      };
-    }
 
     return {
       props: {
@@ -96,10 +88,6 @@ export async function getStaticProps() {
     return {
       notFound: true,
     };
-  } finally {
-    if (client && client.connection) {
-      await client.connection.close();
-    }
   }
 }
 
