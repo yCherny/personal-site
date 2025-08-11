@@ -37,7 +37,7 @@ export default function App({
 			</Head>
 			<ThemeProvider attribute='class'>
 				<div className='p-7 md:p-10'>
-					<SessionProvider session={session}>
+					<SessionProvider session={session} refetchInterval={5 * 60}>
 						<Component {...pageProps} />
 					</SessionProvider>
 				</div>

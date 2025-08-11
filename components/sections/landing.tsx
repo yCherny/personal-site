@@ -24,7 +24,7 @@ function Landing() {
 			</p>
 			<div className='flex flex-row gap-2 items-center hidden md:flex'>
 				<MapPinIcon className='h-7' />
-				<p className='text-lg md:text-2xl'>Brooklyn, NY</p>
+				<p className='text-lg md:text-2xl'>Arlington, VA</p>
 			</div>
 		</div>
 	);

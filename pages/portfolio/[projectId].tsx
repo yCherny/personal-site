@@ -1,47 +1,46 @@
-import { useRouter } from 'next/router';
-import ErrorPage from 'next/error';
-import Content from '@/interfaces/content';
-import DetailContent from '@/components/content/detail-content';
-import mongoose from 'mongoose';
-import { Post } from '@/interfaces/content';
+import { useRouter } from "next/router";
+import ErrorPage from "next/error";
+import Content, { Post } from "@/interfaces/content";
+import DetailContent from "@/components/content/detail-content";
+import { dbConnect } from "@/lib/db-connect";
 
 type Props = {
-	project: Content;
+  project: Content;
 };
 
 export default function ProjectDetail({ project }: Props) {
-	const router = useRouter();
-	if (!router.isFallback && !project?.slug) {
-		return <ErrorPage statusCode={404} />;
-	}
+  const router = useRouter();
+  if (!router.isFallback && !project?.slug) {
+    return <ErrorPage statusCode={404} />;
+  }
 
-	return <DetailContent data={project} type={'project'} />;
+  return <DetailContent data={project} type={"project"} />;
 }
 
 type Params = {
-	params: {
-		projectId: string;
-	};
+  params: {
+    projectId: string;
+  };
 };
 
 export async function getServerSideProps(context: Params) {
-	let client = await mongoose.connect(process.env.MONGO_INSTANCE as string);
+  await dbConnect();
 
-	// Get Portfolio Content
-	const query = Post.where({ slug: context.params.projectId });
-	const project = await query.findOne();
-	const jsonProject = JSON.parse(JSON.stringify(project));
-	client.connection.close();
+  try {
+    // Get Portfolio Content
+    const query = Post.where({ slug: context.params.projectId });
+    const project = await query.findOne();
+    const jsonProject = JSON.parse(JSON.stringify(project));
 
-	if (!project) {
-		return {
-			props: {},
-		};
-	}
-
-	return {
-		props: {
-			project: jsonProject,
-		},
-	};
+    return {
+      props: {
+        project: jsonProject,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      notFound: true,
+    };
+  }
 }

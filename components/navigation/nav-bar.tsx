@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
-import { signIn, signOut } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -18,6 +18,7 @@ const navigation = [
 ];
 
 export default function Navbar({ user }: { user: any }) {
+	const { data: session } = useSession();
 	const pathname = usePathname();
 
 	return (
@@ -50,6 +51,9 @@ export default function Navbar({ user }: { user: any }) {
 								</div>
 							</div>
 							<div className='hidden sm:ml-6 sm:flex sm:items-center'>
+								<h1 className='dark:text-white'>
+									{session?.user?.name}
+								</h1>
 								<Menu as='div' className='relative ml-3'>
 									<div>
 										<Menu.Button className='flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2'>

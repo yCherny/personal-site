@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useRef } from 'react';
 import { Canvas as FiberCanvas } from '@react-three/fiber';
 import {
 	PerformanceMonitor,
@@ -7,6 +7,12 @@ import {
 } from '@react-three/drei';
 import Loading from '../navigation/loading';
 import Scene from './scene';
+import { OrthographicCamera, OrbitControls, Preload } from '@react-three/drei';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
+
+// Local Components
+import SceneLighting from './scene-lighting';
+import { Model } from './room-alpha';
 
 /*
 TrueISOCam Properties Taken from Reiner Prokein's Work:
@@ -14,26 +20,48 @@ http://wiki.blender.org/index.php/Extensions:2.6/Py/Scripts/Add_Mesh/Create_IsoC
 */
 
 function Canvas() {
-	const [dpr, setDpr] = useState(1.5);
+    const myCamera = useRef<THREE.OrthographicCamera>(null);
 
 	return (
 		<Suspense fallback={<Loading />}>
-			<FiberCanvas
-				shadows
-				frameloop='demand'
-				dpr={dpr}
-				performance={{ min: 0.5 }}
-				gl={{ antialias: false }}
-			>
-				<AdaptiveDpr pixelated />
-				<AdaptiveEvents />
-				<PerformanceMonitor
-					onChange={({ factor }) =>
-						setDpr(Math.round(0.5 + 1.5 * factor))
-					}
-				>
-					<Scene />
-				</PerformanceMonitor>
+			<FiberCanvas shadows>
+				<OrthographicCamera
+					makeDefault
+					zoom={1500}
+					rotation={[0.955324, 0, 0.785398]}
+					scale={14.123}
+					near={1}
+					far={10}
+					position={[30.60861, 30.60861, 30.60861]}
+					ref={myCamera}
+				/>
+
+				<OrbitControls
+					// 0, 2*PI -> + Z
+					// PI -> -Z
+					// Pi / 2 -> -X
+					// (3*PI) / 2 -> + X
+					minZoom={1400}
+					maxZoom={6000}
+					minAzimuthAngle={0 + Math.PI / 36}
+					maxAzimuthAngle={Math.PI / 3}
+					minPolarAngle={Math.PI / 6}
+					maxPolarAngle={Math.PI / 2.25}
+				/>
+
+				<Suspense fallback={null}>
+					<SceneLighting enabled={true} />
+					<EffectComposer>
+						<Bloom
+							luminanceThreshold={20}
+							luminanceSmoothing={0}
+							height={300}
+						/>
+						<Vignette eskil={false} offset={0.1} darkness={1.1} />
+					</EffectComposer>
+				</Suspense>
+
+				<Model />
 			</FiberCanvas>
 		</Suspense>
 	);
