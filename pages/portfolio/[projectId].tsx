@@ -28,7 +28,7 @@ export async function getServerSideProps(context: Params) {
 
   try {
     // Get Portfolio Content
-    const query = Post.where({ slug: context.params.projectId });
+    const query = Post.where({ slug: context.params.projectId, status: "published" });
     const project = await query.findOne();
     const jsonProject = JSON.parse(JSON.stringify(project));
 

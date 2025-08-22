@@ -70,7 +70,7 @@ export async function getStaticProps() {
   await dbConnect();
 
   try {
-    const query = Post.where({ type: "blog" }).sort({ createdAt: -1 });
+    const query = Post.where({ type: "blog", status: "published" }).sort({ createdAt: -1 });
     const posts = await query.find();
 
     const jsonPosts = JSON.parse(JSON.stringify(posts));

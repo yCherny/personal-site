@@ -29,7 +29,7 @@ export async function getServerSideProps(context: Params) {
 
   try {
     // Get Post Content
-    const query = Post.where({ slug: context.params.postId });
+    const query = Post.where({ slug: context.params.postId, status: "published" });
     const post = await query.findOne();
     const jsonPost = JSON.parse(JSON.stringify(post));
 
