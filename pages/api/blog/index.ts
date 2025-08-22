@@ -22,7 +22,14 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        const query = Post.where({ type: "blog" });
+        const { status } = req.query;
+        let query = Post.where({ type: "blog" });
+        
+        // If status parameter is provided, filter by it
+        if (status && (status === "published" || status === "draft")) {
+          query = query.where({ status });
+        }
+        
         const posts = await query.find();
         res.status(200).json({ posts: posts });
       } catch (err) {

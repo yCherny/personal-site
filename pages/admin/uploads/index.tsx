@@ -25,13 +25,30 @@ function Uploads({ allContent, allContentFilters, session }: Props) {
   const [filteredContent, setFilteredContent] = useState<Content[]>(allContent);
   const [filter, setFilter] = useState<string>("");
 
-  function filterContent(type: string) {
-    if (type === filter) {
+  function filterContent(filterType: string) {
+    if (filterType === filter) {
       setFilter("");
+      setFilteredContent(allContent);
     } else {
-      const filteredContent = allContent.filter((data) => data.type === type);
-      setFilter(type);
-      setFilteredContent(filteredContent);
+      let filtered: Content[] = [];
+      
+      // Handle type-based filters (blog, portfolio)
+      if (filterType === "blog" || filterType === "portfolio") {
+        filtered = allContent.filter((data) => data.type === filterType);
+      }
+      // Handle status-based filters (drafts)
+      else if (filterType === "blog-drafts") {
+        filtered = allContent.filter((data) => data.type === "blog" && data.status === "draft");
+      }
+      else if (filterType === "portfolio-drafts") {
+        filtered = allContent.filter((data) => data.type === "portfolio" && data.status === "draft");
+      }
+      else if (filterType === "all-drafts") {
+        filtered = allContent.filter((data) => data.status === "draft");
+      }
+      
+      setFilter(filterType);
+      setFilteredContent(filtered);
     }
   }
 
@@ -72,7 +89,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         allContent: allContent,
-        allContentFilters: ["blog", "portfolio"],
+        allContentFilters: ["blog", "portfolio", "blog-drafts", "portfolio-drafts", "all-drafts"],
         // session: await getServerSession(
         // 	context.req,
         // 	context.res,

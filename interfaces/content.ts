@@ -14,6 +14,9 @@ export interface IPost {
 	authors: Author[];
 	coverImage: { url: string; copyrightLink: string; copyrightOwner: string };
 
+	// Status
+	status: string; // 'draft' or 'published'
+
 	// Optionals
 	color: string;
 	externalLink: string;
@@ -43,6 +46,9 @@ export const postSchema = new Schema<IPost>(
 				copyrightOwner: String,
 			},
 		},
+
+		// Status
+		status: { type: String, enum: ['draft', 'published'], default: 'published' },
 
 		// Optionals
 		color: { type: String },
@@ -76,6 +82,7 @@ type Content = {
 		copyrightOwner?: string;
 	};
 
+	status?: string; // 'draft' or 'published'
 	color?: string;
 	externalLink?: string;
 	githubLink?: string;

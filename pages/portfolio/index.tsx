@@ -139,7 +139,7 @@ export async function getStaticProps() {
 
   try {
     // Get Portfolio Content
-    const query = Post.where({ type: "portfolio" }).sort({ createdAt: -1 });
+    const query = Post.where({ type: "portfolio", status: "published" }).sort({ createdAt: -1 });
     const projects = await query.find();
     const jsonProjects = JSON.parse(JSON.stringify(projects));
     const tags = projects.map((post) => post.tags).flat();

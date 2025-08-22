@@ -19,6 +19,23 @@ export default function SideBar({ onClick, filterOptions, newPath }: Props) {
 		onClick(option);
 	}
 
+	function getFilterLabel(option: string): string {
+		switch (option) {
+			case "blog":
+				return "Blog Posts";
+			case "portfolio":
+				return "Portfolio";
+			case "blog-drafts":
+				return "Blog Drafts";
+			case "portfolio-drafts":
+				return "Portfolio Drafts";
+			case "all-drafts":
+				return "All Drafts";
+			default:
+				return option;
+		}
+	}
+
 	return (
 		<div className='flex flex-col gap-4 mb-5 md:mb-0'>
 			<Title className='font-bold text-2xl dark:text-white'>
@@ -27,12 +44,13 @@ export default function SideBar({ onClick, filterOptions, newPath }: Props) {
 			{filterOptions.map((option, index) => {
 				return (
 					<FilterOption
-						text={option}
+						text={getFilterLabel(option)}
 						key={index}
 						selected={selected === index}
-						onPress={(option: string) =>
-							handleOptionSelect(option, index)
-						}
+						onPress={(label: string) => {
+							// Pass the original option value, not the display label
+							handleOptionSelect(option, index);
+						}}
 					/>
 				);
 			})}
